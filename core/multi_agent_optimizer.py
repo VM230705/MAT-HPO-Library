@@ -762,8 +762,14 @@ class MAT_HPO_Optimizer:
             print(f"📊 Agent 0: class_weights = [{weight_str}]")
         
         # Agent 1: 架構參數
+        agent1_params = []
         if 'hidden_size' in hyperparams:
-            print(f"🏗️  Agent 1: hidden_size = {hyperparams['hidden_size']}")
+            agent1_params.append(f"hidden_size = {hyperparams['hidden_size']}")
+        if 'loss_function' in hyperparams:
+            agent1_params.append(f"loss_function = {hyperparams['loss_function']}")
+        
+        if agent1_params:
+            print(f"🏗️  Agent 1: {', '.join(agent1_params)}")
         
         # Agent 2: 訓練參數
         training_params = []
