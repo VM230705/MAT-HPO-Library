@@ -33,6 +33,7 @@ Quick Start:
 
 # Core components
 from .core.multi_agent_optimizer import MAT_HPO_Optimizer
+from .core.multi_fidelity_optimizer import MultiFidelityMAT_HPO, FidelityConfig, MultiFidelityEnvironment
 from .core.base_environment import BaseEnvironment
 from .core.hyperparameter_space import HyperparameterSpace
 
@@ -47,6 +48,9 @@ __author__ = "MAT-HPO Development Team"
 __all__ = [
     # Core components
     "MAT_HPO_Optimizer",
+    "MultiFidelityMAT_HPO",
+    "FidelityConfig", 
+    "MultiFidelityEnvironment",
     "BaseEnvironment", 
     "HyperparameterSpace",
     # Configuration
