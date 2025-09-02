@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Simple Example - MAT-HPO Library</title>
+    <meta name="description" content="Simple example demonstrating basic usage of MAT-HPO Library with a neural network classification task.">
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+    <button class="mobile-toggle">☰</button>
+    
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" class="logo">
+                    <div class="logo-icon">M</div>
+                    <div class="logo-text">
+                        <h1>MAT-HPO</h1>
+                        <p>Multi-Agent Transformer HPO</p>
+                    </div>
+                </a>
+                <div style="margin-top: 1rem;">
+                    <span class="version-badge">v1.0.0</span>
+                </div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <div class="nav-section">Getting Started</div>
+                </li>
+                <li class="nav-item">
+                    <a href="../index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../quickstart.html" class="nav-link">Quick Start</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Examples & Tutorials</div>
+                </li>
+                <li class="nav-item">
+                    <a href="simple.html" class="nav-link active">Simple Example</a>
+                </li>
+                <li class="nav-item">
+                    <a href="image-classification.html" class="nav-link">Image Classification</a>
+                </li>
+                <li class="nav-item">
+                    <a href="nlp.html" class="nav-link">NLP Tasks</a>
+                </li>
+                <li class="nav-item">
+                    <a href="time-series.html" class="nav-link">Time Series</a>
+                </li>
+            </ul>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <ol class="breadcrumb">
+                    <li><a href="../index.html">Home</a></li>
+                    <li><a href="../examples/">Examples</a></li>
+                    <li>Simple Example</li>
+                </ol>
+            </div>
+            
+            <div class="main-content">
+                <h1>🚀 Simple Example: Neural Network Optimization</h1>
+                <p class="lead">This example demonstrates the basic usage of MAT-HPO Library with a simple neural network for classification. Perfect for learning the fundamentals!</p>
+                
+                <div id="table-of-contents">
+                    <h3>Contents</h3>
+                </div>
+                
+                <!-- Overview -->
+                <section>
+                    <h2>📋 Overview</h2>
+                    <p>In this example, we'll optimize hyperparameters for a feedforward neural network on a synthetic classification dataset. This covers all the essential concepts you need to get started with MAT-HPO.</p>
+                    
+                    <div class="alert alert-info">
+                        <strong>What you'll learn:</strong>
+                        <ul>
+                            <li>How to implement a BaseEnvironment for neural networks</li>
+                            <li>Setting up hyperparameter spaces with different agents</li>
+                            <li>Running optimization and interpreting results</li>
+                            <li>Best practices for reward function design</li>
+                        </ul>
+                    </div>
+                    
+                    <h3>Problem Description</h3>
+                    <ul>
+                        <li><strong>Task:</strong> Multi-class classification (3 classes)</li>
+                        <li><strong>Dataset:</strong> Synthetic dataset with 2000 samples, 50 features</li>
+                        <li><strong>Model:</strong> Feedforward neural network with PyTorch</li>
+                        <li><strong>Optimization Goal:</strong> Maximize weighted F1-score and accuracy</li>
+                    </ul>
+                </section>
+                
+                <!-- Prerequisites -->
+                <section>
+                    <h2>🔧 Prerequisites</h2>
+                    <pre><code class="language-bash"># Install required packages
+pip install mat-hpo-lib torch scikit-learn</code></pre>
+                    
+                    <pre><code class="language-python"># Verify installation
+import torch
+import MAT_HPO_LIB
+print(f"PyTorch version: {torch.__version__}")
+print(f"MAT-HPO version: {MAT_HPO_LIB.__version__}")</code></pre>
+                </section>
+                
+                <!-- Complete Code -->
+                <section>
+                    <h2>💻 Complete Code</h2>
+                    
+                    <h3>Step 1: Imports and Setup</h3>
+                    <pre><code class="language-python">import torch
+import torch.nn as nn
+import torch.optim as optim
+from torch.utils.data import DataLoader, TensorDataset
+from sklearn.datasets import make_classification
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import accuracy_score, f1_score
+import numpy as np
+import warnings
+warnings.filterwarnings('ignore')
+
+# MAT-HPO imports
+from MAT_HPO_LIB import (
+    BaseEnvironment, 
+    HyperparameterSpace, 
+    MAT_HPO_Optimizer,
+    DefaultConfigs
+)</code></pre>
+                    
+                    <h3>Step 2: Define Neural Network</h3>
+                    <pre><code class="language-python">class SimpleNN(nn.Module):
+    """Simple feedforward neural network for classification"""
+    
+    def __init__(self, input_dim: int, hidden_size: int, num_classes: int = 3, dropout_rate: float = 0.2):
+        super().__init__()
+        self.network = nn.Sequential(
+            nn.Linear(input_dim, hidden_size),
+            nn.ReLU(),
+            nn.Dropout(dropout_rate),
+            nn.Linear(hidden_size, hidden_size // 2),
+            nn.ReLU(), 
+            nn.Dropout(dropout_rate),
+            nn.Linear(hidden_size // 2, num_classes)
+        )
+    
+    def forward(self, x):
+        return self.network(x)</code></pre>
+                    
+                    <h3>Step 3: Create Environment</h3>
+                    <pre><code class="language-python">class SimpleNNEnvironment(BaseEnvironment):
+    """Environment for optimizing neural network hyperparameters"""
+    
+    def __init__(self, max_epochs=20):
+        super().__init__(name="SimpleNeuralNetOptimization")
+        self.max_epochs = max_epochs
+        self.device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        print(f"🖥️  Using device: {self.device}")
+        
+    def load_data(self):
+        """Generate and prepare synthetic dataset"""
+        print("📊 Generating synthetic classification dataset...")
+        
+        # Create synthetic dataset
+        X, y = make_classification(
+            n_samples=2000,
+            n_features=50,
+            n_classes=3,
+            n_informative=30,
+            n_redundant=10,
+            n_clusters_per_class=1,
+            random_state=42
+        )
+        
+        # Split data
+        X_train, X_val, y_train, y_val = train_test_split(
+            X, y, test_size=0.2, random_state=42, stratify=y
+        )
+        
+        # Convert to tensors and move to device
+        self.X_train = torch.FloatTensor(X_train).to(self.device)
+        self.X_val = torch.FloatTensor(X_val).to(self.device)
+        self.y_train = torch.LongTensor(y_train).to(self.device)
+        self.y_val = torch.LongTensor(y_val).to(self.device)
+        
+        # Store dimensions
+        self.input_dim = X.shape[1]
+        self.num_classes = len(np.unique(y))
+        
+        data_info = {
+            "train_samples": len(X_train),
+            "val_samples": len(X_val),
+            "features": self.input_dim,
+            "classes": self.num_classes,
+            "class_distribution": {
+                str(i): int(np.sum(y_train == i)) 
+                for i in range(self.num_classes)
+            }
+        }
+        
+        print(f"✅ Dataset loaded: {data_info}")
+        return data_info
+    
+    def create_model(self, hyperparams):
+        """Create neural network with given hyperparameters"""
+        model = SimpleNN(
+            input_dim=self.input_dim,
+            hidden_size=int(hyperparams['hidden_size']),
+            num_classes=self.num_classes,
+            dropout_rate=hyperparams.get('dropout_rate', 0.2)
+        )
+        return model.to(self.device)
+    
+    def train_evaluate(self, model, hyperparams):
+        """Train model and return evaluation metrics"""
+        # Setup training components
+        criterion = nn.CrossEntropyLoss()
+        optimizer = optim.Adam(
+            model.parameters(), 
+            lr=hyperparams['learning_rate'],
+            weight_decay=hyperparams.get('weight_decay', 1e-4)
+        )
+        
+        # Create data loaders
+        train_dataset = TensorDataset(self.X_train, self.y_train)
+        train_loader = DataLoader(
+            train_dataset, 
+            batch_size=int(hyperparams['batch_size']), 
+            shuffle=True
+        )
+        
+        # Training loop
+        model.train()
+        total_loss = 0
+        
+        for epoch in range(self.max_epochs):
+            epoch_loss = 0
+            for batch_X, batch_y in train_loader:
+                optimizer.zero_grad()
+                outputs = model(batch_X)
+                loss = criterion(outputs, batch_y)
+                loss.backward()
+                optimizer.step()
+                epoch_loss += loss.item()
+            
+            avg_epoch_loss = epoch_loss / len(train_loader)
+            total_loss += avg_epoch_loss
+            
+            # Early stopping on very low loss
+            if avg_epoch_loss < 0.01:
+                break
+        
+        # Evaluation
+        model.eval()
+        with torch.no_grad():
+            val_outputs = model(self.X_val)
+            _, predicted = torch.max(val_outputs, 1)
+            
+            # Convert to CPU for sklearn metrics
+            y_true = self.y_val.cpu().numpy()
+            y_pred = predicted.cpu().numpy()
+            
+            # Calculate metrics
+            accuracy = accuracy_score(y_true, y_pred)
+            f1 = f1_score(y_true, y_pred, average='weighted')
+            
+            # Additional metrics
+            val_loss = criterion(val_outputs, self.y_val).item()
+        
+        return {
+            'accuracy': accuracy,
+            'f1': f1,
+            'val_loss': val_loss,
+            'avg_train_loss': total_loss / (epoch + 1),
+            'epochs_trained': epoch + 1,
+            'model_params': sum(p.numel() for p in model.parameters())
+        }
+    
+    def compute_reward(self, metrics):
+        """Compute reward from metrics (higher is better)"""
+        # Multi-objective reward function
+        f1_weight = 0.5
+        accuracy_weight = 0.3
+        efficiency_weight = 0.15
+        stability_weight = 0.05
+        
+        # Primary metrics
+        f1_score = metrics['f1']
+        accuracy = metrics['accuracy']
+        
+        # Efficiency bonus (fewer epochs = better)
+        efficiency_bonus = max(0, 1.0 - metrics['epochs_trained'] / self.max_epochs)
+        
+        # Stability bonus (lower validation loss = better)
+        stability_bonus = max(0, 1.0 - metrics['val_loss'] / 2.0)
+        
+        # Compute weighted reward
+        reward = (
+            f1_score * f1_weight + 
+            accuracy * accuracy_weight + 
+            efficiency_bonus * efficiency_weight + 
+            stability_bonus * stability_weight
+        )
+        
+        return reward</code></pre>
+                    
+                    <h3>Step 4: Define Hyperparameter Space</h3>
+                    <pre><code class="language-python">def create_hyperparameter_space():
+    """Create hyperparameter search space for neural network optimization"""
+    
+    space = HyperparameterSpace(
+        # Agent assignment (key concept in MAT-HPO)
+        agent0_params=['dropout_rate', 'weight_decay'],     # Regularization (Agent 0)
+        agent1_params=['hidden_size'],                      # Architecture (Agent 1)  
+        agent2_params=['learning_rate', 'batch_size'],      # Training (Agent 2)
+        
+        # Parameter bounds
+        bounds={
+            'hidden_size': (64, 512),         # Network width
+            'learning_rate': (1e-4, 1e-2),    # Learning rate range
+            'batch_size': (16, 128),          # Batch size range
+            'dropout_rate': (0.0, 0.5),       # Dropout probability
+            'weight_decay': (1e-6, 1e-3)      # L2 regularization
+        },
+        
+        # Parameter types and distributions
+        param_types={
+            'hidden_size': int,               # Integer values
+            'learning_rate': 'log_uniform',   # Log scale (good for learning rates)
+            'batch_size': int,                # Integer values
+            'dropout_rate': float,            # Float values
+            'weight_decay': 'log_uniform'     # Log scale (good for regularization)
+        },
+        
+        # Default values (optional)
+        default_values={
+            'hidden_size': 128,
+            'learning_rate': 1e-3,
+            'batch_size': 32,
+            'dropout_rate': 0.2,
+            'weight_decay': 1e-4
+        }
+    )
+    
+    return space</code></pre>
+                    
+                    <h3>Step 5: Run Optimization</h3>
+                    <pre><code class="language-python">def main():
+    """Main function to run the optimization"""
+    
+    print("🚀 Starting MAT-HPO Simple Neural Network Optimization")
+    print("=" * 60)
+    
+    # Step 1: Create environment
+    print("\n🏗️  Setting up optimization environment...")
+    environment = SimpleNNEnvironment(max_epochs=25)
+    
+    # Step 2: Load data
+    data_info = environment.load_data()
+    
+    # Step 3: Create hyperparameter space
+    print("\n🎯 Creating hyperparameter search space...")
+    hyperparameter_space = create_hyperparameter_space()
+    
+    print("Agent assignment:")
+    print(f"  Agent 0 (Regularization): {hyperparameter_space.agent0_params}")
+    print(f"  Agent 1 (Architecture): {hyperparameter_space.agent1_params}")
+    print(f"  Agent 2 (Training): {hyperparameter_space.agent2_params}")
+    
+    # Step 4: Configure optimization
+    print("\n⚙️  Configuring optimization settings...")
+    config = DefaultConfigs.standard()
+    
+    # Customize for this example
+    config.update(
+        max_steps=30,                    # Number of optimization steps
+        use_cuda=torch.cuda.is_available(),
+        verbose=True,                    # Show detailed progress
+        early_stop_patience=8,           # Stop if no improvement for 8 steps
+        save_interval=5                  # Save every 5 steps
+    )
+    
+    print(f"Configuration: {config.max_steps} steps, GPU: {config.use_cuda}")
+    
+    # Step 5: Add callback for monitoring
+    def progress_callback(env, hyperparams, metrics, reward):
+        """Custom callback to monitor optimization progress"""
+        print(f"  💡 Step {env.current_step}:")
+        print(f"     Reward: {reward:.4f} | F1: {metrics['f1']:.4f} | Acc: {metrics['accuracy']:.4f}")
+        print(f"     Hidden: {hyperparams['hidden_size']}, LR: {hyperparams['learning_rate']:.2e}")
+        
+        if reward > env.best_reward * 0.99:  # Close to best
+            print(f"     🌟 Great performance!")
+    
+    environment.add_step_callback(progress_callback)
+    
+    # Step 6: Create and run optimizer
+    print(f"\n🎯 Starting optimization with MAT-HPO...")
+    print("-" * 50)
+    
+    optimizer = MAT_HPO_Optimizer(
+        environment=environment,
+        hyperparameter_space=hyperparameter_space,
+        config=config,
+        output_dir="./simple_nn_results"
+    )
+    
+    # Run the optimization
+    results = optimizer.optimize()
+    
+    # Step 7: Display results
+    print("\n" + "=" * 60)
+    print("🎉 OPTIMIZATION COMPLETED!")
+    print("=" * 60)
+    
+    best_params = results['best_hyperparameters']
+    best_perf = results['best_performance']
+    stats = results['optimization_stats']
+    
+    print(f"\n🏆 Best Results:")
+    print(f"   F1-Score: {best_perf['f1']:.4f}")
+    print(f"   Accuracy: {best_perf['accuracy']:.4f}")
+    print(f"   Validation Loss: {best_perf['val_loss']:.4f}")
+    print(f"   Training Epochs: {best_perf['epochs_trained']}")
+    
+    print(f"\n🎯 Best Hyperparameters:")
+    for param, value in best_params.items():
+        if isinstance(value, float):
+            if param in ['learning_rate', 'weight_decay']:
+                print(f"   {param}: {value:.2e}")
+            else:
+                print(f"   {param}: {value:.4f}")
+        else:
+            print(f"   {param}: {value}")
+    
+    print(f"\n⏱️  Optimization Statistics:")
+    print(f"   Total Steps: {stats['total_steps']}")
+    print(f"   Total Time: {stats['total_time']:.2f} seconds")
+    print(f"   Average Time per Step: {stats['avg_time_per_step']:.2f} seconds")
+    print(f"   Best Step: {stats.get('best_step', 'N/A')}")
+    
+    print(f"\n💾 Results saved to: ./simple_nn_results/")
+    
+    # Step 8: Test final model (optional)
+    print(f"\n🧪 Testing optimized configuration...")
+    test_env = SimpleNNEnvironment(max_epochs=50)  # More epochs for final test
+    test_env.load_data()
+    
+    final_model = test_env.create_model(best_params)
+    final_metrics = test_env.train_evaluate(final_model, best_params)
+    
+    print(f"   Final Test Results:")
+    print(f"   F1-Score: {final_metrics['f1']:.4f}")
+    print(f"   Accuracy: {final_metrics['accuracy']:.4f}")
+    print(f"   Model Parameters: {final_metrics['model_params']:,}")
+    
+    print(f"\n✅ Simple MAT-HPO example completed successfully!")
+    
+    return results
+
+if __name__ == "__main__":
+    results = main()</code></pre>
+                </section>
+                
+                <!-- Running the Code -->
+                <section>
+                    <h2>🏃‍♂️ Running the Code</h2>
+                    
+                    <h3>Save and Execute</h3>
+                    <pre><code class="language-bash"># Save the code as simple_nn_example.py
+python simple_nn_example.py</code></pre>
+                    
+                    <h3>Expected Output</h3>
+                    <pre><code class="language-txt">🚀 Starting MAT-HPO Simple Neural Network Optimization
+============================================================
+
+🏗️  Setting up optimization environment...
+🖥️  Using device: cuda:0
+
+📊 Generating synthetic classification dataset...
+✅ Dataset loaded: {'train_samples': 1600, 'val_samples': 400, 'features': 50, 'classes': 3, 'class_distribution': {'0': 533, '1': 534, '2': 533}}
+
+🎯 Creating hyperparameter search space...
+Agent assignment:
+  Agent 0 (Regularization): ['dropout_rate', 'weight_decay']
+  Agent 1 (Architecture): ['hidden_size']
+  Agent 2 (Training): ['learning_rate', 'batch_size']
+
+⚙️  Configuring optimization settings...
+Configuration: 30 steps, GPU: True
+
+🎯 Starting optimization with MAT-HPO...
+--------------------------------------------------
+  💡 Step 1:
+     Reward: 0.8234 | F1: 0.8156 | Acc: 0.8200
+     Hidden: 256, LR: 3.45e-03
+
+  💡 Step 2:
+     Reward: 0.8456 | F1: 0.8423 | Acc: 0.8450
+     Hidden: 192, LR: 1.23e-03
+     🌟 Great performance!
+     
+... (continuing for 30 steps) ...
+
+============================================================
+🎉 OPTIMIZATION COMPLETED!
+============================================================
+
+🏆 Best Results:
+   F1-Score: 0.8734
+   Accuracy: 0.8750
+   Validation Loss: 0.3456
+   Training Epochs: 18
+
+🎯 Best Hyperparameters:
+   hidden_size: 384
+   learning_rate: 8.23e-04
+   batch_size: 64
+   dropout_rate: 0.1234
+   weight_decay: 2.34e-05
+
+⏱️  Optimization Statistics:
+   Total Steps: 30
+   Total Time: 145.67 seconds
+   Average Time per Step: 4.86 seconds
+   Best Step: 23
+
+💾 Results saved to: ./simple_nn_results/
+
+✅ Simple MAT-HPO example completed successfully!</code></pre>
+                </section>
+                
+                <!-- Understanding the Results -->
+                <section>
+                    <h2>📊 Understanding the Results</h2>
+                    
+                    <h3>Key Insights</h3>
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <h4>Multi-Agent Collaboration</h4>
+                            <p>Notice how the three agents work together:</p>
+                            <ul>
+                                <li><strong>Agent 0</strong> fine-tuned regularization (dropout_rate, weight_decay)</li>
+                                <li><strong>Agent 1</strong> found optimal architecture (hidden_size)</li>
+                                <li><strong>Agent 2</strong> optimized training parameters (learning_rate, batch_size)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>Performance Evolution</h4>
+                            <p>The optimization typically shows:</p>
+                            <ul>
+                                <li><strong>Early exploration:</strong> Wide parameter ranges tested</li>
+                                <li><strong>Convergence:</strong> Parameters narrow to optimal regions</li>
+                                <li><strong>Fine-tuning:</strong> Small adjustments for final improvements</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h3>Output Files</h3>
+                    <p>The optimization saves several files in the output directory:</p>
+                    
+                    <pre><code class="language-bash">simple_nn_results/
+├── best_hyperparams.json          # Best hyperparameter configuration
+├── optimization_results.json      # Complete results summary  
+├── optimization_log.txt          # Detailed optimization log
+├── step_log.jsonl                # Per-step data in JSON Lines format
+├── best_actor_agent0.pt          # Trained agent 0 model
+├── best_actor_agent1.pt          # Trained agent 1 model
+└── best_actor_agent2.pt          # Trained agent 2 model</code></pre>
+                    
+                    <h3>Analyzing best_hyperparams.json</h3>
+                    <pre><code class="language-json">{
+  "hidden_size": 384,
+  "learning_rate": 0.000823,
+  "batch_size": 64,
+  "dropout_rate": 0.1234,
+  "weight_decay": 0.0000234,
+  "optimization_step": 23,
+  "reward": 0.8734,
+  "metrics": {
+    "f1": 0.8734,
+    "accuracy": 0.8750,
+    "val_loss": 0.3456
+  }
+}</code></pre>
+                </section>
+                
+                <!-- Customization Tips -->
+                <section>
+                    <h2>🎨 Customization Tips</h2>
+                    
+                    <h3>Experiment with Different Configurations</h3>
+                    
+                    <h4>1. Adjust the Reward Function</h4>
+                    <pre><code class="language-python">def compute_reward(self, metrics):
+    # Focus more on F1-score
+    return metrics['f1'] * 0.8 + metrics['accuracy'] * 0.2
+    
+    # Or add model complexity penalty
+    complexity_penalty = metrics['model_params'] / 1000000  # Per million params
+    return metrics['f1'] * 0.7 + metrics['accuracy'] * 0.3 - complexity_penalty * 0.1</code></pre>
+                    
+                    <h4>2. Modify the Search Space</h4>
+                    <pre><code class="language-python"># Add more architectural parameters
+space = HyperparameterSpace(
+    agent0_params=['dropout_rate', 'weight_decay'],
+    agent1_params=['hidden_size', 'num_layers', 'activation_type'],  # Added parameters
+    agent2_params=['learning_rate', 'batch_size', 'optimizer_type'],  # Added optimizer
+    bounds={
+        'hidden_size': (32, 1024),        # Wider range
+        'num_layers': (2, 5),             # Number of hidden layers
+        'activation_type': ['relu', 'gelu', 'swish'],  # Different activations
+        'optimizer_type': ['adam', 'adamw', 'sgd'],    # Different optimizers
+        # ... other parameters
+    }
+)</code></pre>
+                    
+                    <h4>3. Use Different Datasets</h4>
+                    <pre><code class="language-python"># Replace synthetic data with real dataset
+from torchvision import datasets, transforms
+
+def load_data(self):
+    transform = transforms.Compose([
+        transforms.ToTensor(),
+        transforms.Normalize((0.5,), (0.5,))
+    ])
+    
+    self.train_dataset = datasets.CIFAR10(
+        root='./data', train=True, download=True, transform=transform
+    )
+    # ... rest of implementation</code></pre>
+                    
+                    <h4>4. Add Early Stopping</h4>
+                    <pre><code class="language-python">def train_evaluate(self, model, hyperparams):
+    # Add patience-based early stopping
+    best_val_loss = float('inf')
+    patience = 5
+    patience_counter = 0
+    
+    for epoch in range(self.max_epochs):
+        # ... training code ...
+        
+        # Validation
+        val_loss = self.validate(model)
+        
+        if val_loss < best_val_loss:
+            best_val_loss = val_loss
+            patience_counter = 0
+        else:
+            patience_counter += 1
+            
+        if patience_counter >= patience:
+            break  # Early stopping
+            
+    # ... rest of evaluation</code></pre>
+                </section>
+                
+                <!-- Next Steps -->
+                <section>
+                    <h2>🎯 Next Steps</h2>
+                    
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <h4>📚 Learn More</h4>
+                            <p>Dive deeper into MAT-HPO capabilities:</p>
+                            <ul>
+                                <li><a href="../architecture.html">Architecture Overview</a></li>
+                                <li><a href="../multi-agent.html">Multi-Agent System Details</a></li>
+                                <li><a href="../api/base-environment.html">BaseEnvironment API</a></li>
+                                <li><a href="../advanced/multi-objective.html">Multi-Objective Optimization</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>🚀 More Examples</h4>
+                            <p>Explore domain-specific examples:</p>
+                            <ul>
+                                <li><a href="image-classification.html">Computer Vision</a> - CNN optimization</li>
+                                <li><a href="nlp.html">NLP Tasks</a> - Transformer fine-tuning</li>
+                                <li><a href="time-series.html">Time Series</a> - LSTM/GRU optimization</li>
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <h3>Challenge Yourself</h3>
+                    <div class="alert alert-success">
+                        <strong>Try these modifications:</strong>
+                        <ul>
+                            <li>Add convolutional layers for image data</li>
+                            <li>Implement custom loss functions</li>
+                            <li>Add data augmentation hyperparameters</li>
+                            <li>Experiment with different optimizers</li>
+                            <li>Add learning rate scheduling</li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <!-- Troubleshooting -->
+                <section>
+                    <h2>🔧 Common Issues</h2>
+                    
+                    <h3>CUDA Out of Memory</h3>
+                    <pre><code class="language-python"># Reduce batch size or use CPU
+config = DefaultConfigs.standard()
+config.use_cuda = False  # Force CPU usage
+
+# Or reduce max batch size in hyperparameter space
+bounds = {
+    'batch_size': (8, 32),  # Smaller range
+    # ... other parameters
+}</code></pre>
+                    
+                    <h3>Slow Optimization</h3>
+                    <pre><code class="language-python"># Reduce max_epochs for faster evaluation
+environment = SimpleNNEnvironment(max_epochs=10)
+
+# Use quick_test config for debugging
+config = DefaultConfigs.quick_test()  # Only 10 steps</code></pre>
+                    
+                    <h3>Poor Performance</h3>
+                    <ul>
+                        <li><strong>Check your reward function:</strong> Make sure higher values mean better performance</li>
+                        <li><strong>Verify data preprocessing:</strong> Ensure proper normalization and splitting</li>
+                        <li><strong>Review hyperparameter ranges:</strong> Make sure they cover reasonable values</li>
+                        <li><strong>Increase optimization steps:</strong> More complex problems need more exploration</li>
+                    </ul>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <script src="../js/main.js"></script>
+</body>
+</html>

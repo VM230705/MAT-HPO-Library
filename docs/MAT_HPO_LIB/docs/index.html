@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAT-HPO Library - Multi-Agent Transformer Hyperparameter Optimization</title>
+    <meta name="description" content="MAT-HPO: A powerful and flexible library for hyperparameter optimization using multi-agent reinforcement learning and transformer networks.">
+    <meta name="keywords" content="hyperparameter optimization, machine learning, multi-agent, transformer, reinforcement learning, automl">
+    <meta name="author" content="MAT-HPO Development Team">
+    
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="MAT-HPO Library">
+    <meta property="og:description" content="Multi-Agent Transformer Hyperparameter Optimization Library">
+    <meta property="og:type" content="website">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-toggle">☰</button>
+    
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">M</div>
+                    <div class="logo-text">
+                        <h1>MAT-HPO</h1>
+                        <p>Multi-Agent Transformer HPO</p>
+                    </div>
+                </a>
+                <div style="margin-top: 1rem;">
+                    <span class="version-badge">v1.0.0</span>
+                </div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <div class="nav-section">Getting Started</div>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link active">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="installation.html" class="nav-link">Installation</a>
+                </li>
+                <li class="nav-item">
+                    <a href="quickstart.html" class="nav-link">Quick Start</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Core Concepts</div>
+                </li>
+                <li class="nav-item">
+                    <a href="architecture.html" class="nav-link">Architecture</a>
+                </li>
+                <li class="nav-item">
+                    <a href="multi-agent.html" class="nav-link">Multi-Agent System</a>
+                </li>
+                <li class="nav-item">
+                    <a href="environments.html" class="nav-link">Environments</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">API Reference</div>
+                </li>
+                <li class="nav-item">
+                    <a href="api/base-environment.html" class="nav-link">BaseEnvironment</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/hyperparameter-space.html" class="nav-link">HyperparameterSpace</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/optimizer.html" class="nav-link">MAT_HPO_Optimizer</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/config.html" class="nav-link">Configuration</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Examples & Tutorials</div>
+                </li>
+                <li class="nav-item">
+                    <a href="examples/simple.html" class="nav-link">Simple Example</a>
+                </li>
+                <li class="nav-item">
+                    <a href="examples/image-classification.html" class="nav-link">Image Classification</a>
+                </li>
+                <li class="nav-item">
+                    <a href="examples/nlp.html" class="nav-link">NLP Tasks</a>
+                </li>
+                <li class="nav-item">
+                    <a href="examples/time-series.html" class="nav-link">Time Series</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Advanced</div>
+                </li>
+                <li class="nav-item">
+                    <a href="advanced/multi-objective.html" class="nav-link">Multi-Objective</a>
+                </li>
+                <li class="nav-item">
+                    <a href="advanced/constraints.html" class="nav-link">Constraints</a>
+                </li>
+                <li class="nav-item">
+                    <a href="advanced/distributed.html" class="nav-link">Distributed</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Help</div>
+                </li>
+                <li class="nav-item">
+                    <a href="troubleshooting.html" class="nav-link">Troubleshooting</a>
+                </li>
+                <li class="nav-item">
+                    <a href="faq.html" class="nav-link">FAQ</a>
+                </li>
+                <li class="nav-item">
+                    <a href="https://github.com/your-org/MAT_HPO_LIB" class="nav-link" target="_blank">GitHub</a>
+                </li>
+            </ul>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <ol class="breadcrumb">
+                    <li><a href="index.html">Home</a></li>
+                </ol>
+            </div>
+            
+            <div class="main-content">
+                <!-- Hero Section -->
+                <div class="hero">
+                    <h1>MAT-HPO Library</h1>
+                    <p>Multi-Agent Transformer Hyperparameter Optimization for complex machine learning problems. Leverage the power of reinforcement learning and transformer networks to find optimal hyperparameters automatically.</p>
+                    <div class="hero-actions">
+                        <a href="quickstart.html" class="btn btn-primary">Get Started</a>
+                        <a href="https://github.com/your-org/MAT_HPO_LIB" class="btn btn-outline" target="_blank">View on GitHub</a>
+                    </div>
+                </div>
+                
+                <!-- Key Features -->
+                <section>
+                    <h2>🚀 Key Features</h2>
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <div class="feature-icon">🤖</div>
+                            <h3>Multi-Agent Architecture</h3>
+                            <p>Three specialized agents optimize different types of hyperparameters simultaneously, enabling efficient parallel search across the parameter space.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">🧠</div>
+                            <h3>Transformer Networks</h3>
+                            <p>Uses advanced transformer neural networks for intelligent hyperparameter selection, learning from optimization history to make smarter choices.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">🔧</div>
+                            <h3>Flexible Integration</h3>
+                            <p>Easy-to-use abstract interface that works with any ML model or training pipeline. Simply inherit from BaseEnvironment and implement four methods.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">⚡</div>
+                            <h3>CUDA Acceleration</h3>
+                            <p>Full GPU support for faster optimization. Automatic memory management and efficient tensor operations for large-scale hyperparameter search.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">📊</div>
+                            <h3>Comprehensive Logging</h3>
+                            <p>Detailed optimization history tracking, performance metrics, and result analysis. Built-in support for experiment management and reproducibility.</p>
+                        </div>
+                        
+                        <div class="feature-card">
+                            <div class="feature-icon">🎯</div>
+                            <h3>Advanced Features</h3>
+                            <p>Multi-objective optimization, constraint handling, early stopping, checkpointing, and custom callback systems for complex optimization scenarios.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Quick Example -->
+                <section>
+                    <h2>🏃‍♂️ Quick Start Example</h2>
+                    <p>Get started with MAT-HPO in just a few lines of code:</p>
+                    
+                    <pre><code class="language-python"># 1. Install MAT-HPO
+pip install mat-hpo-lib
+
+# 2. Define your optimization environment
+from MAT_HPO_LIB import BaseEnvironment, HyperparameterSpace, MAT_HPO_Optimizer
+
+class MyEnvironment(BaseEnvironment):
+    def load_data(self):
+        # Load your dataset
+        return data
+    
+    def create_model(self, hyperparams):
+        # Create model with hyperparameters
+        model = MyModel(
+            hidden_size=hyperparams['hidden_size'],
+            learning_rate=hyperparams['learning_rate']
+        )
+        return model
+    
+    def train_evaluate(self, model, hyperparams):
+        # Train and evaluate model
+        model.train()
+        accuracy = model.evaluate()
+        return {'accuracy': accuracy, 'f1': f1_score}
+    
+    def compute_reward(self, metrics):
+        # Define optimization objective
+        return metrics['f1'] * 0.7 + metrics['accuracy'] * 0.3
+
+# 3. Set up hyperparameter space
+space = HyperparameterSpace(
+    agent0_params=[],  # Problem-specific parameters
+    agent1_params=['hidden_size'],  # Architecture parameters
+    agent2_params=['learning_rate', 'batch_size'],  # Training parameters
+    bounds={
+        'hidden_size': (64, 512),
+        'learning_rate': (1e-4, 1e-2),
+        'batch_size': (16, 128)
+    }
+)
+
+# 4. Run optimization
+environment = MyEnvironment()
+optimizer = MAT_HPO_Optimizer(environment, space, config)
+results = optimizer.optimize()
+
+print(f"Best hyperparameters: {results['best_hyperparameters']}")
+print(f"Best performance: {results['best_performance']}")
+</code></pre>
+                </section>
+                
+                <!-- Architecture Overview -->
+                <section>
+                    <h2>🏗️ Architecture Overview</h2>
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">🎯</div>
+                                <h3 class="card-title">Agent Specialization</h3>
+                            </div>
+                            <ul>
+                                <li><strong>Agent 0:</strong> Problem-specific parameters (class weights, regularization)</li>
+                                <li><strong>Agent 1:</strong> Model architecture parameters (hidden size, layers)</li>
+                                <li><strong>Agent 2:</strong> Training parameters (batch size, learning rate)</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="card-icon">🔄</div>
+                                <h3 class="card-title">Optimization Loop</h3>
+                            </div>
+                            <ol>
+                                <li>Agents propose hyperparameters</li>
+                                <li>Environment evaluates configuration</li>
+                                <li>Shapley value-based credit assignment</li>
+                                <li>Agents learn and improve strategies</li>
+                                <li>Repeat until convergence</li>
+                            </ol>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Use Cases -->
+                <section>
+                    <h2>🎨 Use Cases</h2>
+                    <div class="grid grid-3">
+                        <div class="card">
+                            <h4>🖼️ Computer Vision</h4>
+                            <p>Optimize CNN architectures, data augmentation strategies, and training parameters for image classification, object detection, and segmentation tasks.</p>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>📝 Natural Language Processing</h4>
+                            <p>Fine-tune transformer models, optimize tokenization strategies, and adjust training procedures for text classification, generation, and understanding.</p>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>📈 Time Series Analysis</h4>
+                            <p>Configure LSTM/GRU networks, optimize window sizes and forecasting horizons for financial modeling, IoT analytics, and predictive maintenance.</p>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>🤖 Reinforcement Learning</h4>
+                            <p>Tune RL algorithms, optimize exploration strategies, and configure network architectures for game playing and robot control.</p>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>🔬 Scientific Computing</h4>
+                            <p>Optimize numerical solvers, configure simulation parameters, and tune machine learning models for scientific discovery and research.</p>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>🏭 AutoML Systems</h4>
+                            <p>Build automated machine learning pipelines, create hyperparameter optimization services, and develop intelligent model selection systems.</p>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Installation -->
+                <section>
+                    <h2>📦 Installation</h2>
+                    <div class="alert alert-info">
+                        <strong>Requirements:</strong> Python 3.8+, PyTorch 1.9+, NumPy, scikit-learn
+                    </div>
+                    
+                    <h3>From PyPI (Recommended)</h3>
+                    <pre><code class="language-bash">pip install mat-hpo-lib</code></pre>
+                    
+                    <h3>From Source</h3>
+                    <pre><code class="language-bash">git clone https://github.com/your-org/MAT_HPO_LIB.git
+cd MAT_HPO_LIB
+pip install -e .</code></pre>
+                    
+                    <h3>Verify Installation</h3>
+                    <pre><code class="language-python">from MAT_HPO_LIB import MAT_HPO_Optimizer, BaseEnvironment
+print("✅ MAT-HPO Library successfully installed!")</code></pre>
+                </section>
+                
+                <!-- Getting Started -->
+                <section>
+                    <h2>📚 Next Steps</h2>
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <h4>📖 Learn the Basics</h4>
+                            <p>Start with our comprehensive <a href="quickstart.html">Quick Start Guide</a> to understand core concepts and run your first optimization.</p>
+                            <a href="quickstart.html" class="btn btn-primary">Quick Start →</a>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>🔍 Explore Examples</h4>
+                            <p>Check out detailed <a href="examples/simple.html">examples and tutorials</a> for different machine learning domains and use cases.</p>
+                            <a href="examples/simple.html" class="btn btn-outline">View Examples →</a>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Community & Support -->
+                <section>
+                    <h2>🤝 Community & Support</h2>
+                    <div class="grid grid-2">
+                        <div class="card">
+                            <h4>📖 Documentation</h4>
+                            <p>Comprehensive guides, API reference, and best practices for getting the most out of MAT-HPO.</p>
+                            <ul>
+                                <li><a href="api/base-environment.html">API Reference</a></li>
+                                <li><a href="advanced/multi-objective.html">Advanced Features</a></li>
+                                <li><a href="faq.html">FAQ & Troubleshooting</a></li>
+                            </ul>
+                        </div>
+                        
+                        <div class="card">
+                            <h4>🌟 Get Involved</h4>
+                            <p>Join our community and contribute to the development of MAT-HPO.</p>
+                            <ul>
+                                <li><a href="https://github.com/your-org/MAT_HPO_LIB" target="_blank">GitHub Repository</a></li>
+                                <li><a href="https://github.com/your-org/MAT_HPO_LIB/issues" target="_blank">Report Issues</a></li>
+                                <li><a href="https://github.com/your-org/MAT_HPO_LIB/discussions" target="_blank">Discussions</a></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+                
+                <!-- Citation -->
+                <section>
+                    <h2>📄 Citation</h2>
+                    <p>If you use MAT-HPO in your research, please cite our work:</p>
+                    <pre><code class="language-bibtex">@article{mat_hpo_2024,
+    title={MAT-HPO: Multi-Agent Transformer Hyperparameter Optimization},
+    author={Your Name and Collaborators},
+    journal={Machine Learning Research},
+    year={2024},
+    volume={X},
+    pages={XXX-XXX}
+}</code></pre>
+                </section>
+            </div>
+        </main>
+    </div>
+    
+    <!-- Scripts -->
+    <script src="js/main.js"></script>
+</body>
+</html>
