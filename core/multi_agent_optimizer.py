@@ -314,6 +314,7 @@ class MAT_HPO_Optimizer:
                 self.best_hyperparams = hyperparams.copy()
                 self.best_f1, self.best_auc, self.best_gmean = f1, auc, gmean
                 self._save_best_model()
+                self._save_rl_model_input(state)  # Save current state as RL_model_input.pt
                 
                 self.logger.info(f"🎯 New best model at step {step}! "
                                f"F1={f1:.4f}, AUC={auc:.4f}, G-mean={gmean:.4f}")
@@ -520,13 +521,67 @@ class MAT_HPO_Optimizer:
                 'step': self.current_step
             }, f, indent=2)
         
-        # Save agent models
-        torch.save(self.sqddpg.actor0.state_dict(), 
-                  os.path.join(self.output_dir, 'best_actor0.pt'))
-        torch.save(self.sqddpg.actor1.state_dict(),
-                  os.path.join(self.output_dir, 'best_actor1.pt'))
-        torch.save(self.sqddpg.actor2.state_dict(),
-                  os.path.join(self.output_dir, 'best_actor2.pt'))
+        # Note: Removed best_actor*.pt files as they are redundant with RL_model*.pt
+        
+        # Save RL models in original MAT_HPO format for compatibility
+        torch.save(self.sqddpg.actor0, os.path.join(self.output_dir, 'RL_model0.pt'))
+        torch.save(self.sqddpg.actor1, os.path.join(self.output_dir, 'RL_model1.pt'))
+        torch.save(self.sqddpg.actor2, os.path.join(self.output_dir, 'RL_model2.pt'))
+        
+        # Save hyperparameters in numpy format (original MAT_HPO compatibility)
+        import numpy as np
+        if self.best_hyperparams:
+            # Convert hyperparameters to list format compatible with original system
+            hyp_list = self._convert_hyperparams_to_list(self.best_hyperparams)
+            np.save(os.path.join(self.output_dir, 'CNNLSTM_model_hyp.npy'), np.array(hyp_list))
+    
+    def _convert_hyperparams_to_list(self, hyperparams: Dict[str, Any]) -> List[float]:
+        """
+        Convert hyperparameters dictionary to list format compatible with original MAT_HPO system.
+        
+        Original MAT_HPO expects hyperparameters in this order:
+        - Class weights (varies by dataset)
+        - Architecture params: lstm_dim, conv_out1, conv_out2, conv_out3, fc_out2, fc_out3, att_dim, dilation, rp_group
+        - Training params: batch_size, learning_rate
+        """
+        hyp_list = []
+        
+        # Add class weights (Agent 0 parameters)
+        class_weight_keys = [k for k in hyperparams.keys() if k.startswith('class_weight_')]
+        class_weight_keys.sort()  # Ensure consistent ordering
+        for key in class_weight_keys:
+            hyp_list.append(float(hyperparams[key]))
+        
+        # Add architecture parameters (Agent 1 parameters)  
+        arch_params = ['lstm_dim', 'conv_out1', 'conv_out2', 'conv_out3', 'fc_out2', 'fc_out3', 'att_dim', 'dilation', 'rp_group']
+        for param in arch_params:
+            if param in hyperparams:
+                hyp_list.append(float(hyperparams[param]))
+            else:
+                # Use default values if parameter not found
+                default_values = {
+                    'lstm_dim': 48, 'conv_out1': 48, 'conv_out2': 48, 'conv_out3': 48,
+                    'fc_out2': 48, 'fc_out3': 48, 'att_dim': 48, 'dilation': 3, 'rp_group': 5
+                }
+                hyp_list.append(float(default_values.get(param, 48)))
+        
+        # Add training parameters (Agent 2 parameters)
+        training_params = ['batch_size', 'learning_rate']
+        for param in training_params:
+            if param in hyperparams:
+                hyp_list.append(float(hyperparams[param]))
+            else:
+                # Use default values
+                default_values = {'batch_size': 32, 'learning_rate': 1e-3}
+                hyp_list.append(float(default_values.get(param, 1e-3)))
+        
+        return hyp_list
+    
+    def _save_rl_model_input(self, state: torch.Tensor):
+        """
+        Save the current state as RL_model_input.pt for compatibility with original MAT_HPO.
+        """
+        torch.save(state.cpu(), os.path.join(self.output_dir, 'RL_model_input.pt'))
     
     def _check_early_stopping(self) -> bool:
         """
