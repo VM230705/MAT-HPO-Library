@@ -265,6 +265,10 @@ class HyperparameterSpace:
         else:
             self.agent2_params.append(name)
             
+        # Update legacy attributes for backward compatibility
+        self.bounds[name] = (min_val, max_val)
+        self.param_types[name] = 'continuous' if not log_scale else 'log_uniform'
+            
         # Update agent dimensions
         self.agent_dims = (len(self.agent0_params), len(self.agent1_params), len(self.agent2_params))
         
@@ -305,6 +309,10 @@ class HyperparameterSpace:
             self.agent1_params.append(name)  
         else:
             self.agent2_params.append(name)
+            
+        # Update legacy attributes for backward compatibility
+        self.bounds[name] = choices  # For discrete params, bounds stores choices
+        self.param_types[name] = 'discrete'
             
         # Update agent dimensions
         self.agent_dims = (len(self.agent0_params), len(self.agent1_params), len(self.agent2_params))
@@ -532,7 +540,7 @@ class HyperparameterSpace:
                 param_type = self.param_types[param_name]
                 bounds = self.bounds[param_name]
                 
-                if param_type in [int, float]:
+                if param_type in [int, float] or param_type == 'continuous':
                     # Convert from [-1, 1] to [min, max]
                     min_val, max_val = bounds
                     scaled_value = min_val + (max_val - min_val) * (1 + action_value) / 2
@@ -555,7 +563,7 @@ class HyperparameterSpace:
                     # Ensure within original bounds
                     value = max(min(value, bounds[1]), bounds[0])
                     
-                elif param_type == str:
+                elif param_type == 'discrete' or param_type == str:
                     # Convert to categorical choice
                     choices = bounds
                     # Map [-1, 1] to [0, len(choices)-1]
