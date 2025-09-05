@@ -2,7 +2,14 @@
 
 **Multi-Agent Transformer Hyperparameter Optimization Library**
 
+[![Documentation](https://img.shields.io/badge/docs-github.io-blue)](https://vm230705.github.io/MAT-HPO-Library/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![Tests](https://img.shields.io/badge/tests-passing-green)](https://github.com/VM230705/MAT-HPO-Library)
+
 A flexible and powerful library for hyperparameter optimization using multi-agent reinforcement learning. Built on the MAT-HPO framework, this library can optimize hyperparameters for any machine learning model or pipeline.
+
+📖 **[Full Documentation](https://vm230705.github.io/MAT-HPO-Library/)**
 
 ## 🚀 Key Features
 
@@ -27,8 +34,8 @@ Each agent uses transformer networks to learn optimal hyperparameter selection s
 
 ```bash
 # Clone the repository
-git clone <repository-url>
-cd MAT_HPO_LIB
+git clone https://github.com/VM230705/MAT-HPO-Library.git
+cd MAT-HPO-Library
 
 # Install dependencies
 pip install torch numpy scikit-learn

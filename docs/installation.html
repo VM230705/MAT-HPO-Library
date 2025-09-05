@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Installation - MAT-HPO Library</title>
+    <meta name="description" content="Complete installation guide for the MAT-HPO library with examples and troubleshooting.">
+    <meta name="keywords" content="installation, setup, requirements, dependencies, MAT-HPO, hyperparameter optimization">
+    <meta name="author" content="MAT-HPO Development Team">
+    
+    <!-- Open Graph meta tags -->
+    <meta property="og:title" content="MAT-HPO Installation Guide">
+    <meta property="og:description" content="Easy installation guide for MAT-HPO library">
+    <meta property="og:type" content="website">
+    
+    <!-- Stylesheets -->
+    <link rel="stylesheet" href="css/style.css">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+    <!-- Mobile Menu Toggle -->
+    <button class="mobile-toggle">☰</button>
+    
+    <div class="container">
+        <!-- Sidebar Navigation -->
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">M</div>
+                    <div class="logo-text">
+                        <h1>MAT-HPO</h1>
+                        <p>Multi-Agent Transformer HPO</p>
+                    </div>
+                </a>
+                <div style="margin-top: 1rem;">
+                    <span class="version-badge">v1.0.0</span>
+                </div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <div class="nav-section">Getting Started</div>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="installation.html" class="nav-link active">Installation</a>
+                </li>
+                <li class="nav-item">
+                    <a href="quickstart.html" class="nav-link">Quick Start</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Examples</div>
+                </li>
+                <li class="nav-item">
+                    <a href="examples/simple.html" class="nav-link">Simple Example</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">API Reference</div>
+                </li>
+                <li class="nav-item">
+                    <a href="api/base-environment.html" class="nav-link">BaseEnvironment</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Resources</div>
+                </li>
+                <li class="nav-item">
+                    <a href="https://github.com/VM230705/MAT-HPO-Library" class="nav-link external">GitHub Repository</a>
+                </li>
+            </ul>
+        </nav>
+        
+        <!-- Main Content -->
+        <main class="content">
+            <div class="content-header">
+                <nav class="breadcrumb">
+                    <a href="index.html">Home</a> &gt; Installation
+                </nav>
+                <h1>Installation Guide</h1>
+            </div>
+            
+            <div class="main-content">
+                
+                <section class="content-section">
+                    <h2>🚀 Quick Installation</h2>
+                    <p>Get up and running with MAT-HPO in minutes:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code># Clone the repository
+git clone https://github.com/VM230705/MAT-HPO-Library.git
+cd MAT-HPO-Library
+
+# Install dependencies
+pip install torch numpy scikit-learn
+
+# Test the installation
+python simple_functionality_test.py</code></pre>
+                    </div>
+                </section>
+                
+                <section class="content-section">
+                    <h2>📋 System Requirements</h2>
+                    
+                    <h3>Minimum Requirements</h3>
+                    <ul>
+                        <li><strong>Python:</strong> 3.8 or higher</li>
+                        <li><strong>RAM:</strong> 4GB minimum (8GB recommended)</li>
+                        <li><strong>Disk Space:</strong> 100MB for library</li>
+                        <li><strong>OS:</strong> Linux, macOS, Windows</li>
+                    </ul>
+                    
+                    <h3>Recommended Setup</h3>
+                    <ul>
+                        <li><strong>Python:</strong> 3.10+</li>
+                        <li><strong>GPU:</strong> CUDA-compatible GPU (for faster training)</li>
+                        <li><strong>RAM:</strong> 16GB+ for large optimization tasks</li>
+                        <li><strong>CPU:</strong> Multi-core processor for parallel optimization</li>
+                    </ul>
+                </section>
+                
+                <section class="content-section">
+                    <h2>📦 Dependencies</h2>
+                    
+                    <h3>Core Dependencies</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code># Core ML/DL dependencies
+pip install torch>=2.0.0
+pip install numpy>=1.20.0
+pip install scikit-learn>=1.0.0
+
+# Optional but recommended
+pip install tqdm              # Progress bars
+pip install wandb             # Experiment tracking
+pip install matplotlib       # Plotting
+pip install seaborn          # Enhanced plotting</code></pre>
+                    </div>
+                    
+                    <h3>GPU Support (Optional)</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code># For CUDA support (check your CUDA version)
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+
+# Verify GPU support
+python -c "import torch; print('CUDA Available:', torch.cuda.is_available())"</code></pre>
+                    </div>
+                </section>
+                
+                <section class="content-section">
+                    <h2>📥 Installation Methods</h2>
+                    
+                    <h3>Method 1: Git Clone (Recommended)</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code># Clone the repository
+git clone https://github.com/VM230705/MAT-HPO-Library.git
+cd MAT-HPO-Library
+
+# Add to Python path for development
+export PYTHONPATH=$PYTHONPATH:$(pwd)</code></pre>
+                    </div>
+                    
+                    <h3>Method 2: Development Installation</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code># Clone and install in development mode
+git clone https://github.com/VM230705/MAT-HPO-Library.git
+cd MAT-HPO-Library
+pip install -e .
+
+# This allows you to modify the code and see changes immediately</code></pre>
+                    </div>
+                </section>
+                
+                <section class="content-section">
+                    <h2>🧪 Verify Installation</h2>
+                    
+                    <h3>Quick Test</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code># Test basic imports
+import sys
+sys.path.insert(0, '.')
+
+from MAT_HPO_LIB import MAT_HPO_Optimizer, BaseEnvironment, HyperparameterSpace
+print("✅ MAT-HPO Library imported successfully!")</code></pre>
+                    </div>
+                    
+                    <h3>Run Test Suite</h3>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code># Run the comprehensive functionality test
+python simple_functionality_test.py
+
+# Expected output:
+# 🚀 MAT-HPO Library Simple Functionality Test
+# ==================================================
+# 🧪 Testing imports...
+# ✅ Core imports successful
+# ...
+# 📊 Test Results: 5/5 tests passed
+# 🎉 All functionality tests passed!</code></pre>
+                    </div>
+                </section>
+                
+                <section class="content-section">
+                    <h2>🛠️ Troubleshooting</h2>
+                    
+                    <h3>Common Issues</h3>
+                    
+                    <div class="troubleshoot-item">
+                        <h4>ImportError: No module named 'MAT_HPO_LIB'</h4>
+                        <p><strong>Solution:</strong> Make sure you're in the correct directory and have added it to PYTHONPATH:</p>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-language">bash</span>
+                                <button class="copy-btn">Copy</button>
+                            </div>
+                            <pre><code>cd MAT-HPO-Library
+export PYTHONPATH=$PYTHONPATH:$(pwd)
+python -c "from MAT_HPO_LIB import MAT_HPO_Optimizer"</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="troubleshoot-item">
+                        <h4>CUDA not available</h4>
+                        <p><strong>Solution:</strong> Install PyTorch with CUDA support:</p>
+                        <div class="code-block">
+                            <div class="code-header">
+                                <span class="code-language">bash</span>
+                                <button class="copy-btn">Copy</button>
+                            </div>
+                            <pre><code># Check your CUDA version first
+nvcc --version
+
+# Install appropriate PyTorch version
+pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118</code></pre>
+                        </div>
+                    </div>
+                    
+                    <div class="troubleshoot-item">
+                        <h4>Memory errors during optimization</h4>
+                        <p><strong>Solutions:</strong></p>
+                        <ul>
+                            <li>Reduce batch size in optimization config</li>
+                            <li>Use CPU-only mode if GPU memory is limited</li>
+                            <li>Clear GPU cache regularly with <code>torch.cuda.empty_cache()</code></li>
+                        </ul>
+                    </div>
+                </section>
+                
+                <section class="content-section">
+                    <h2>🚀 Next Steps</h2>
+                    <p>Now that you have MAT-HPO installed, here's what to do next:</p>
+                    
+                    <div class="next-steps">
+                        <div class="step-item">
+                            <h3>1. Quick Start Guide</h3>
+                            <p>Follow our <a href="quickstart.html">Quick Start Guide</a> to run your first optimization in minutes.</p>
+                        </div>
+                        
+                        <div class="step-item">
+                            <h3>2. Try Examples</h3>
+                            <p>Explore the <a href="examples/simple.html">Simple Example</a> to understand the basic concepts.</p>
+                        </div>
+                        
+                        <div class="step-item">
+                            <h3>3. Read Documentation</h3>
+                            <p>Check out the <a href="api/base-environment.html">API Reference</a> for detailed information about classes and methods.</p>
+                        </div>
+                    </div>
+                </section>
+                
+            </div>
+        </main>
+    </div>
+    
+    <script src="js/main.js"></script>
+</body>
+</html>
