@@ -165,7 +165,7 @@
                         <div class="api-header">
                             <h3>load_data</h3>
                             <div class="api-signature">
-                                <code>@abstractmethod<br>load_data() → Any</code>
+                                <code>@abstractmethod<br>load_data() -&gt; Any</code>
                             </div>
                         </div>
                         <div class="api-content">
@@ -218,7 +218,7 @@
                         <div class="api-header">
                             <h3>create_model</h3>
                             <div class="api-signature">
-                                <code>@abstractmethod<br>create_model(hyperparams: Dict[str, Any]) → Any</code>
+                                <code>@abstractmethod<br>create_model(hyperparams: Dict[str, Any]) -&gt; Any</code>
                             </div>
                         </div>
                         <div class="api-content">
@@ -261,7 +261,7 @@
                         <div class="api-header">
                             <h3>train_evaluate</h3>
                             <div class="api-signature">
-                                <code>@abstractmethod<br>train_evaluate(model: Any, hyperparams: Dict[str, Any]) → Dict[str, float]</code>
+                                <code>@abstractmethod<br>train_evaluate(model: Any, hyperparams: Dict[str, Any]) -&gt; Dict[str, float]</code>
                             </div>
                         </div>
                         <div class="api-content">
@@ -352,7 +352,7 @@
                         <div class="api-header">
                             <h3>compute_reward</h3>
                             <div class="api-signature">
-                                <code>@abstractmethod<br>compute_reward(metrics: Dict[str, float]) → float</code>
+                                <code>@abstractmethod<br>compute_reward(metrics: Dict[str, float]) -&gt; float</code>
                             </div>
                         </div>
                         <div class="api-content">
@@ -413,7 +413,7 @@
                         <div class="api-header">
                             <h3>step</h3>
                             <div class="api-signature">
-                                <code>step(hyperparams: Dict[str, Any]) → Tuple[float, float, float, bool]</code>
+                                <code>step(hyperparams: Dict[str, Any]) -&gt; Tuple[float, float, float, bool]</code>
                             </div>
                         </div>
                         <div class="api-content">
@@ -448,7 +448,7 @@
                         <div class="api-header">
                             <h3>reset</h3>
                             <div class="api-signature">
-                                <code>reset() → torch.Tensor</code>
+                                <code>reset() -&gt; torch.Tensor</code>
                             </div>
                         </div>
                         <div class="api-content">
@@ -467,7 +467,7 @@
                         <div class="api-header">
                             <h3>get_best_results</h3>
                             <div class="api-signature">
-                                <code>get_best_results() → Dict[str, Any]</code>
+                                <code>get_best_results() -&gt; Dict[str, Any]</code>
                             </div>
                         </div>
                         <div class="api-content">
