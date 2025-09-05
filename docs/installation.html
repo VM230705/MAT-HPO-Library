@@ -66,6 +66,15 @@
                 <li class="nav-item">
                     <a href="api/base-environment.html" class="nav-link">BaseEnvironment</a>
                 </li>
+                <li class="nav-item">
+                    <a href="api/hyperparameter-space.html" class="nav-link">HyperparameterSpace</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/optimizer.html" class="nav-link">MAT_HPO_Optimizer</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/configs.html" class="nav-link">Configs</a>
+                </li>
                 
                 <li class="nav-item">
                     <div class="nav-section">Resources</div>
@@ -232,51 +241,6 @@ python simple_functionality_test.py
                     </div>
                 </section>
                 
-                <section class="content-section">
-                    <h2>🛠️ Troubleshooting</h2>
-                    
-                    <h3>Common Issues</h3>
-                    
-                    <div class="troubleshoot-item">
-                        <h4>ImportError: No module named 'MAT_HPO_LIB'</h4>
-                        <p><strong>Solution:</strong> Make sure you're in the correct directory and have added it to PYTHONPATH:</p>
-                        <div class="code-block">
-                            <div class="code-header">
-                                <span class="code-language">bash</span>
-                                <button class="copy-btn">Copy</button>
-                            </div>
-                            <pre><code>cd MAT-HPO-Library
-export PYTHONPATH=$PYTHONPATH:$(pwd)
-python -c "from MAT_HPO_LIB import MAT_HPO_Optimizer"</code></pre>
-                        </div>
-                    </div>
-                    
-                    <div class="troubleshoot-item">
-                        <h4>CUDA not available</h4>
-                        <p><strong>Solution:</strong> Install PyTorch with CUDA support:</p>
-                        <div class="code-block">
-                            <div class="code-header">
-                                <span class="code-language">bash</span>
-                                <button class="copy-btn">Copy</button>
-                            </div>
-                            <pre><code># Check your CUDA version first
-nvcc --version
-
-# Install appropriate PyTorch version
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118</code></pre>
-                        </div>
-                    </div>
-                    
-                    <div class="troubleshoot-item">
-                        <h4>Memory errors during optimization</h4>
-                        <p><strong>Solutions:</strong></p>
-                        <ul>
-                            <li>Reduce batch size in optimization config</li>
-                            <li>Use CPU-only mode if GPU memory is limited</li>
-                            <li>Clear GPU cache regularly with <code>torch.cuda.empty_cache()</code></li>
-                        </ul>
-                    </div>
-                </section>
                 
                 <section class="content-section">
                     <h2>🚀 Next Steps</h2>

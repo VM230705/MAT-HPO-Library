@@ -216,6 +216,11 @@ class HyperparameterSpace:
         self.constraints = constraints or []
         self.parameter_descriptions = parameter_descriptions or {}
         
+        # Initialize parameter categorization dictionaries
+        self.numerical_params = {}
+        self.discrete_params = {}
+        self.boolean_params = {}
+        
         # Initialize agent dimensions
         self.agent_dims = (0, 0, 0)
         
@@ -223,6 +228,10 @@ class HyperparameterSpace:
         self._is_validated = True
         self._translation_cache = {}
         self.device = None
+        
+        # Initialize tensors (will be populated when parameters are added)
+        self.hL_tensors = []
+        self.hU_tensors = []
         
     def add_continuous(self, name: str, min_val: float, max_val: float, 
                       agent: int, log_scale: bool = False, 

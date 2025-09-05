@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MAT_HPO_Optimizer API - MAT-HPO Library</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+    <button class="mobile-toggle">☰</button>
+    
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" class="logo">
+                    <div class="logo-icon">M</div>
+                    <div class="logo-text">
+                        <h1>MAT-HPO</h1>
+                        <p>Multi-Agent HPO</p>
+                    </div>
+                </a>
+                <div style="margin-top: 1rem;">
+                    <span class="version-badge">v1.0.0</span>
+                </div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <div class="nav-section">Getting Started</div>
+                </li>
+                <li class="nav-item">
+                    <a href="../index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../installation.html" class="nav-link">Installation</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../quickstart.html" class="nav-link">Quick Start</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">API Reference</div>
+                </li>
+                <li class="nav-item">
+                    <a href="base-environment.html" class="nav-link">BaseEnvironment</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hyperparameter-space.html" class="nav-link">HyperparameterSpace</a>
+                </li>
+                <li class="nav-item">
+                    <a href="optimizer.html" class="nav-link active">MAT_HPO_Optimizer</a>
+                </li>
+                <li class="nav-item">
+                    <a href="configs.html" class="nav-link">Configs</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Examples</div>
+                </li>
+                <li class="nav-item">
+                    <a href="../examples/simple.html" class="nav-link">Simple Example</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Resources</div>
+                </li>
+                <li class="nav-item">
+                    <a href="https://github.com/VM230705/MAT-HPO-Library" class="nav-link external">GitHub</a>
+                </li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <div class="content-header">
+                <nav class="breadcrumb">
+                    <a href="../index.html">Home</a> &gt; <a href="../api/">API</a> &gt; MAT_HPO_Optimizer
+                </nav>
+                <h1>MAT_HPO_Optimizer API</h1>
+            </div>
+            
+            <div class="main-content">
+                
+                <section class="content-section">
+                    <h2>📋 Overview</h2>
+                    <p>The main optimization interface that coordinates multi-agent hyperparameter search using reinforcement learning.</p>
+                </section>
+
+                <section class="content-section">
+                    <h2>🏗️ Initialization</h2>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code>from MAT_HPO_LIB import MAT_HPO_Optimizer
+from MAT_HPO_LIB.utils import DefaultConfigs
+
+optimizer = MAT_HPO_Optimizer(
+    environment=your_environment,
+    hyperparameter_space=your_space,
+    config=DefaultConfigs.standard()
+)</code></pre>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>🔧 Parameters</h2>
+                    
+                    <div class="api-section">
+                        <div class="api-header">
+                            <h3>Constructor Parameters</h3>
+                        </div>
+                        <div class="api-content">
+                            <ul>
+                                <li><strong>environment</strong>: Your BaseEnvironment implementation</li>
+                                <li><strong>hyperparameter_space</strong>: HyperparameterSpace defining search bounds</li>
+                                <li><strong>config</strong>: OptimizationConfig with optimization settings</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>🚀 Main Method</h2>
+                    
+                    <div class="api-section">
+                        <div class="api-header">
+                            <h3>optimize()</h3>
+                            <div class="api-signature">optimize() -&gt; Dict[str, Any]</div>
+                        </div>
+                        <div class="api-content">
+                            <p>Run the multi-agent hyperparameter optimization.</p>
+                            
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">python</span>
+                                    <button class="copy-btn">Copy</button>
+                                </div>
+                                <pre><code>results = optimizer.optimize()
+
+# Results dictionary contains:
+print(results['best_hyperparameters'])  # Best params found
+print(results['best_performance'])      # Best reward/score
+print(results['optimization_history'])  # History of all evaluations</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>📊 Results Structure</h2>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code>{
+    'best_hyperparameters': {
+        'learning_rate': 0.0034,
+        'hidden_size': 128,
+        'batch_size': 64
+    },
+    'best_performance': 0.9234,
+    'optimization_history': [
+        {'step': 1, 'hyperparams': {...}, 'reward': 0.85},
+        {'step': 2, 'hyperparams': {...}, 'reward': 0.87},
+        # ... all evaluation steps
+    ],
+    'total_steps': 100,
+    'convergence_info': {...}
+}</code></pre>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>📁 Output Files</h2>
+                    <p>Optimization results are automatically saved to:</p>
+                    <ul>
+                        <li><code>best_hyperparams.json</code> - Best hyperparameters found</li>
+                        <li><code>optimization_results.json</code> - Complete results dictionary</li>
+                        <li><code>step_log.jsonl</code> - Step-by-step evaluation log</li>
+                    </ul>
+                </section>
+
+                <section class="content-section">
+                    <h2>📝 Complete Example</h2>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code>from MAT_HPO_LIB import MAT_HPO_Optimizer, BaseEnvironment, HyperparameterSpace
+from MAT_HPO_LIB.utils import DefaultConfigs
+
+# 1. Setup environment and space
+environment = MyEnvironment()
+space = HyperparameterSpace()
+space.add_continuous('learning_rate', 1e-4, 1e-2, agent=0)
+space.add_continuous('batch_size', 16, 128, agent=1)
+space.add_continuous('dropout_rate', 0.0, 0.5, agent=2)
+
+# 2. Configure optimization
+config = DefaultConfigs.standard()  # 100 steps
+
+# 3. Run optimization
+optimizer = MAT_HPO_Optimizer(environment, space, config)
+results = optimizer.optimize()
+
+# 4. Use best hyperparameters
+best_params = results['best_hyperparameters']
+print(f"Best learning rate: {best_params['learning_rate']}")
+print(f"Best performance: {results['best_performance']}")</code></pre>
+                    </div>
+                </section>
+                
+            </div>
+        </main>
+    </div>
+    
+    <script src="../js/main.js"></script>
+</body>
+</html>

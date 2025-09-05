@@ -46,6 +46,15 @@
                 <li class="nav-item">
                     <a href="api/base-environment.html" class="nav-link">BaseEnvironment</a>
                 </li>
+                <li class="nav-item">
+                    <a href="api/hyperparameter-space.html" class="nav-link">HyperparameterSpace</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/optimizer.html" class="nav-link">MAT_HPO_Optimizer</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/configs.html" class="nav-link">Configs</a>
+                </li>
                 
                 <li class="nav-item">
                     <div class="nav-section">Examples</div>
@@ -104,7 +113,8 @@ class MyEnvironment(BaseEnvironment):
 # 2. Define hyperparameter space  
 space = HyperparameterSpace()
 space.add_continuous('learning_rate', 1e-5, 1e-2, agent=0)
-space.add_discrete('batch_size', [16, 32, 64, 128], agent=1)
+space.add_continuous('batch_size', 16, 128, agent=1)  # Continuous range, cast to int
+space.add_continuous('dropout_rate', 0.0, 0.5, agent=2)
 
 # 3. Run optimization
 config = DefaultConfigs.standard()
@@ -185,25 +195,6 @@ config = DefaultConfigs.cpu_only()</code></pre>
                     </ul>
                 </section>
 
-                <section class="content-section">
-                    <h2>🔧 Troubleshooting</h2>
-                    
-                    <div class="troubleshoot-grid">
-                        <div class="troubleshoot-item">
-                            <h4>Import Error</h4>
-                            <div class="code-block">
-                                <pre><code>export PYTHONPATH=$PYTHONPATH:$(pwd)</code></pre>
-                            </div>
-                        </div>
-                        
-                        <div class="troubleshoot-item">
-                            <h4>CUDA Out of Memory</h4>
-                            <div class="code-block">
-                                <pre><code>config = DefaultConfigs.cpu_only()</code></pre>
-                            </div>
-                        </div>
-                    </div>
-                </section>
 
                 <section class="content-section">
                     <h2>📚 Next Steps</h2>

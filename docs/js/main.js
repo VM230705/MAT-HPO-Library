@@ -109,55 +109,13 @@ function initializeCodeBlocks() {
             });
         });
         
-        // Syntax highlighting (basic)
-        highlightSyntax(block);
+        // Skip syntax highlighting - use clean code display
     });
 }
 
-// Basic syntax highlighting
-function highlightSyntax(codeBlock) {
-    let code = codeBlock.innerHTML;
-    
-    // Python syntax highlighting
-    if (codeBlock.classList.contains('language-python') || 
-        codeBlock.parentElement.classList.contains('language-python')) {
-        
-        // Keywords
-        code = code.replace(/\b(class|def|if|else|elif|for|while|try|except|finally|import|from|return|yield|with|as|pass|break|continue|and|or|not|in|is|None|True|False|self)\b/g, 
-            '<span style="color: #0000ff; font-weight: bold;">$1</span>');
-        
-        // Strings
-        code = code.replace(/(["'])((?:\\.|(?!\1)[^\\])*?)\1/g, 
-            '<span style="color: #008000;">$1$2$1</span>');
-        
-        // Comments
-        code = code.replace(/#.*$/gm, 
-            '<span style="color: #808080; font-style: italic;">$&</span>');
-        
-        // Numbers
-        code = code.replace(/\b\d+\.?\d*\b/g, 
-            '<span style="color: #800080;">$&</span>');
-    }
-    
-    // Bash syntax highlighting
-    if (codeBlock.classList.contains('language-bash') || 
-        codeBlock.parentElement.classList.contains('language-bash')) {
-        
-        // Commands
-        code = code.replace(/\b(cd|ls|mkdir|pip|python|git|curl|wget|sudo|apt|yum|docker|conda)\b/g, 
-            '<span style="color: #0000ff; font-weight: bold;">$1</span>');
-        
-        // Flags
-        code = code.replace(/(\s|^)(-{1,2}[a-zA-Z0-9-]+)/g, 
-            '$1<span style="color: #800080;">$2</span>');
-        
-        // Comments
-        code = code.replace(/#.*$/gm, 
-            '<span style="color: #808080; font-style: italic;">$&</span>');
-    }
-    
-    codeBlock.innerHTML = code;
-}
+// Clean code display without syntax highlighting
+// Most GitHub Pages use external libraries like Prism.js or highlight.js
+// For simplicity, we'll use clean monospace display
 
 // Scroll to top functionality
 function initializeScrollToTop() {

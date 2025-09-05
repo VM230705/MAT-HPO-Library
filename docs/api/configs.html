@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuration API - MAT-HPO Library</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+    <button class="mobile-toggle">☰</button>
+    
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" class="logo">
+                    <div class="logo-icon">M</div>
+                    <div class="logo-text">
+                        <h1>MAT-HPO</h1>
+                        <p>Multi-Agent HPO</p>
+                    </div>
+                </a>
+                <div style="margin-top: 1rem;">
+                    <span class="version-badge">v1.0.0</span>
+                </div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <div class="nav-section">Getting Started</div>
+                </li>
+                <li class="nav-item">
+                    <a href="../index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../installation.html" class="nav-link">Installation</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../quickstart.html" class="nav-link">Quick Start</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">API Reference</div>
+                </li>
+                <li class="nav-item">
+                    <a href="base-environment.html" class="nav-link">BaseEnvironment</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hyperparameter-space.html" class="nav-link">HyperparameterSpace</a>
+                </li>
+                <li class="nav-item">
+                    <a href="optimizer.html" class="nav-link">MAT_HPO_Optimizer</a>
+                </li>
+                <li class="nav-item">
+                    <a href="configs.html" class="nav-link active">Configs</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Examples</div>
+                </li>
+                <li class="nav-item">
+                    <a href="../examples/simple.html" class="nav-link">Simple Example</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Resources</div>
+                </li>
+                <li class="nav-item">
+                    <a href="https://github.com/VM230705/MAT-HPO-Library" class="nav-link external">GitHub</a>
+                </li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <div class="content-header">
+                <nav class="breadcrumb">
+                    <a href="../index.html">Home</a> &gt; <a href="../api/">API</a> &gt; Configs
+                </nav>
+                <h1>Configuration API</h1>
+            </div>
+            
+            <div class="main-content">
+                
+                <section class="content-section">
+                    <h2>📋 Overview</h2>
+                    <p>Configuration presets and custom settings for optimization behavior, device usage, and performance tuning.</p>
+                </section>
+
+                <section class="content-section">
+                    <h2>🚀 DefaultConfigs</h2>
+                    <p>Pre-configured optimization settings for common scenarios:</p>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code>from MAT_HPO_LIB.utils import DefaultConfigs
+
+# Quick test (10 steps, fast evaluation)
+config = DefaultConfigs.quick_test()
+
+# Standard optimization (100 steps, balanced)  
+config = DefaultConfigs.standard()
+
+# CPU-only mode (no GPU usage)
+config = DefaultConfigs.cpu_only()</code></pre>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>⚙️ Custom Configuration</h2>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code>from MAT_HPO_LIB.utils import OptimizationConfig
+
+config = OptimizationConfig(
+    max_steps=50,              # Number of optimization steps
+    batch_size=32,             # Agent batch size
+    use_cuda=True,             # Enable GPU acceleration  
+    gpu_device=0,              # GPU device ID
+    verbose=True,              # Show progress
+    save_interval=10,          # Save every N steps
+    early_stop_patience=15,    # Stop if no improvement
+    output_dir="./results"     # Results directory
+)</code></pre>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>🔧 Configuration Options</h2>
+                    
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <h3>Optimization Control</h3>
+                            <ul style="text-align: left;">
+                                <li><code>max_steps</code>: Total optimization steps</li>
+                                <li><code>early_stop_patience</code>: Early stopping patience</li>
+                                <li><code>convergence_threshold</code>: Convergence criteria</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <h3>Performance Settings</h3>
+                            <ul style="text-align: left;">
+                                <li><code>use_cuda</code>: Enable GPU acceleration</li>
+                                <li><code>gpu_device</code>: GPU device selection</li>
+                                <li><code>batch_size</code>: Agent training batch size</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <h3>Output & Logging</h3>
+                            <ul style="text-align: left;">
+                                <li><code>verbose</code>: Progress display</li>
+                                <li><code>save_interval</code>: Checkpoint frequency</li>
+                                <li><code>output_dir</code>: Results directory</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>🎯 Preset Comparison</h2>
+                    
+                    <div style="overflow-x: auto;">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Setting</th>
+                                    <th>quick_test()</th>
+                                    <th>standard()</th>
+                                    <th>cpu_only()</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>max_steps</td>
+                                    <td>10</td>
+                                    <td>100</td>
+                                    <td>100</td>
+                                </tr>
+                                <tr>
+                                    <td>use_cuda</td>
+                                    <td>Auto-detect</td>
+                                    <td>Auto-detect</td>
+                                    <td>False</td>
+                                </tr>
+                                <tr>
+                                    <td>batch_size</td>
+                                    <td>16</td>
+                                    <td>32</td>
+                                    <td>32</td>
+                                </tr>
+                                <tr>
+                                    <td>Use Case</td>
+                                    <td>Testing setup</td>
+                                    <td>Production runs</td>
+                                    <td>CPU-only systems</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>📝 Usage Example</h2>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code># Choose based on your needs:
+
+# 1. Quick testing/debugging
+config = DefaultConfigs.quick_test()
+
+# 2. Standard optimization run  
+config = DefaultConfigs.standard()
+
+# 3. Custom configuration for your specific needs
+config = OptimizationConfig(
+    max_steps=200,           # Longer optimization
+    use_cuda=True,          
+    gpu_device=1,           # Use GPU 1
+    verbose=True,           # Show progress
+    output_dir="./my_results"
+)
+
+# Use with optimizer
+optimizer = MAT_HPO_Optimizer(environment, space, config)
+results = optimizer.optimize()</code></pre>
+                    </div>
+                </section>
+                
+            </div>
+        </main>
+    </div>
+    
+    <script src="../js/main.js"></script>
+</body>
+</html>

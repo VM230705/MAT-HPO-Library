@@ -46,6 +46,15 @@
                 <li class="nav-item">
                     <a href="api/base-environment.html" class="nav-link">BaseEnvironment</a>
                 </li>
+                <li class="nav-item">
+                    <a href="api/hyperparameter-space.html" class="nav-link">HyperparameterSpace</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/optimizer.html" class="nav-link">MAT_HPO_Optimizer</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/configs.html" class="nav-link">Configs</a>
+                </li>
                 
                 <li class="nav-item">
                     <div class="nav-section">Examples</div>
@@ -134,7 +143,7 @@ class MyEnvironment(BaseEnvironment):
 
                 <section class="content-section">
                     <h2>🎯 Step 3: Define Hyperparameter Space</h2>
-                    <p>Specify which hyperparameters to optimize and assign them to agents:</p>
+                    <p>Specify hyperparameter ranges for optimization. Use continuous bounds (min, max) - the system will automatically handle int/float casting based on your model's needs:</p>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -143,19 +152,43 @@ class MyEnvironment(BaseEnvironment):
                         </div>
                         <pre><code>from MAT_HPO_LIB import HyperparameterSpace
 
+# Method 1: Using add_continuous with comments
 space = HyperparameterSpace()
 
-# Agent 0: Problem-specific parameters
+# Agent 0: Problem-specific parameters (float ranges)
 space.add_continuous('class_weight_0', 0.1, 5.0, agent=0)
 space.add_continuous('class_weight_1', 0.1, 5.0, agent=0)
 
-# Agent 1: Architecture parameters  
-space.add_discrete('hidden_size', [64, 128, 256, 512], agent=1)
-space.add_discrete('num_layers', [2, 3, 4, 5], agent=1)
+# Agent 1: Architecture parameters (int ranges)
+space.add_continuous('hidden_size', 64, 512, agent=1)    # Will be cast to int
+space.add_continuous('num_layers', 2, 8, agent=1)        # Will be cast to int
 
 # Agent 2: Training parameters
-space.add_continuous('learning_rate', 1e-5, 1e-2, agent=2)
-space.add_discrete('batch_size', [16, 32, 64, 128], agent=2)</code></pre>
+space.add_continuous('learning_rate', 1e-5, 1e-2, agent=2)  # float
+space.add_continuous('batch_size', 16, 128, agent=2)        # Will be cast to int
+
+# Method 2: Using bounds dictionary (more explicit)
+space = HyperparameterSpace(
+    agent0_params=['class_weight_0', 'class_weight_1'],
+    agent1_params=['hidden_size', 'num_layers'],
+    agent2_params=['learning_rate', 'batch_size'],
+    bounds={
+        'class_weight_0': (0.1, 5.0),    # continuous range
+        'class_weight_1': (0.1, 5.0),    # continuous range
+        'hidden_size': (64, 512),        # continuous range 
+        'num_layers': (2, 8),            # continuous range
+        'learning_rate': (1e-5, 1e-2),   # continuous range
+        'batch_size': (16, 128)          # continuous range
+    },
+    param_types={
+        'class_weight_0': float,
+        'class_weight_1': float,
+        'hidden_size': int,      # System will cast float to int
+        'num_layers': int,       # System will cast float to int  
+        'learning_rate': float,
+        'batch_size': int        # System will cast float to int
+    }
+)</code></pre>
                     </div>
                 </section>
 
@@ -253,30 +286,6 @@ config = OptimizationConfig(
                     </div>
                 </section>
 
-                <section class="content-section">
-                    <h2>🔧 Troubleshooting</h2>
-                    
-                    <div class="troubleshoot-item">
-                        <h4>Import Error</h4>
-                        <div class="code-block">
-                            <pre><code>export PYTHONPATH=$PYTHONPATH:$(pwd)</code></pre>
-                        </div>
-                    </div>
-                    
-                    <div class="troubleshoot-item">
-                        <h4>CUDA Out of Memory</h4>
-                        <div class="code-block">
-                            <pre><code>config = DefaultConfigs.cpu_only()</code></pre>
-                        </div>
-                    </div>
-
-                    <div class="troubleshoot-item">
-                        <h4>Test Library Function</h4>
-                        <div class="code-block">
-                            <pre><code>python simple_functionality_test.py</code></pre>
-                        </div>
-                    </div>
-                </section>
 
                 <section class="content-section">
                     <h2>📚 Next Steps</h2>

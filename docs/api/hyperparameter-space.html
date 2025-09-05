@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HyperparameterSpace API - MAT-HPO Library</title>
+    <link rel="stylesheet" href="../css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+    <button class="mobile-toggle">☰</button>
+    
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <a href="../index.html" class="logo">
+                    <div class="logo-icon">M</div>
+                    <div class="logo-text">
+                        <h1>MAT-HPO</h1>
+                        <p>Multi-Agent HPO</p>
+                    </div>
+                </a>
+                <div style="margin-top: 1rem;">
+                    <span class="version-badge">v1.0.0</span>
+                </div>
+            </div>
+            
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <div class="nav-section">Getting Started</div>
+                </li>
+                <li class="nav-item">
+                    <a href="../index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../installation.html" class="nav-link">Installation</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../quickstart.html" class="nav-link">Quick Start</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">API Reference</div>
+                </li>
+                <li class="nav-item">
+                    <a href="base-environment.html" class="nav-link">BaseEnvironment</a>
+                </li>
+                <li class="nav-item">
+                    <a href="hyperparameter-space.html" class="nav-link active">HyperparameterSpace</a>
+                </li>
+                <li class="nav-item">
+                    <a href="optimizer.html" class="nav-link">MAT_HPO_Optimizer</a>
+                </li>
+                <li class="nav-item">
+                    <a href="configs.html" class="nav-link">Configs</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Examples</div>
+                </li>
+                <li class="nav-item">
+                    <a href="../examples/simple.html" class="nav-link">Simple Example</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Resources</div>
+                </li>
+                <li class="nav-item">
+                    <a href="https://github.com/VM230705/MAT-HPO-Library" class="nav-link external">GitHub</a>
+                </li>
+            </ul>
+        </nav>
+        
+        <main class="content">
+            <div class="content-header">
+                <nav class="breadcrumb">
+                    <a href="../index.html">Home</a> &gt; <a href="../api/">API</a> &gt; HyperparameterSpace
+                </nav>
+                <h1>HyperparameterSpace API</h1>
+            </div>
+            
+            <div class="main-content">
+                
+                <section class="content-section">
+                    <h2>📋 Overview</h2>
+                    <p>Define the search space for hyperparameters and assign them to different agents for specialized optimization.</p>
+                </section>
+
+                <section class="content-section">
+                    <h2>🏗️ Initialization</h2>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code># Method 1: Dynamic addition
+space = HyperparameterSpace()
+space.add_continuous('learning_rate', 1e-4, 1e-2, agent=0)
+
+# Method 2: Full initialization
+space = HyperparameterSpace(
+    agent0_params=['learning_rate', 'weight_decay'],
+    agent1_params=['hidden_size'],
+    agent2_params=['batch_size'],
+    bounds={'learning_rate': (1e-4, 1e-2), ...},
+    param_types={'learning_rate': float, ...}
+)</code></pre>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>🔧 Methods</h2>
+                    
+                    <div class="api-section">
+                        <div class="api-header">
+                            <h3>add_continuous(name, min_val, max_val, agent)</h3>
+                            <div class="api-signature">add_continuous(name: str, min_val: float, max_val: float, agent: int) -&gt; self</div>
+                        </div>
+                        <div class="api-content">
+                            <p>Add a continuous hyperparameter with min/max bounds.</p>
+                            
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">python</span>
+                                    <button class="copy-btn">Copy</button>
+                                </div>
+                                <pre><code># Float parameters
+space.add_continuous('learning_rate', 1e-5, 1e-2, agent=0)
+space.add_continuous('dropout_rate', 0.0, 0.5, agent=1)
+
+# Int parameters (will be cast from continuous range)
+space.add_continuous('hidden_size', 64, 512, agent=2)
+space.add_continuous('batch_size', 16, 128, agent=2)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="api-section">
+                        <div class="api-header">
+                            <h3>add_discrete(name, choices, agent)</h3>
+                            <div class="api-signature">add_discrete(name: str, choices: List, agent: int) -&gt; self</div>
+                        </div>
+                        <div class="api-content">
+                            <p>Add a discrete hyperparameter with fixed choices (use sparingly - continuous ranges are preferred).</p>
+                            
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">python</span>
+                                    <button class="copy-btn">Copy</button>
+                                </div>
+                                <pre><code>space.add_discrete('optimizer', ['adam', 'sgd', 'adamw'], agent=0)
+space.add_discrete('activation', ['relu', 'tanh', 'gelu'], agent=1)</code></pre>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>🎯 Agent Assignment</h2>
+                    <div class="feature-grid">
+                        <div class="feature-item">
+                            <h3>Agent 0</h3>
+                            <p>Problem-specific parameters like learning rates, regularization, class weights</p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <h3>Agent 1</h3>
+                            <p>Model architecture parameters like hidden layers, network size, activation functions</p>
+                        </div>
+                        
+                        <div class="feature-item">
+                            <h3>Agent 2</h3>
+                            <p>Training parameters like batch size, dropout rate, optimization settings</p>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>📝 Complete Example</h2>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code>from MAT_HPO_LIB import HyperparameterSpace
+
+# Create space for neural network optimization
+space = HyperparameterSpace()
+
+# Agent 0: Problem-specific parameters
+space.add_continuous('learning_rate', 1e-5, 1e-2, agent=0)
+space.add_continuous('weight_decay', 1e-6, 1e-3, agent=0)
+
+# Agent 1: Architecture parameters  
+space.add_continuous('hidden_size', 64, 512, agent=1)
+space.add_continuous('num_layers', 2, 8, agent=1)
+
+# Agent 2: Training parameters
+space.add_continuous('batch_size', 16, 128, agent=2)
+space.add_continuous('dropout_rate', 0.0, 0.5, agent=2)
+
+# Each agent will have 2 parameters to optimize
+print(f"Agent dimensions: {space.agent_dims}")  # (2, 2, 2)</code></pre>
+                    </div>
+                </section>
+                
+            </div>
+        </main>
+    </div>
+    
+    <script src="../js/main.js"></script>
+</body>
+</html>

@@ -17,17 +17,23 @@ Quick Start:
     
     # Define your environment
     class MyEnvironment(BaseEnvironment):
-        def step(self, hyperparams):
-            # Your optimization logic here
-            return f1, auc, gmean, done
+        def load_data(self):
+            return load_your_dataset()
+        def create_model(self, hyperparams):
+            return create_your_model(hyperparams)
+        def train_evaluate(self, model, hyperparams):
+            return {'f1': 0.85, 'accuracy': 0.90}
+        def compute_reward(self, metrics):
+            return metrics['f1']
     
-    # Set up optimization
+    # Set up optimization  
     space = HyperparameterSpace()
     space.add_continuous('learning_rate', 1e-4, 1e-2, agent=0)
-    space.add_discrete('batch_size', [16, 32, 64], agent=1)
+    space.add_continuous('batch_size', 16, 128, agent=1)
+    space.add_continuous('dropout_rate', 0.0, 0.5, agent=2)
     
     config = DefaultConfigs.standard()
-    optimizer = MAT_HPO_Optimizer(environment, space, config)
+    optimizer = MAT_HPO_Optimizer(MyEnvironment(), space, config)
     results = optimizer.optimize()
 """
 

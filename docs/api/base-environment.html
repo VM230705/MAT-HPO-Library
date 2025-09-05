@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BaseEnvironment API - MAT-HPO Library</title>
-    <meta name="description" content="Complete API reference for the BaseEnvironment class in MAT-HPO Library.">
     <link rel="stylesheet" href="../css/style.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
 </head>
@@ -12,14 +11,13 @@
     <button class="mobile-toggle">☰</button>
     
     <div class="container">
-        <!-- Sidebar Navigation -->
         <nav class="sidebar">
             <div class="sidebar-header">
                 <a href="../index.html" class="logo">
                     <div class="logo-icon">M</div>
                     <div class="logo-text">
                         <h1>MAT-HPO</h1>
-                        <p>Multi-Agent Transformer HPO</p>
+                        <p>Multi-Agent HPO</p>
                     </div>
                 </a>
                 <div style="margin-top: 1rem;">
@@ -54,669 +52,216 @@
                     <a href="optimizer.html" class="nav-link">MAT_HPO_Optimizer</a>
                 </li>
                 <li class="nav-item">
-                    <a href="config.html" class="nav-link">Configuration</a>
+                    <a href="configs.html" class="nav-link">Configs</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Examples</div>
+                </li>
+                <li class="nav-item">
+                    <a href="../examples/simple.html" class="nav-link">Simple Example</a>
+                </li>
+                
+                <li class="nav-item">
+                    <div class="nav-section">Resources</div>
+                </li>
+                <li class="nav-item">
+                    <a href="https://github.com/VM230705/MAT-HPO-Library" class="nav-link external">GitHub</a>
                 </li>
             </ul>
         </nav>
         
-        <!-- Main Content -->
         <main class="content">
             <div class="content-header">
-                <ol class="breadcrumb">
-                    <li><a href="../index.html">Home</a></li>
-                    <li><a href="../api/">API Reference</a></li>
-                    <li>BaseEnvironment</li>
-                </ol>
+                <nav class="breadcrumb">
+                    <a href="../index.html">Home</a> &gt; <a href="../api/">API</a> &gt; BaseEnvironment
+                </nav>
+                <h1>BaseEnvironment API</h1>
             </div>
             
             <div class="main-content">
-                <h1>BaseEnvironment</h1>
-                <p class="lead">Abstract base class for defining hyperparameter optimization environments in MAT-HPO.</p>
                 
-                <div id="table-of-contents">
-                    <h3>Contents</h3>
-                </div>
-                
-                <!-- Class Overview -->
-                <section>
-                    <h2>Class Overview</h2>
-                    <div class="api-section">
-                        <div class="api-header">
-                            <h3>BaseEnvironment</h3>
-                            <div class="api-signature">
-                                <code>class MAT_HPO_LIB.core.base_environment.BaseEnvironment(name, checkpoint_dir, verbose, save_history, validation_split)</code>
-                            </div>
-                        </div>
-                        <div class="api-content">
-                            <p>Abstract base class that provides a comprehensive framework for defining optimization problems that can be solved using the MAT-HPO algorithm. Users must inherit from this class and implement the abstract methods to define their specific optimization problem.</p>
-                            
-                            <h4>Key Features</h4>
-                            <ul>
-                                <li>Automatic tracking of training history and best results</li>
-                                <li>Built-in progress monitoring and logging capabilities</li>
-                                <li>Flexible metric extraction with fallback options</li>
-                                <li>Error handling and graceful degradation</li>
-                                <li>Support for custom stopping criteria</li>
-                                <li>Checkpoint and resume functionality</li>
-                                <li>Integration with external validation sets</li>
-                            </ul>
-                        </div>
-                    </div>
+                <section class="content-section">
+                    <h2>📋 Overview</h2>
+                    <p>The <code>BaseEnvironment</code> class is the core abstract interface for MAT-HPO optimization. Inherit from this class to define your optimization problem.</p>
                 </section>
-                
-                <!-- Constructor -->
-                <section>
-                    <h2>Constructor</h2>
-                    <div class="api-section">
-                        <div class="api-header">
-                            <h3>__init__</h3>
-                            <div class="api-signature">
-                                <code>__init__(name="CustomEnvironment", checkpoint_dir=None, verbose=True, save_history=True, validation_split=0.2)</code>
-                            </div>
-                        </div>
-                        <div class="api-content">
-                            <p>Initialize the base environment with configuration options.</p>
-                            
-                            <h4>Parameters</h4>
-                            <div class="param-list">
-                                <div class="param-item">
-                                    <span class="param-name">name</span> <span class="param-type">str, optional</span>
-                                    <p>Descriptive name for this environment. Default: "CustomEnvironment"</p>
-                                </div>
-                                <div class="param-item">
-                                    <span class="param-name">checkpoint_dir</span> <span class="param-type">str, optional</span>
-                                    <p>Directory to save checkpoints. If None, no checkpointing is performed. Default: None</p>
-                                </div>
-                                <div class="param-item">
-                                    <span class="param-name">verbose</span> <span class="param-type">bool, optional</span>
-                                    <p>Whether to print progress information. Default: True</p>
-                                </div>
-                                <div class="param-item">
-                                    <span class="param-name">save_history</span> <span class="param-type">bool, optional</span>
-                                    <p>Whether to maintain detailed training history. Default: True</p>
-                                </div>
-                                <div class="param-item">
-                                    <span class="param-name">validation_split</span> <span class="param-type">float, optional</span>
-                                    <p>Fraction of data to use for validation (if applicable). Default: 0.2</p>
-                                </div>
-                            </div>
-                            
-                            <h4>Example</h4>
-                            <pre><code class="language-python">class MyEnvironment(BaseEnvironment):
-    def __init__(self):
-        super().__init__(
-            name="MyCustomOptimization",
-            checkpoint_dir="./checkpoints",
-            verbose=True,
-            save_history=True,
-            validation_split=0.15
-        )</code></pre>
-                        </div>
-                    </div>
-                </section>
-                
-                <!-- Abstract Methods -->
-                <section>
-                    <h2>Abstract Methods</h2>
-                    <p class="alert alert-info">These methods <strong>must</strong> be implemented in your subclass.</p>
+
+                <section class="content-section">
+                    <h2>🏗️ Class Definition</h2>
                     
-                    <!-- load_data -->
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code>from MAT_HPO_LIB import BaseEnvironment
+
+class MyEnvironment(BaseEnvironment):
+    def __init__(self, name="MyEnvironment"):
+        super().__init__(name)</code></pre>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>🔧 Required Methods</h2>
+                    
                     <div class="api-section">
                         <div class="api-header">
-                            <h3>load_data</h3>
-                            <div class="api-signature">
-                                <code>@abstractmethod<br>load_data() -&gt; Any</code>
-                            </div>
+                            <h3>load_data()</h3>
+                            <div class="api-signature">load_data() -&gt; Any</div>
                         </div>
                         <div class="api-content">
-                            <p>Load and prepare the dataset for training/evaluation. This method should handle all data preprocessing, splitting, and preparation needed for your specific problem.</p>
+                            <p>Load and preprocess your dataset. Store data as instance variables.</p>
                             
-                            <h4>Returns</h4>
-                            <div class="param-item">
-                                <span class="param-name">data</span> <span class="param-type">Any</span>
-                                <p>The loaded and preprocessed dataset in any format that your create_model and train_evaluate methods can work with.</p>
-                            </div>
-                            
-                            <h4>Common Implementations</h4>
-                            <ul>
-                                <li>Load data from files (CSV, JSON, images, etc.)</li>
-                                <li>Apply preprocessing (normalization, tokenization, etc.)</li>
-                                <li>Split into train/validation/test sets</li>
-                                <li>Convert to appropriate tensor formats</li>
-                            </ul>
-                            
-                            <h4>Example</h4>
-                            <pre><code class="language-python">def load_data(self):
-    # Load from file
-    data = pd.read_csv('my_dataset.csv')
-    
-    # Preprocessing
-    X = data.drop('target', axis=1).values
-    y = data['target'].values
-    
-    # Split data
-    X_train, X_val, y_train, y_val = train_test_split(
-        X, y, test_size=0.2, random_state=42
-    )
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">python</span>
+                                    <button class="copy-btn">Copy</button>
+                                </div>
+                                <pre><code>def load_data(self):
+    # Load your data
+    X, y = load_my_dataset()
     
     # Store as instance variables
-    self.X_train = X_train
-    self.X_val = X_val
-    self.y_train = y_train
-    self.y_val = y_val
+    self.X_train, self.X_val = train_test_split(X, y)
     
-    return {
-        'train_size': len(X_train),
-        'val_size': len(X_val),
-        'features': X.shape[1]
-    }</code></pre>
+    return {"samples": len(X), "features": X.shape[1]}</code></pre>
+                            </div>
                         </div>
                     </div>
-                    
-                    <!-- create_model -->
+
                     <div class="api-section">
                         <div class="api-header">
-                            <h3>create_model</h3>
-                            <div class="api-signature">
-                                <code>@abstractmethod<br>create_model(hyperparams: Dict[str, Any]) -&gt; Any</code>
-                            </div>
+                            <h3>create_model(hyperparams)</h3>
+                            <div class="api-signature">create_model(hyperparams: dict) -&gt; Any</div>
                         </div>
                         <div class="api-content">
-                            <p>Create a model instance with the given hyperparameters. This method should instantiate your model/algorithm with the specified hyperparameters.</p>
+                            <p>Create a model with given hyperparameters.</p>
                             
-                            <h4>Parameters</h4>
-                            <div class="param-item">
-                                <span class="param-name">hyperparams</span> <span class="param-type">Dict[str, Any]</span>
-                                <p>Dictionary containing hyperparameter values. Keys should match the parameters defined in HyperparameterSpace.</p>
-                            </div>
-                            
-                            <h4>Returns</h4>
-                            <div class="param-item">
-                                <span class="param-name">model</span> <span class="param-type">Any</span>
-                                <p>The created model instance ready for training (PyTorch, scikit-learn, TensorFlow, custom implementation, etc.)</p>
-                            </div>
-                            
-                            <h4>Example</h4>
-                            <pre><code class="language-python">def create_model(self, hyperparams):
-    import torch.nn as nn
-    
-    model = nn.Sequential(
-        nn.Linear(784, hyperparams['hidden_size']),
-        nn.ReLU(),
-        nn.Dropout(hyperparams.get('dropout', 0.5)),
-        nn.Linear(hyperparams['hidden_size'], 10),
-        nn.Softmax(dim=1)
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">python</span>
+                                    <button class="copy-btn">Copy</button>
+                                </div>
+                                <pre><code>def create_model(self, hyperparams):
+    model = MyModel(
+        hidden_size=hyperparams['hidden_size'],
+        learning_rate=hyperparams['learning_rate']
     )
-    
-    # Move to GPU if available
-    if torch.cuda.is_available():
-        model = model.cuda()
-    
     return model</code></pre>
-                        </div>
-                    </div>
-                    
-                    <!-- train_evaluate -->
-                    <div class="api-section">
-                        <div class="api-header">
-                            <h3>train_evaluate</h3>
-                            <div class="api-signature">
-                                <code>@abstractmethod<br>train_evaluate(model: Any, hyperparams: Dict[str, Any]) -&gt; Dict[str, float]</code>
-                            </div>
-                        </div>
-                        <div class="api-content">
-                            <p>Train the model and evaluate its performance. This is the core method where actual model training and evaluation occurs.</p>
-                            
-                            <h4>Parameters</h4>
-                            <div class="param-list">
-                                <div class="param-item">
-                                    <span class="param-name">model</span> <span class="param-type">Any</span>
-                                    <p>The model instance to train (from create_model)</p>
-                                </div>
-                                <div class="param-item">
-                                    <span class="param-name">hyperparams</span> <span class="param-type">Dict[str, Any]</span>
-                                    <p>Dictionary containing hyperparameter values</p>
-                                </div>
-                            </div>
-                            
-                            <h4>Returns</h4>
-                            <div class="param-item">
-                                <span class="param-name">metrics</span> <span class="param-type">Dict[str, float]</span>
-                                <p>Dictionary containing evaluation metrics. Should include at least one of: 'f1', 'accuracy', 'auc'. Can include additional custom metrics.</p>
-                            </div>
-                            
-                            <h4>Common Metrics</h4>
-                            <ul>
-                                <li><code>'f1'</code> or <code>'f1_score'</code> - F1 score</li>
-                                <li><code>'accuracy'</code> - Classification accuracy</li>
-                                <li><code>'auc'</code> or <code>'auc_score'</code> - Area Under Curve</li>
-                                <li><code>'precision'</code>, <code>'recall'</code> - Precision and recall</li>
-                                <li><code>'loss'</code> or <code>'val_loss'</code> - Training/validation loss</li>
-                                <li><code>'mse'</code>, <code>'mae'</code> - Mean Squared/Absolute Error (for regression)</li>
-                                <li>Custom domain-specific metrics</li>
-                            </ul>
-                            
-                            <h4>Example</h4>
-                            <pre><code class="language-python">def train_evaluate(self, model, hyperparams):
-    # Setup training
-    device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-    optimizer = torch.optim.Adam(
-        model.parameters(), 
-        lr=hyperparams['learning_rate']
-    )
-    criterion = nn.CrossEntropyLoss()
-    
-    # Training loop
-    model.train()
-    for epoch in range(hyperparams.get('epochs', 10)):
-        for batch_x, batch_y in self.train_loader:
-            batch_x, batch_y = batch_x.to(device), batch_y.to(device)
-            
-            optimizer.zero_grad()
-            outputs = model(batch_x)
-            loss = criterion(outputs, batch_y)
-            loss.backward()
-            optimizer.step()
-    
-    # Evaluation
-    model.eval()
-    all_predictions = []
-    all_targets = []
-    
-    with torch.no_grad():
-        for batch_x, batch_y in self.val_loader:
-            batch_x = batch_x.to(device)
-            outputs = model(batch_x)
-            predictions = torch.argmax(outputs, dim=1)
-            
-            all_predictions.extend(predictions.cpu().numpy())
-            all_targets.extend(batch_y.numpy())
-    
-    # Calculate metrics
-    from sklearn.metrics import accuracy_score, f1_score, roc_auc_score
-    
-    accuracy = accuracy_score(all_targets, all_predictions)
-    f1 = f1_score(all_targets, all_predictions, average='weighted')
-    
-    return {
-        'accuracy': accuracy,
-        'f1': f1,
-        'loss': loss.item(),
-        'training_epochs': epoch + 1
-    }</code></pre>
-                        </div>
-                    </div>
-                    
-                    <!-- compute_reward -->
-                    <div class="api-section">
-                        <div class="api-header">
-                            <h3>compute_reward</h3>
-                            <div class="api-signature">
-                                <code>@abstractmethod<br>compute_reward(metrics: Dict[str, float]) -&gt; float</code>
-                            </div>
-                        </div>
-                        <div class="api-content">
-                            <p>Compute the reward based on evaluation metrics. This method defines how to combine multiple evaluation metrics into a single reward value that the optimization algorithm will try to maximize.</p>
-                            
-                            <h4>Parameters</h4>
-                            <div class="param-item">
-                                <span class="param-name">metrics</span> <span class="param-type">Dict[str, float]</span>
-                                <p>Dictionary containing evaluation metrics from train_evaluate</p>
-                            </div>
-                            
-                            <h4>Returns</h4>
-                            <div class="param-item">
-                                <span class="param-name">reward</span> <span class="param-type">float</span>
-                                <p>Computed reward value (higher is better)</p>
-                            </div>
-                            
-                            <h4>Common Strategies</h4>
-                            <ul>
-                                <li><strong>Single metric:</strong> <code>return metrics['f1']</code></li>
-                                <li><strong>Weighted combination:</strong> <code>return 0.7 * metrics['accuracy'] + 0.3 * metrics['f1']</code></li>
-                                <li><strong>Multi-objective:</strong> <code>return harmonic_mean([metrics['precision'], metrics['recall']])</code></li>
-                                <li><strong>With penalties:</strong> <code>return metrics['f1'] - 0.1 * (training_time / max_time)</code></li>
-                            </ul>
-                            
-                            <h4>Example</h4>
-                            <pre><code class="language-python">def compute_reward(self, metrics):
-    # Multi-objective reward with accuracy and F1
-    f1_weight = 0.6
-    accuracy_weight = 0.4
-    
-    if 'f1' in metrics and 'accuracy' in metrics:
-        reward = (metrics['f1'] * f1_weight + 
-                 metrics['accuracy'] * accuracy_weight)
-    elif 'f1' in metrics:
-        reward = metrics['f1']
-    else:
-        reward = metrics.get('accuracy', 0.0)
-    
-    # Optional: Add efficiency bonus
-    if 'training_epochs' in metrics:
-        max_epochs = 50
-        efficiency_bonus = max(0, 1.0 - metrics['training_epochs'] / max_epochs)
-        reward = reward * 0.9 + efficiency_bonus * 0.1
-    
-    return reward</code></pre>
-                        </div>
-                    </div>
-                </section>
-                
-                <!-- Public Methods -->
-                <section>
-                    <h2>Public Methods</h2>
-                    <p>These methods are provided by the base class and can be used or overridden as needed.</p>
-                    
-                    <!-- step -->
-                    <div class="api-section">
-                        <div class="api-header">
-                            <h3>step</h3>
-                            <div class="api-signature">
-                                <code>step(hyperparams: Dict[str, Any]) -&gt; Tuple[float, float, float, bool]</code>
-                            </div>
-                        </div>
-                        <div class="api-content">
-                            <p>Execute one step of evaluation with given hyperparameters. This is the main interface method called by the MAT-HPO optimizer.</p>
-                            
-                            <h4>Parameters</h4>
-                            <div class="param-item">
-                                <span class="param-name">hyperparams</span> <span class="param-type">Dict[str, Any]</span>
-                                <p>Dictionary containing hyperparameter values</p>
-                            </div>
-                            
-                            <h4>Returns</h4>
-                            <div class="param-item">
-                                <span class="param-name">results</span> <span class="param-type">Tuple[float, float, float, bool]</span>
-                                <p>Tuple containing (f1_score, auc_score, gmean_score, done)</p>
-                                <ul>
-                                    <li><code>f1_score</code> - F1 score or primary performance metric</li>
-                                    <li><code>auc_score</code> - AUC score or secondary performance metric</li>
-                                    <li><code>gmean_score</code> - G-mean score or tertiary performance metric</li>
-                                    <li><code>done</code> - Whether optimization should stop early</li>
-                                </ul>
-                            </div>
-                            
-                            <div class="alert alert-info">
-                                <strong>Note:</strong> This method is called automatically by the optimizer. You typically don't need to call it directly.
                             </div>
                         </div>
                     </div>
-                    
-                    <!-- reset -->
-                    <div class="api-section">
-                        <div class="api-header">
-                            <h3>reset</h3>
-                            <div class="api-signature">
-                                <code>reset() -&gt; torch.Tensor</code>
-                            </div>
-                        </div>
-                        <div class="api-content">
-                            <p>Reset the environment for a new optimization run. Called at the beginning of optimization to initialize or reset the environment state.</p>
-                            
-                            <h4>Returns</h4>
-                            <div class="param-item">
-                                <span class="param-name">state</span> <span class="param-type">torch.Tensor</span>
-                                <p>Initial state tensor for the agents. Default shape: [1, 12] (9 class weights + 1 architecture + 2 training params)</p>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <!-- get_best_results -->
-                    <div class="api-section">
-                        <div class="api-header">
-                            <h3>get_best_results</h3>
-                            <div class="api-signature">
-                                <code>get_best_results() -&gt; Dict[str, Any]</code>
-                            </div>
-                        </div>
-                        <div class="api-content">
-                            <p>Get comprehensive information about the best results found during optimization.</p>
-                            
-                            <h4>Returns</h4>
-                            <div class="param-item">
-                                <span class="param-name">results</span> <span class="param-type">Dict[str, Any]</span>
-                                <p>Dictionary containing:</p>
-                                <ul>
-                                    <li><code>'best_hyperparams'</code> - Best hyperparameter configuration</li>
-                                    <li><code>'best_reward'</code> - Best reward achieved</li>
-                                    <li><code>'best_metrics'</code> - Metrics corresponding to best reward</li>
-                                    <li><code>'total_steps'</code> - Total optimization steps completed</li>
-                                    <li><code>'total_time'</code> - Total optimization time</li>
-                                    <li><code>'avg_step_time'</code> - Average time per step</li>
-                                    <li><code>'training_history'</code> - Complete training history (if enabled)</li>
-                                </ul>
-                            </div>
-                            
-                            <h4>Example</h4>
-                            <pre><code class="language-python">results = environment.get_best_results()
-print(f"Best reward: {results['best_reward']:.4f}")
-print(f"Best hyperparams: {results['best_hyperparams']}")
-print(f"Total time: {results['total_time']:.2f} seconds")</code></pre>
-                        </div>
-                    </div>
-                </section>
-                
-                <!-- Callback System -->
-                <section>
-                    <h2>Callback System</h2>
-                    <p>BaseEnvironment supports custom callback functions for monitoring and extending functionality.</p>
-                    
-                    <!-- add_step_callback -->
-                    <div class="api-section">
-                        <div class="api-header">
-                            <h3>add_step_callback</h3>
-                            <div class="api-signature">
-                                <code>add_step_callback(callback: Callable)</code>
-                            </div>
-                        </div>
-                        <div class="api-content">
-                            <p>Add a custom callback function to be executed after each optimization step.</p>
-                            
-                            <h4>Parameters</h4>
-                            <div class="param-item">
-                                <span class="param-name">callback</span> <span class="param-type">Callable</span>
-                                <p>Function with signature: <code>callback(env, hyperparams, metrics, reward)</code></p>
-                            </div>
-                            
-                            <h4>Example</h4>
-                            <pre><code class="language-python">def my_callback(env, hyperparams, metrics, reward):
-    print(f"Step {env.current_step}: Reward = {reward:.4f}")
-    
-    # Log to external system
-    wandb.log({
-        'reward': reward,
-        'f1_score': metrics.get('f1', 0),
-        'step': env.current_step
-    })
 
-environment.add_step_callback(my_callback)</code></pre>
-                        </div>
-                    </div>
-                </section>
-                
-                <!-- Checkpointing -->
-                <section>
-                    <h2>Checkpointing</h2>
-                    
-                    <!-- load_checkpoint -->
                     <div class="api-section">
                         <div class="api-header">
-                            <h3>load_checkpoint</h3>
-                            <div class="api-signature">
-                                <code>load_checkpoint(checkpoint_dir: str)</code>
-                            </div>
+                            <h3>train_evaluate(model, hyperparams)</h3>
+                            <div class="api-signature">train_evaluate(model: Any, hyperparams: dict) -&gt; dict</div>
                         </div>
                         <div class="api-content">
-                            <p>Load optimization state from checkpoint directory to resume optimization.</p>
+                            <p>Train the model and return evaluation metrics.</p>
                             
-                            <h4>Parameters</h4>
-                            <div class="param-item">
-                                <span class="param-name">checkpoint_dir</span> <span class="param-type">str</span>
-                                <p>Path to checkpoint directory</p>
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">python</span>
+                                    <button class="copy-btn">Copy</button>
+                                </div>
+                                <pre><code>def train_evaluate(self, model, hyperparams):
+    # Train your model
+    model.fit(self.X_train, self.y_train)
+    
+    # Evaluate performance
+    predictions = model.predict(self.X_val)
+    f1 = f1_score(self.y_val, predictions)
+    accuracy = accuracy_score(self.y_val, predictions)
+    
+    return {'f1': f1, 'accuracy': accuracy}</code></pre>
                             </div>
+                        </div>
+                    </div>
+
+                    <div class="api-section">
+                        <div class="api-header">
+                            <h3>compute_reward(metrics)</h3>
+                            <div class="api-signature">compute_reward(metrics: dict) -&gt; float</div>
+                        </div>
+                        <div class="api-content">
+                            <p>Compute reward from metrics (higher is better).</p>
                             
-                            <h4>Raises</h4>
-                            <div class="param-item">
-                                <span class="param-name">FileNotFoundError</span>
-                                <p>If no checkpoint found at the specified path</p>
+                            <div class="code-block">
+                                <div class="code-header">
+                                    <span class="code-language">python</span>
+                                    <button class="copy-btn">Copy</button>
+                                </div>
+                                <pre><code>def compute_reward(self, metrics):
+    # Simple reward: optimize F1-score
+    return metrics['f1']
+    
+    # Multi-objective reward
+    return 0.7 * metrics['f1'] + 0.3 * metrics['accuracy']</code></pre>
                             </div>
-                            
-                            <h4>Example</h4>
-                            <pre><code class="language-python"># Resume from checkpoint
-if os.path.exists("./checkpoints/experiment_1"):
-    environment.load_checkpoint("./checkpoints/experiment_1")
-    print(f"Resumed from step {environment.current_step}")
-    print(f"Best reward so far: {environment.best_reward:.4f}")</code></pre>
                         </div>
                     </div>
                 </section>
-                
-                <!-- Usage Examples -->
-                <section>
-                    <h2>Complete Usage Example</h2>
-                    <pre><code class="language-python">import torch
-import torch.nn as nn
-from MAT_HPO_LIB import BaseEnvironment
 
-class MyNeuralNetEnvironment(BaseEnvironment):
-    def __init__(self):
-        super().__init__(
-            name="NeuralNetOptimization",
-            checkpoint_dir="./checkpoints",
-            verbose=True
-        )
-        
+                <section class="content-section">
+                    <h2>📝 Complete Example</h2>
+                    
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code>from MAT_HPO_LIB import BaseEnvironment
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import f1_score, accuracy_score
+
+class RandomForestEnvironment(BaseEnvironment):
     def load_data(self):
         # Load your dataset
-        from torchvision import datasets, transforms
-        
-        transform = transforms.Compose([
-            transforms.ToTensor(),
-            transforms.Normalize((0.5,), (0.5,))
-        ])
-        
-        self.train_dataset = datasets.MNIST(
-            root='./data', train=True, download=True, transform=transform
-        )
-        self.val_dataset = datasets.MNIST(
-            root='./data', train=False, transform=transform
-        )
-        
-        return {
-            'train_size': len(self.train_dataset),
-            'val_size': len(self.val_dataset),
-            'input_size': 784,
-            'num_classes': 10
-        }
+        X, y = self.load_my_data()
+        self.X_train, self.X_val, self.y_train, self.y_val = \
+            train_test_split(X, y, test_size=0.2, random_state=42)
+        return {"samples": len(X), "features": X.shape[1]}
     
     def create_model(self, hyperparams):
-        model = nn.Sequential(
-            nn.Linear(784, hyperparams['hidden_size']),
-            nn.ReLU(),
-            nn.Dropout(hyperparams.get('dropout', 0.2)),
-            nn.Linear(hyperparams['hidden_size'], 10)
+        return RandomForestClassifier(
+            n_estimators=int(hyperparams['n_estimators']),
+            max_depth=int(hyperparams['max_depth']),
+            random_state=42
         )
-        
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
-        return model.to(device)
     
     def train_evaluate(self, model, hyperparams):
-        device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
+        model.fit(self.X_train, self.y_train)
+        predictions = model.predict(self.X_val)
         
-        # Setup data loaders
-        train_loader = torch.utils.data.DataLoader(
-            self.train_dataset, 
-            batch_size=hyperparams['batch_size'], 
-            shuffle=True
-        )
-        val_loader = torch.utils.data.DataLoader(
-            self.val_dataset, 
-            batch_size=hyperparams['batch_size']
-        )
-        
-        # Training
-        optimizer = torch.optim.Adam(
-            model.parameters(), 
-            lr=hyperparams['learning_rate']
-        )
-        criterion = nn.CrossEntropyLoss()
-        
-        model.train()
-        for epoch in range(5):  # Quick training for demo
-            for batch_x, batch_y in train_loader:
-                batch_x = batch_x.view(batch_x.size(0), -1).to(device)
-                batch_y = batch_y.to(device)
-                
-                optimizer.zero_grad()
-                outputs = model(batch_x)
-                loss = criterion(outputs, batch_y)
-                loss.backward()
-                optimizer.step()
-        
-        # Evaluation
-        model.eval()
-        correct = 0
-        total = 0
-        
-        with torch.no_grad():
-            for batch_x, batch_y in val_loader:
-                batch_x = batch_x.view(batch_x.size(0), -1).to(device)
-                batch_y = batch_y.to(device)
-                
-                outputs = model(batch_x)
-                _, predicted = torch.max(outputs.data, 1)
-                total += batch_y.size(0)
-                correct += (predicted == batch_y).sum().item()
-        
-        accuracy = correct / total
         return {
-            'accuracy': accuracy,
-            'loss': loss.item()
+            'f1': f1_score(self.y_val, predictions, average='weighted'),
+            'accuracy': accuracy_score(self.y_val, predictions)
         }
     
     def compute_reward(self, metrics):
-        # Simple reward: just use accuracy
-        return metrics['accuracy']
+        return metrics['f1']  # Optimize for F1-score</code></pre>
+                    </div>
+                </section>
 
-# Usage
-environment = MyNeuralNetEnvironment()
-
-# Add custom callback
-def log_progress(env, hyperparams, metrics, reward):
-    print(f"Step {env.current_step}: Accuracy = {metrics['accuracy']:.4f}")
-
-environment.add_step_callback(log_progress)
-
-# The environment is now ready for optimization
-from MAT_HPO_LIB import MAT_HPO_Optimizer, HyperparameterSpace
-
-space = HyperparameterSpace(
-    agent0_params=[],
-    agent1_params=['hidden_size'],
-    agent2_params=['learning_rate', 'batch_size'],
-    bounds={
-        'hidden_size': (64, 512),
-        'learning_rate': (1e-4, 1e-2),
-        'batch_size': (32, 128)
-    }
-)
-
-optimizer = MAT_HPO_Optimizer(environment, space, config)
-results = optimizer.optimize()</code></pre>
+                <section class="content-section">
+                    <h2>📚 Next Steps</h2>
+                    
+                    <div class="next-steps">
+                        <div class="step-item">
+                            <h3><a href="../examples/simple.html">Complete Example</a></h3>
+                            <p>See a full working example with neural networks</p>
+                        </div>
+                        
+                        <div class="step-item">
+                            <h3><a href="../quickstart.html">Quick Start Guide</a></h3>
+                            <p>Step-by-step tutorial for your first optimization</p>
+                        </div>
+                    </div>
                 </section>
                 
-                <!-- See Also -->
-                <section>
-                    <h2>See Also</h2>
-                    <ul>
-                        <li><a href="hyperparameter-space.html">HyperparameterSpace</a> - Define search spaces</li>
-                        <li><a href="optimizer.html">MAT_HPO_Optimizer</a> - Main optimization engine</li>
-                        <li><a href="config.html">Configuration</a> - Optimization configuration options</li>
-                        <li><a href="../examples/simple.html">Simple Example</a> - Complete working example</li>
-                        <li><a href="../quickstart.html">Quick Start Guide</a> - Getting started tutorial</li>
-                    </ul>
-                </section>
             </div>
         </main>
     </div>
