@@ -325,7 +325,7 @@ class BaseEnvironment(ABC):
         
         try:
             if self.verbose:
-                print(f"\n🎯 Step {self.current_step + 1}: Evaluating hyperparameters...")
+                print(f"\nStep {self.current_step + 1}: Evaluating hyperparameters...")
             
             # Load data if not already loaded
             if self.training_data is None:

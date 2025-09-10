@@ -113,17 +113,111 @@ class SQDDPG:
         Generate actions for all agents given the current state.
         
         Args:
-            state: State tensor [batch_size, n_agents, obs_dim]
+            state: State tensor - can be [batch_size, features] or [batch_size, n_agents, obs_dim]
             
         Returns:
             actions: Action tensor [batch_size, n_agents, act_dim]
         """
         batch_size = state.size(0)
         
-        # Handle state dimension - if 2D, expand to 3D
+        # Handle different state formats
         if len(state.shape) == 2:
-            # Assume state is [batch_size, obs_dim], replicate for each agent
-            state = state.unsqueeze(1).expand(batch_size, self.n_, -1)
+            # Format: [batch_size, features] -> need to convert to [batch_size, n_agents, obs_dim]
+            state_features = state.size(1)  # e.g., 12 features
+            
+            # Split state features across agents or replicate for each agent
+            if state_features >= self.obs_dim * self.n_:
+                # If we have enough features, split them across agents
+                feature_per_agent = state_features // self.n_
+                agent_states = []
+                for i in range(self.n_):
+                    start_idx = i * feature_per_agent
+                    end_idx = start_idx + min(feature_per_agent, self.obs_dim)
+                    agent_state = state[:, start_idx:end_idx]
+                    # Pad if necessary
+                    if agent_state.size(1) < self.obs_dim:
+                        padding = torch.zeros(batch_size, self.obs_dim - agent_state.size(1), device=self.device)
+                        agent_state = torch.cat([agent_state, padding], dim=1)
+                    agent_states.append(agent_state.unsqueeze(1))
+                state = torch.cat(agent_states, dim=1)
+            else:
+                # If not enough features, replicate the state for each agent
+                # First pad state to obs_dim if necessary
+                if state_features < self.obs_dim:
+                    padding = torch.zeros(batch_size, self.obs_dim - state_features, device=self.device)
+                    state = torch.cat([state, padding], dim=1)
+                elif state_features > self.obs_dim:
+                    # Truncate if too many features
+                    state = state[:, :self.obs_dim]
+                # Now replicate for each agent
+                state = state.unsqueeze(1).expand(batch_size, self.n_, -1)
+                
+        elif len(state.shape) == 3:
+            # Format: [batch_size, current_agents, features] -> need to convert to [batch_size, n_agents, obs_dim]
+            current_agents = state.size(1)
+            current_features = state.size(2)
+            
+            if current_agents == 1:
+                # Single agent state - replicate across all agents
+                single_agent_state = state.squeeze(1)  # [batch_size, features]
+                
+                # Pad/truncate to obs_dim
+                if current_features < self.obs_dim:
+                    padding = torch.zeros(batch_size, self.obs_dim - current_features, device=self.device)
+                    single_agent_state = torch.cat([single_agent_state, padding], dim=1)
+                elif current_features > self.obs_dim:
+                    single_agent_state = single_agent_state[:, :self.obs_dim]
+                    
+                # Replicate for all agents
+                state = single_agent_state.unsqueeze(1).expand(batch_size, self.n_, -1)
+                
+            elif current_agents == self.n_:
+                # Already correct number of agents - just adjust feature dimension
+                if current_features != self.obs_dim:
+                    agent_states = []
+                    for i in range(self.n_):
+                        agent_state = state[:, i, :]  # [batch_size, features]
+                        
+                        # Pad/truncate to obs_dim
+                        if current_features < self.obs_dim:
+                            padding = torch.zeros(batch_size, self.obs_dim - current_features, device=self.device)
+                            agent_state = torch.cat([agent_state, padding], dim=1)
+                        elif current_features > self.obs_dim:
+                            agent_state = agent_state[:, :self.obs_dim]
+                            
+                        agent_states.append(agent_state.unsqueeze(1))
+                    state = torch.cat(agent_states, dim=1)
+            else:
+                # Incorrect number of agents - flatten and redistribute
+                flattened_state = state.view(batch_size, -1)  # [batch_size, current_agents * current_features]
+                total_features = flattened_state.size(1)
+                
+                if total_features >= self.obs_dim * self.n_:
+                    # Split across agents
+                    feature_per_agent = total_features // self.n_
+                    agent_states = []
+                    for i in range(self.n_):
+                        start_idx = i * feature_per_agent
+                        end_idx = start_idx + min(feature_per_agent, self.obs_dim)
+                        agent_state = flattened_state[:, start_idx:end_idx]
+                        
+                        if agent_state.size(1) < self.obs_dim:
+                            padding = torch.zeros(batch_size, self.obs_dim - agent_state.size(1), device=self.device)
+                            agent_state = torch.cat([agent_state, padding], dim=1)
+                        agent_states.append(agent_state.unsqueeze(1))
+                    state = torch.cat(agent_states, dim=1)
+                else:
+                    # Replicate across agents
+                    if total_features < self.obs_dim:
+                        padding = torch.zeros(batch_size, self.obs_dim - total_features, device=self.device)
+                        flattened_state = torch.cat([flattened_state, padding], dim=1)
+                    elif total_features > self.obs_dim:
+                        flattened_state = flattened_state[:, :self.obs_dim]
+                    state = flattened_state.unsqueeze(1).expand(batch_size, self.n_, -1)
+        
+        # Verify final dimensions
+        if len(state.shape) != 3 or state.size(1) != self.n_:
+            raise ValueError(f"State dimension error: expected [batch_size, {self.n_}, {self.obs_dim}], got {state.shape}")
         
         # Generate actions for each agent
         action0 = (self.actor0(state[:, 0, :self.hyp_num0]) * self.masks[0][:self.hyp_num0]).unsqueeze(1)
@@ -237,6 +331,47 @@ class SQDDPG:
         batch_size = obs.size(0)
         subcoalition_map, grand_coalitions = self.sample_grand_coalitions(batch_size)
         
+        # Handle observation dimensions - ensure obs matches expected format
+        if len(obs.shape) == 3 and obs.size(1) == self.n_:
+            # obs is [batch_size, n_agents, features] - extract the actual feature dimension
+            actual_obs_dim = obs.size(2)
+            if actual_obs_dim != self.obs_dim:
+                # Adjust observations to match obs_dim
+                if actual_obs_dim < self.obs_dim:
+                    # Pad observations
+                    padding = torch.zeros(batch_size, self.n_, self.obs_dim - actual_obs_dim, device=self.device)
+                    obs = torch.cat([obs, padding], dim=2)
+                else:
+                    # Truncate observations
+                    obs = obs[:, :, :self.obs_dim]
+        elif len(obs.shape) == 2:
+            # obs is [batch_size, features] - convert to multi-agent format manually
+            obs_features = obs.size(1)
+            
+            # Pad/truncate to obs_dim
+            if obs_features < self.obs_dim:
+                padding = torch.zeros(batch_size, self.obs_dim - obs_features, device=self.device)
+                obs = torch.cat([obs, padding], dim=1)
+            elif obs_features > self.obs_dim:
+                obs = obs[:, :self.obs_dim]
+                
+            # Replicate for all agents
+            obs = obs.unsqueeze(1).expand(batch_size, self.n_, -1)
+        elif len(obs.shape) == 3 and obs.size(1) == 1:
+            # obs is [batch_size, 1, features] - replicate across agents
+            obs_features = obs.size(2)
+            obs = obs.squeeze(1)  # [batch_size, features]
+            
+            # Pad/truncate to obs_dim
+            if obs_features < self.obs_dim:
+                padding = torch.zeros(batch_size, self.obs_dim - obs_features, device=self.device)
+                obs = torch.cat([obs, padding], dim=1)
+            elif obs_features > self.obs_dim:
+                obs = obs[:, :self.obs_dim]
+                
+            # Replicate for all agents
+            obs = obs.unsqueeze(1).expand(batch_size, self.n_, -1)
+        
         # Expand grand coalitions for actions
         grand_coalitions = grand_coalitions.unsqueeze(-1).expand(
             batch_size, self.sample_size, self.n_, self.n_, self.act_dim)
@@ -251,7 +386,7 @@ class SQDDPG:
         act = act * act_map
         act = act.contiguous().view(batch_size, self.sample_size, self.n_, -1)
         
-        # Prepare observations
+        # Prepare observations - now obs should be [batch_size, n_agents, obs_dim]
         obs = obs.unsqueeze(1).unsqueeze(2).expand(
             batch_size, self.sample_size, self.n_, self.n_, self.obs_dim)
         obs = obs.contiguous().view(batch_size, self.sample_size, self.n_, self.n_ * self.obs_dim)

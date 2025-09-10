@@ -803,7 +803,7 @@ class MAT_HPO_Optimizer:
             This method uses Chinese labels (Agent 0: 📊, Agent 1: 🏗️, Agent 2: ⚙️) for
             better visualization and can be easily localized for different languages.
         """
-        print(f"\n🎯 Step {step + 1} 選擇的超參數:")
+        print(f"\nStep {step + 1} - Selected hyperparameters:")
         print("-" * 45)
         
         # Agent 0: 類別權重 (顯示前3個和總結)
@@ -814,7 +814,7 @@ class MAT_HPO_Optimizer:
                 weight_str = ', '.join([f"{w:.2f}" for w in class_weights])
             else:
                 weight_str = f"{class_weights[0]:.2f}, {class_weights[1]:.2f}, {class_weights[2]:.2f}...({len(class_weights)} total)"
-            print(f"📊 Agent 0: class_weights = [{weight_str}]")
+            print(f"Agent 0 (Class Weights): [{weight_str}]")
         
         # Agent 1: 架構參數
         agent1_params = []
@@ -824,7 +824,7 @@ class MAT_HPO_Optimizer:
             agent1_params.append(f"loss_function = {hyperparams['loss_function']}")
         
         if agent1_params:
-            print(f"🏗️  Agent 1: {', '.join(agent1_params)}")
+            print(f"Agent 1 (Architecture): {', '.join(agent1_params)}")
         
         # Agent 2: 訓練參數
         training_params = []
@@ -834,6 +834,6 @@ class MAT_HPO_Optimizer:
             training_params.append(f"lr={hyperparams['learning_rate']:.2e}")
         
         if training_params:
-            print(f"⚙️  Agent 2: {', '.join(training_params)}")
+            print(f"Agent 2 (Training): {', '.join(training_params)}")
         
         print("-" * 45)
