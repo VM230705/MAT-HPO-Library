@@ -191,11 +191,17 @@ class HyperparameterSpace:
             len(agent2_params)
         ]
         
+        # Initialize parameters dictionary
+        self.parameters = {}
+        
         # Process and categorize parameters
         self._categorize_parameters()
         
         # Create bounds tensors for each agent (for numerical parameters)
         self._create_bounds_tensors()
+        
+        # Populate parameters dictionary from legacy initialization
+        self._populate_parameters_dict()
         
         # Validation flag
         self._is_validated = True
@@ -415,6 +421,48 @@ class HyperparameterSpace:
                 self.categorical_params[param] = {'values': bounds}
             elif param_type == bool:
                 self.boolean_params[param] = {'values': bounds}
+    
+    def _populate_parameters_dict(self):
+        """Populate parameters dictionary from legacy initialization."""
+        all_params = self.agent0_params + self.agent1_params + self.agent2_params
+        
+        for param in all_params:
+            param_type = self.param_types[param]
+            bounds = self.bounds[param]
+            
+            # Determine agent assignment
+            if param in self.agent0_params:
+                agent = 0
+            elif param in self.agent1_params:
+                agent = 1
+            else:
+                agent = 2
+            
+            # Determine parameter type for LLM
+            if param_type in [int, float]:
+                self.parameters[param] = {
+                    'type': 'continuous',
+                    'bounds': bounds,
+                    'agent': agent
+                }
+            elif param_type == 'log_uniform':
+                self.parameters[param] = {
+                    'type': 'continuous',
+                    'bounds': bounds,
+                    'agent': agent
+                }
+            elif param_type == str:
+                self.parameters[param] = {
+                    'type': 'discrete',
+                    'choices': bounds,
+                    'agent': agent
+                }
+            elif param_type == bool:
+                self.parameters[param] = {
+                    'type': 'boolean',
+                    'choices': bounds,
+                    'agent': agent
+                }
     
     def _create_bounds_tensors(self, device=None):
         """Create lower and upper bound tensors for numerical parameters of each agent."""

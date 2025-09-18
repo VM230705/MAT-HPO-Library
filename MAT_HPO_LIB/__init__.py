@@ -40,31 +40,109 @@ Quick Start:
 # Core components
 from .core.multi_agent_optimizer import MAT_HPO_Optimizer
 from .core.multi_fidelity_optimizer import MultiFidelityMAT_HPO, FidelityConfig, MultiFidelityEnvironment
+from .core.llm_enhanced_optimizer import LLMEnhancedMAT_HPO_Optimizer, LLMEnhancedOptimizationConfig, LLMConfigs
 from .core.base_environment import BaseEnvironment
+from .core.enhanced_environment import TimeSeriesEnvironment
 from .core.hyperparameter_space import HyperparameterSpace
+
+# Easy-to-use high-level interface
+from .easy_hpo import EasyHPO
+from .full_control_hpo import FullControlHPO
+from .configurable_optimizer import LLMEnhancedHPO
+
+# LLM components
+from .llm import (
+    BaseLLMClient,
+    DefaultJSONParser,
+    OllamaLLMClient,
+    LLMHyperparameterMixer,
+    EnhancedLLMHyperparameterMixer,
+    AdaptiveAlphaController,
+    LLaPipeAdaptiveAdvisor,
+    PerformanceMetricCalculator,
+    DatasetInfoReader,
+    get_enhanced_dataset_info,
+    get_dataset_recommendations,
+    analyze_time_series_dataset,
+    get_time_series_llm_context,
+    get_universal_dataset_info,
+    TimeSeriesAnalyzer,
+    LLMConversationLogger
+)
+
+# Try to import optional LLM clients
+try:
+    from .llm import OpenAILLMClient, AzureOpenAILLMClient
+    _OPENAI_AVAILABLE = True
+except ImportError:
+    _OPENAI_AVAILABLE = False
+
+try:
+    from .llm import AnthropicLLMClient, ClaudeLegacyClient
+    _ANTHROPIC_AVAILABLE = True
+except ImportError:
+    _ANTHROPIC_AVAILABLE = False
 
 # Utilities
 from .utils.config import OptimizationConfig, DefaultConfigs
+from .utils.llm_config import TimeSeriesLLMConfig, LLMClientConfig, DatasetConfig, LLMOptimizationConfig, create_llm_config
 from .utils.metrics import MetricsCalculator, calculate_f1_auc_gmean
 from .utils.logger import HPOLogger, SimpleLogger
 
-__version__ = "1.0.0"
+__version__ = "1.1.0"
 __author__ = "MAT-HPO Development Team"
 
 __all__ = [
     # Core components
     "MAT_HPO_Optimizer",
     "MultiFidelityMAT_HPO",
-    "FidelityConfig", 
+    "FidelityConfig",
     "MultiFidelityEnvironment",
-    "BaseEnvironment", 
+    "LLMEnhancedMAT_HPO_Optimizer",
+    "LLMEnhancedOptimizationConfig",
+    "LLMConfigs",
+    "BaseEnvironment",
+    "TimeSeriesEnvironment",
     "HyperparameterSpace",
+    # Easy-to-use interface
+    "EasyHPO",
+    "FullControlHPO",
+    "LLMEnhancedHPO",
+    # LLM components - Core
+    "BaseLLMClient",
+    "DefaultJSONParser",
+    "OllamaLLMClient",
+    "LLMHyperparameterMixer",
+    "EnhancedLLMHyperparameterMixer",
+    "AdaptiveAlphaController",
+    "LLaPipeAdaptiveAdvisor",
+    "PerformanceMetricCalculator",
+    "DatasetInfoReader",
+    "get_enhanced_dataset_info",
+    "get_dataset_recommendations",
+    "analyze_time_series_dataset",
+    "get_time_series_llm_context",
+    "get_universal_dataset_info",
+    "TimeSeriesAnalyzer",
+    "LLMConversationLogger",
     # Configuration
     "OptimizationConfig",
     "DefaultConfigs",
+    "TimeSeriesLLMConfig",
+    "LLMClientConfig",
+    "DatasetConfig",
+    "LLMOptimizationConfig",
+    "create_llm_config",
     # Utilities
     "MetricsCalculator",
     "calculate_f1_auc_gmean",
     "HPOLogger",
     "SimpleLogger"
 ]
+
+# Add optional LLM clients to __all__ if available
+if _OPENAI_AVAILABLE:
+    __all__.extend(["OpenAILLMClient", "AzureOpenAILLMClient"])
+
+if _ANTHROPIC_AVAILABLE:
+    __all__.extend(["AnthropicLLMClient", "ClaudeLegacyClient"])

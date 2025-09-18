@@ -86,3 +86,8 @@ wandb/
 results/
 outputs/
 checkpoints/
+
+# MAT-HPO generated artifacts
+mat_hpo_results/
+*.jsonl
+*.npy
