@@ -330,10 +330,15 @@ class MAT_HPO_Optimizer:
             )
             self.replay_buffer.add_experience(transition)
             
-            # Update agents if enough samples
+            # Update agents if enough samples - with enhanced error handling
             if (len(self.replay_buffer) >= self.config.batch_size and 
                 step % self.config.behaviour_update_freq == 0):
-                self._update_agents()
+                try:
+                    self._update_agents()
+                except Exception as e:
+                    print(f"⚠️ Agent update failed at step {step}: {e}")
+                    # Continue optimization even if agent update fails
+                    pass
             
             # Early stopping check
             if done or self._check_early_stopping():
@@ -438,51 +443,112 @@ class MAT_HPO_Optimizer:
         self._update_actors()
     
     def _update_critics(self):
-        """Update critic networks"""
+        """Update critic networks with enhanced error handling"""
         if len(self.replay_buffer) < self.config.batch_size:
             return
-            
-        batch = self.replay_buffer.get_batch(self.config.batch_size)
-        batch_transitions = self.sqddpg.Transition(*zip(*batch))
         
-        _, value_losses, _ = self.sqddpg.get_loss(batch_transitions)
-        
-        for i, (optimizer, loss) in enumerate(zip(self.value_optimizers, value_losses)):
-            optimizer.zero_grad()
-            loss.backward(retain_graph=(i < len(value_losses) - 1))
+        try:
+            batch = self.replay_buffer.get_batch(self.config.batch_size)
+            batch_transitions = self.sqddpg.Transition(*zip(*batch))
             
-            # Gradient clipping
-            for param in optimizer.param_groups[0]['params']:
-                if param.grad is not None:
-                    param.grad.data.clamp_(-self.config.gradient_clip, 
-                                         self.config.gradient_clip)
+            # Disable anomaly detection to avoid performance issues
+            torch.autograd.set_detect_anomaly(False)
+            _, value_losses, _ = self.sqddpg.get_loss(batch_transitions)
             
-            optimizer.step()
+            # Validate losses
+            valid_losses = []
+            for i, loss in enumerate(value_losses):
+                if torch.isnan(loss) or torch.isinf(loss):
+                    print(f"⚠️ Invalid loss value in critic {i}: {loss.item()}")
+                else:
+                    valid_losses.append(loss)
+            if not valid_losses:
+                return
+            
+            # Combine losses to avoid retain_graph/backward-on-stale-graph issues
+            combined_loss = sum(valid_losses)
+            
+            # Zero all critic grads
+            for opt in self.value_optimizers:
+                opt.zero_grad()
+            
+            # Backward once through a single graph
+            combined_loss.backward()
+            
+            # Gradient clipping (safe, non-inplace)
+            for i, opt in enumerate(self.value_optimizers):
+                params = [p for group in opt.param_groups for p in group['params'] if p.grad is not None]
+                if params:
+                    torch.nn.utils.clip_grad_norm_(params, self.config.gradient_clip)
+            
+            # Step all optimizers after gradients are computed
+            for opt in self.value_optimizers:
+                opt.step()
+            
+        except Exception as e:
+            print(f"⚠️ Critical error in _update_critics: {e}")
+            # Clear all gradients to prevent accumulation
+            for optimizer in self.value_optimizers:
+                optimizer.zero_grad()
     
     def _update_actors(self):
-        """Update actor networks"""
+        """Update actor networks with enhanced error handling"""
         if len(self.replay_buffer) < self.config.batch_size:
             return
-            
-        batch = self.replay_buffer.get_batch(self.config.batch_size)
-        batch_transitions = self.sqddpg.Transition(*zip(*batch))
         
-        action_losses, _, log_probs = self.sqddpg.get_loss(batch_transitions)
+        try:
+            batch = self.replay_buffer.get_batch(self.config.batch_size)
+            batch_transitions = self.sqddpg.Transition(*zip(*batch))
+            
+            # Disable anomaly detection during training step for speed
+            torch.autograd.set_detect_anomaly(False)
+            action_losses, _, _ = self.sqddpg.get_loss(batch_transitions)
+            
+            # Validate losses and combine to avoid retain_graph complications
+            valid_losses = []
+            for i, loss in enumerate(action_losses):
+                if torch.isnan(loss) or torch.isinf(loss):
+                    print(f"⚠️ Invalid loss value in actor {i}: {loss.item()}")
+                else:
+                    valid_losses.append(loss)
+            if not valid_losses:
+                return
+            combined_loss = sum(valid_losses)
+            
+            # Zero all actor grads
+            for opt in self.action_optimizers:
+                opt.zero_grad()
+            
+            # Freeze critics to prevent gradient updates to critic parameters during actor step
+            critics = [self.sqddpg.critic0, self.sqddpg.critic1, self.sqddpg.critic2]
+            try:
+                for c in critics:
+                    for p in c.parameters():
+                        p.requires_grad_(False)
+                
+                # Single backward pass through shared graph
+                combined_loss.backward()
+            finally:
+                # Unfreeze critics regardless of success
+                for c in critics:
+                    for p in c.parameters():
+                        p.requires_grad_(True)
+            
+            # Gradient clipping (safe, non-inplace)
+            for opt in self.action_optimizers:
+                params = [p for group in opt.param_groups for p in group['params'] if p.grad is not None]
+                if params:
+                    torch.nn.utils.clip_grad_norm_(params, self.config.gradient_clip)
+            
+            # Step all actor optimizers
+            for opt in self.action_optimizers:
+                opt.step()
         
-        for i, optimizer in enumerate(self.action_optimizers):
-            optimizer.zero_grad()
-            
-            # Compute policy loss
-            loss = action_losses[i]
-            loss.backward(retain_graph=(i < len(self.action_optimizers) - 1))
-            
-            # Gradient clipping
-            for param in optimizer.param_groups[0]['params']:
-                if param.grad is not None:
-                    param.grad.data.clamp_(-self.config.gradient_clip,
-                                         self.config.gradient_clip)
-            
-            optimizer.step()
+        except Exception as e:
+            print(f"⚠️ Critical error in _update_actors: {e}")
+            # Clear all gradients to prevent accumulation
+            for optimizer in self.action_optimizers:
+                optimizer.zero_grad()
     
     def _save_best_model(self):
         """
