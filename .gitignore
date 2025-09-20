@@ -89,5 +89,29 @@ checkpoints/
 
 # MAT-HPO generated artifacts
 mat_hpo_results/
+easy_hpo_results/
+full_control_results/
 *.jsonl
 *.npy
+
+# Symbolic links (should not be tracked)
+MAT-HPO-Library
+
+# Test results and temporary files
+test_results/
+temp/
+*.log
+optimization_log.txt
+step_log.jsonl
+llm_conversations_*.jsonl
+
+# Model checkpoints and weights
+*.pt
+*.pth
+RL_model*.pt
+CNNLSTM_model_*.npy
+
+# Configuration files with sensitive data
+config.json
+secrets.json
+.env.local

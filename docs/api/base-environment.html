@@ -21,7 +21,7 @@
                     </div>
                 </a>
                 <div style="margin-top: 1rem;">
-                    <span class="version-badge">v1.0.0</span>
+                    <span class="version-badge">v1.1.0</span>
                 </div>
             </div>
             
@@ -38,12 +38,25 @@
                 <li class="nav-item">
                     <a href="../quickstart.html" class="nav-link">Quick Start</a>
                 </li>
-                
+                <li class="nav-item">
+                    <a href="../easy-hpo.html" class="nav-link">EasyHPO Interface</a>
+                </li>
+
+                <li class="nav-item">
+                    <div class="nav-section">Advanced Features</div>
+                </li>
+                <li class="nav-item">
+                    <a href="../llm-strategies.html" class="nav-link">LLM Strategies</a>
+                </li>
+
                 <li class="nav-item">
                     <div class="nav-section">API Reference</div>
                 </li>
                 <li class="nav-item">
                     <a href="base-environment.html" class="nav-link active">BaseEnvironment</a>
+                </li>
+                <li class="nav-item">
+                    <a href="full-control-hpo.html" class="nav-link">FullControlHPO</a>
                 </li>
                 <li class="nav-item">
                     <a href="hyperparameter-space.html" class="nav-link">HyperparameterSpace</a>
@@ -60,6 +73,9 @@
                 </li>
                 <li class="nav-item">
                     <a href="../examples/simple.html" class="nav-link">Simple Example</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../examples/easy-hpo.html" class="nav-link">EasyHPO Examples</a>
                 </li>
                 
                 <li class="nav-item">
@@ -118,14 +134,14 @@ class MyEnvironment(BaseEnvironment):
                                     <span class="code-language">python</span>
                                     <button class="copy-btn">Copy</button>
                                 </div>
-                                <pre><code>def load_data(self):
-    # Load your data
-    X, y = load_my_dataset()
-    
-    # Store as instance variables
-    self.X_train, self.X_val = train_test_split(X, y)
-    
-    return {"samples": len(X), "features": X.shape[1]}</code></pre>
+                                <pre><code class="language-python"><span class="token keyword">def</span> <span class="token function">load_data</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># Load your data</span>
+    X<span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token function">load_my_dataset</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+    <span class="token comment"># Store as instance variables</span>
+    self<span class="token punctuation">.</span>X_train<span class="token punctuation">,</span> self<span class="token punctuation">.</span>X_val <span class="token operator">=</span> <span class="token function">train_test_split</span><span class="token punctuation">(</span>X<span class="token punctuation">,</span> y<span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"samples"</span><span class="token punctuation">:</span> <span class="token builtin">len</span><span class="token punctuation">(</span>X<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"features"</span><span class="token punctuation">:</span> X<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">}</span></code></pre>
                             </div>
                         </div>
                     </div>
@@ -143,12 +159,12 @@ class MyEnvironment(BaseEnvironment):
                                     <span class="code-language">python</span>
                                     <button class="copy-btn">Copy</button>
                                 </div>
-                                <pre><code>def create_model(self, hyperparams):
-    model = MyModel(
-        hidden_size=hyperparams['hidden_size'],
-        learning_rate=hyperparams['learning_rate']
-    )
-    return model</code></pre>
+                                <pre><code class="language-python"><span class="token keyword">def</span> <span class="token function">create_model</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> hyperparams<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    model <span class="token operator">=</span> <span class="token function">MyModel</span><span class="token punctuation">(</span>
+        hidden_size<span class="token operator">=</span>hyperparams<span class="token punctuation">[</span><span class="token string">'hidden_size'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+        learning_rate<span class="token operator">=</span>hyperparams<span class="token punctuation">[</span><span class="token string">'learning_rate'</span><span class="token punctuation">]</span>
+    <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> model</code></pre>
                             </div>
                         </div>
                     </div>
@@ -166,16 +182,16 @@ class MyEnvironment(BaseEnvironment):
                                     <span class="code-language">python</span>
                                     <button class="copy-btn">Copy</button>
                                 </div>
-                                <pre><code>def train_evaluate(self, model, hyperparams):
-    # Train your model
-    model.fit(self.X_train, self.y_train)
-    
-    # Evaluate performance
-    predictions = model.predict(self.X_val)
-    f1 = f1_score(self.y_val, predictions)
-    accuracy = accuracy_score(self.y_val, predictions)
-    
-    return {'f1': f1, 'accuracy': accuracy}</code></pre>
+                                <pre><code class="language-python"><span class="token keyword">def</span> <span class="token function">train_evaluate</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> model<span class="token punctuation">,</span> hyperparams<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># Train your model</span>
+    model<span class="token punctuation">.</span><span class="token function">fit</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>X_train<span class="token punctuation">,</span> self<span class="token punctuation">.</span>y_train<span class="token punctuation">)</span>
+
+    <span class="token comment"># Evaluate performance</span>
+    predictions <span class="token operator">=</span> model<span class="token punctuation">.</span><span class="token function">predict</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>X_val<span class="token punctuation">)</span>
+    f1 <span class="token operator">=</span> <span class="token function">f1_score</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>y_val<span class="token punctuation">,</span> predictions<span class="token punctuation">)</span>
+    accuracy <span class="token operator">=</span> <span class="token function">accuracy_score</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>y_val<span class="token punctuation">,</span> predictions<span class="token punctuation">)</span>
+
+    <span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">'f1'</span><span class="token punctuation">:</span> f1<span class="token punctuation">,</span> <span class="token string">'accuracy'</span><span class="token punctuation">:</span> accuracy<span class="token punctuation">}</span></code></pre>
                             </div>
                         </div>
                     </div>
@@ -193,12 +209,12 @@ class MyEnvironment(BaseEnvironment):
                                     <span class="code-language">python</span>
                                     <button class="copy-btn">Copy</button>
                                 </div>
-                                <pre><code>def compute_reward(self, metrics):
-    # Simple reward: optimize F1-score
-    return metrics['f1']
-    
-    # Multi-objective reward
-    return 0.7 * metrics['f1'] + 0.3 * metrics['accuracy']</code></pre>
+                                <pre><code class="language-python"><span class="token keyword">def</span> <span class="token function">compute_reward</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> metrics<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token comment"># Simple reward: optimize F1-score</span>
+    <span class="token keyword">return</span> metrics<span class="token punctuation">[</span><span class="token string">'f1'</span><span class="token punctuation">]</span>
+
+    <span class="token comment"># Multi-objective reward</span>
+    <span class="token keyword">return</span> <span class="token number">0.7</span> <span class="token operator">*</span> metrics<span class="token punctuation">[</span><span class="token string">'f1'</span><span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token number">0.3</span> <span class="token operator">*</span> metrics<span class="token punctuation">[</span><span class="token string">'accuracy'</span><span class="token punctuation">]</span></code></pre>
                             </div>
                         </div>
                     </div>
@@ -212,37 +228,37 @@ class MyEnvironment(BaseEnvironment):
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code>from MAT_HPO_LIB import BaseEnvironment
-from sklearn.ensemble import RandomForestClassifier
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import f1_score, accuracy_score
+                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> BaseEnvironment
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>ensemble <span class="token keyword">import</span> RandomForestClassifier
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> train_test_split
+<span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>metrics <span class="token keyword">import</span> f1_score<span class="token punctuation">,</span> accuracy_score
 
-class RandomForestEnvironment(BaseEnvironment):
-    def load_data(self):
-        # Load your dataset
-        X, y = self.load_my_data()
-        self.X_train, self.X_val, self.y_train, self.y_val = \
-            train_test_split(X, y, test_size=0.2, random_state=42)
-        return {"samples": len(X), "features": X.shape[1]}
-    
-    def create_model(self, hyperparams):
-        return RandomForestClassifier(
-            n_estimators=int(hyperparams['n_estimators']),
-            max_depth=int(hyperparams['max_depth']),
-            random_state=42
-        )
-    
-    def train_evaluate(self, model, hyperparams):
-        model.fit(self.X_train, self.y_train)
-        predictions = model.predict(self.X_val)
-        
-        return {
-            'f1': f1_score(self.y_val, predictions, average='weighted'),
-            'accuracy': accuracy_score(self.y_val, predictions)
-        }
-    
-    def compute_reward(self, metrics):
-        return metrics['f1']  # Optimize for F1-score</code></pre>
+<span class="token keyword">class</span> <span class="token class-name">RandomForestEnvironment</span><span class="token punctuation">(</span>BaseEnvironment<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">load_data</span><span class="token punctuation">(</span>self<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># Load your dataset</span>
+        X<span class="token punctuation">,</span> y <span class="token operator">=</span> self<span class="token punctuation">.</span><span class="token function">load_my_data</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>X_train<span class="token punctuation">,</span> self<span class="token punctuation">.</span>X_val<span class="token punctuation">,</span> self<span class="token punctuation">.</span>y_train<span class="token punctuation">,</span> self<span class="token punctuation">.</span>y_val <span class="token operator">=</span> <span class="token punctuation">\</span>
+            <span class="token function">train_test_split</span><span class="token punctuation">(</span>X<span class="token punctuation">,</span> y<span class="token punctuation">,</span> test_size<span class="token operator">=</span><span class="token number">0.2</span><span class="token punctuation">,</span> random_state<span class="token operator">=</span><span class="token number">42</span><span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span><span class="token string">"samples"</span><span class="token punctuation">:</span> <span class="token builtin">len</span><span class="token punctuation">(</span>X<span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token string">"features"</span><span class="token punctuation">:</span> X<span class="token punctuation">.</span>shape<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">}</span>
+
+    <span class="token keyword">def</span> <span class="token function">create_model</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> hyperparams<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token function">RandomForestClassifier</span><span class="token punctuation">(</span>
+            n_estimators<span class="token operator">=</span><span class="token builtin">int</span><span class="token punctuation">(</span>hyperparams<span class="token punctuation">[</span><span class="token string">'n_estimators'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            max_depth<span class="token operator">=</span><span class="token builtin">int</span><span class="token punctuation">(</span>hyperparams<span class="token punctuation">[</span><span class="token string">'max_depth'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            random_state<span class="token operator">=</span><span class="token number">42</span>
+        <span class="token punctuation">)</span>
+
+    <span class="token keyword">def</span> <span class="token function">train_evaluate</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> model<span class="token punctuation">,</span> hyperparams<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        model<span class="token punctuation">.</span><span class="token function">fit</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>X_train<span class="token punctuation">,</span> self<span class="token punctuation">.</span>y_train<span class="token punctuation">)</span>
+        predictions <span class="token operator">=</span> model<span class="token punctuation">.</span><span class="token function">predict</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>X_val<span class="token punctuation">)</span>
+
+        <span class="token keyword">return</span> <span class="token punctuation">{</span>
+            <span class="token string">'f1'</span><span class="token punctuation">:</span> <span class="token function">f1_score</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>y_val<span class="token punctuation">,</span> predictions<span class="token punctuation">,</span> average<span class="token operator">=</span><span class="token string">'weighted'</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token string">'accuracy'</span><span class="token punctuation">:</span> <span class="token function">accuracy_score</span><span class="token punctuation">(</span>self<span class="token punctuation">.</span>y_val<span class="token punctuation">,</span> predictions<span class="token punctuation">)</span>
+        <span class="token punctuation">}</span>
+
+    <span class="token keyword">def</span> <span class="token function">compute_reward</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> metrics<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> metrics<span class="token punctuation">[</span><span class="token string">'f1'</span><span class="token punctuation">]</span>  <span class="token comment"># Optimize for F1-score</span></code></pre>
                     </div>
                 </section>
 

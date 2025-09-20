@@ -62,55 +62,77 @@ function initializeMobileMenu() {
     }
 }
 
-// Code block enhancements
+// Enhanced code block functionality
 function initializeCodeBlocks() {
-    const codeBlocks = document.querySelectorAll('pre code');
-    
-    codeBlocks.forEach(block => {
-        // Add copy button
-        const pre = block.parentElement;
-        const copyButton = document.createElement('button');
-        copyButton.className = 'copy-button';
-        copyButton.innerHTML = '📋 Copy';
-        copyButton.style.cssText = `
-            position: absolute;
-            top: 0.5rem;
-            right: 0.5rem;
-            background: var(--secondary-color);
-            color: white;
-            border: none;
-            padding: 0.25rem 0.5rem;
-            border-radius: 4px;
-            font-size: 0.75rem;
-            cursor: pointer;
-            opacity: 0;
-            transition: opacity 0.2s ease;
-        `;
-        
-        pre.style.position = 'relative';
-        pre.appendChild(copyButton);
-        
-        // Show copy button on hover
-        pre.addEventListener('mouseenter', () => {
-            copyButton.style.opacity = '1';
+    // Handle existing copy buttons in code-block structure
+    const copyButtons = document.querySelectorAll('.copy-btn');
+
+    copyButtons.forEach(button => {
+        button.addEventListener('click', () => {
+            const codeBlock = button.closest('.code-block');
+            const code = codeBlock.querySelector('code');
+
+            if (code) {
+                // Get clean text content without HTML tags
+                const textContent = getCleanCodeText(code);
+
+                navigator.clipboard.writeText(textContent).then(() => {
+                    const originalText = button.innerHTML;
+                    button.innerHTML = '✅ Copied!';
+                    button.style.background = 'linear-gradient(135deg, #27ae60, #2ecc71)';
+
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.style.background = '';
+                    }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy: ', err);
+                    button.innerHTML = '❌ Failed';
+                    setTimeout(() => {
+                        button.innerHTML = '📋 Copy';
+                    }, 2000);
+                });
+            }
         });
-        
-        pre.addEventListener('mouseleave', () => {
-            copyButton.style.opacity = '0';
-        });
-        
-        // Copy functionality
-        copyButton.addEventListener('click', () => {
-            navigator.clipboard.writeText(block.textContent).then(() => {
-                copyButton.innerHTML = '✅ Copied!';
-                setTimeout(() => {
-                    copyButton.innerHTML = '📋 Copy';
-                }, 2000);
-            });
-        });
-        
-        // Skip syntax highlighting - use clean code display
     });
+
+    // Add hover effects to code blocks
+    const codeBlocks = document.querySelectorAll('.code-block');
+    codeBlocks.forEach(block => {
+        block.addEventListener('mouseenter', () => {
+            block.style.transform = 'translateY(-2px)';
+            block.style.boxShadow = '0 8px 25px rgba(0, 0, 0, 0.2)';
+        });
+
+        block.addEventListener('mouseleave', () => {
+            block.style.transform = '';
+            block.style.boxShadow = '';
+        });
+    });
+}
+
+// Extract clean text from syntax-highlighted code
+function getCleanCodeText(codeElement) {
+    // Create a temporary element to parse the HTML
+    const temp = document.createElement('div');
+    temp.innerHTML = codeElement.innerHTML;
+
+    // Remove all HTML tags and get clean text
+    const walker = document.createTreeWalker(
+        temp,
+        NodeFilter.SHOW_TEXT,
+        null,
+        false
+    );
+
+    let textContent = '';
+    let node;
+
+    while (node = walker.nextNode()) {
+        textContent += node.textContent;
+    }
+
+    return textContent;
 }
 
 // Clean code display without syntax highlighting

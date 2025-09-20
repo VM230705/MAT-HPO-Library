@@ -529,57 +529,218 @@ tr:hover {
     }
 }
 
-/* Syntax highlighting for code blocks */
+/* Enhanced Syntax highlighting for code blocks */
 .highlight {
-    background-color: var(--code-bg);
+    background-color: #1e1e1e;
     border-radius: 8px;
     margin: 1rem 0;
+    overflow: hidden;
 }
 
 .highlight pre {
     background: none;
     border: none;
     margin: 0;
+    color: #d4d4d4;
 }
 
-/* Code block styling */
+/* Python Syntax Highlighting */
+.language-python .token.keyword {
+    color: #569cd6;
+    font-weight: bold;
+}
+
+.language-python .token.string {
+    color: #ce9178;
+}
+
+.language-python .token.function {
+    color: #dcdcaa;
+}
+
+.language-python .token.class-name {
+    color: #4ec9b0;
+}
+
+.language-python .token.comment {
+    color: #6a9955;
+    font-style: italic;
+}
+
+.language-python .token.number {
+    color: #b5cea8;
+}
+
+.language-python .token.operator {
+    color: #d4d4d4;
+}
+
+.language-python .token.punctuation {
+    color: #d4d4d4;
+}
+
+.language-python .token.builtin {
+    color: #569cd6;
+}
+
+/* Bash/Shell Syntax Highlighting */
+.language-bash .token.function {
+    color: #569cd6;
+}
+
+.language-bash .token.string {
+    color: #ce9178;
+}
+
+.language-bash .token.comment {
+    color: #6a9955;
+    font-style: italic;
+}
+
+.language-bash .token.parameter {
+    color: #9cdcfe;
+}
+
+.language-bash .token.option {
+    color: #c586c0;
+}
+
+/* JSON Syntax Highlighting */
+.language-json .token.property {
+    color: #9cdcfe;
+}
+
+.language-json .token.string {
+    color: #ce9178;
+}
+
+.language-json .token.number {
+    color: #b5cea8;
+}
+
+.language-json .token.boolean {
+    color: #569cd6;
+}
+
+.language-json .token.null {
+    color: #569cd6;
+}
+
+/* General token styles */
+.token.tag {
+    color: #569cd6;
+}
+
+.token.attr-name {
+    color: #92c5f8;
+}
+
+.token.attr-value {
+    color: #ce9178;
+}
+
+.token.important {
+    color: #f44747;
+    font-weight: bold;
+}
+
+.token.variable {
+    color: #9cdcfe;
+}
+
+/* Enhanced Code block styling */
 .code-block {
     position: relative;
     margin: 1rem 0;
-    border-radius: 8px;
+    border-radius: 12px;
     overflow: hidden;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 1px solid #333;
 }
 
 .code-header {
-    background-color: #2d3748;
+    background: linear-gradient(135deg, #2d3748, #4a5568);
     color: white;
-    padding: 0.5rem 1rem;
-    font-size: 0.75rem;
-    font-weight: 500;
+    padding: 0.75rem 1rem;
+    font-size: 0.8rem;
+    font-weight: 600;
     display: flex;
     justify-content: space-between;
     align-items: center;
+    border-bottom: 1px solid #4a5568;
 }
 
 .code-language {
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 1px;
+    display: flex;
+    align-items: center;
+}
+
+.code-language::before {
+    content: "📄";
+    margin-right: 0.5rem;
+}
+
+.language-python .code-language::before {
+    content: "🐍";
+}
+
+.language-bash .code-language::before {
+    content: "💻";
+}
+
+.language-json .code-language::before {
+    content: "📊";
 }
 
 .copy-btn {
-    background: rgba(255, 255, 255, 0.2);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, #4299e1, #3182ce);
+    border: none;
     color: white;
-    padding: 0.25rem 0.5rem;
-    border-radius: 4px;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
     font-size: 0.75rem;
+    font-weight: 500;
     cursor: pointer;
-    transition: background-color 0.2s ease;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.3rem;
+}
+
+.copy-btn::before {
+    content: "📋";
 }
 
 .copy-btn:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: linear-gradient(135deg, #3182ce, #2c5282);
+    transform: translateY(-1px);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.copy-btn:active {
+    transform: translateY(0);
+}
+
+/* Enhanced code block content */
+.code-block pre {
+    background: linear-gradient(135deg, #1a202c, #2d3748);
+    margin: 0;
+    padding: 1.5rem;
+    overflow-x: auto;
+    font-family: 'JetBrains Mono', 'Fira Code', 'Monaco', 'Consolas', monospace;
+    font-size: 0.9rem;
+    line-height: 1.6;
+    border: none;
+}
+
+.code-block pre code {
+    background: none;
+    color: #e2e8f0;
+    padding: 0;
+    border: none;
+    font-family: inherit;
 }
 
 /* API documentation styles */

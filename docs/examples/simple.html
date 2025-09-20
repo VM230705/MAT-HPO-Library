@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Simple Example - MAT-HPO Library</title>
+    <title>Quick Test - MAT-HPO Library</title>
     <link rel="stylesheet" href="../css/style.css">
     <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
 </head>
 <body>
     <button class="mobile-toggle">☰</button>
-    
+
     <div class="container">
         <nav class="sidebar">
             <div class="sidebar-header">
@@ -21,10 +21,10 @@
                     </div>
                 </a>
                 <div style="margin-top: 1rem;">
-                    <span class="version-badge">v1.0.0</span>
+                    <span class="version-badge">v1.1.0</span>
                 </div>
             </div>
-            
+
             <ul class="nav-menu">
                 <li class="nav-item">
                     <div class="nav-section">Getting Started</div>
@@ -38,12 +38,25 @@
                 <li class="nav-item">
                     <a href="../quickstart.html" class="nav-link">Quick Start</a>
                 </li>
-                
+                <li class="nav-item">
+                    <a href="../easy-hpo.html" class="nav-link">EasyHPO Interface</a>
+                </li>
+
+                <li class="nav-item">
+                    <div class="nav-section">Advanced Features</div>
+                </li>
+                <li class="nav-item">
+                    <a href="../llm-strategies.html" class="nav-link">LLM Strategies</a>
+                </li>
+
                 <li class="nav-item">
                     <div class="nav-section">API Reference</div>
                 </li>
                 <li class="nav-item">
                     <a href="../api/base-environment.html" class="nav-link">BaseEnvironment</a>
+                </li>
+                <li class="nav-item">
+                    <a href="../api/full-control-hpo.html" class="nav-link">FullControlHPO</a>
                 </li>
                 <li class="nav-item">
                     <a href="../api/hyperparameter-space.html" class="nav-link">HyperparameterSpace</a>
@@ -54,14 +67,17 @@
                 <li class="nav-item">
                     <a href="../api/configs.html" class="nav-link">Configs</a>
                 </li>
-                
+
                 <li class="nav-item">
                     <div class="nav-section">Examples</div>
                 </li>
                 <li class="nav-item">
-                    <a href="simple.html" class="nav-link active">Simple Example</a>
+                    <a href="simple.html" class="nav-link active">Quick Test</a>
                 </li>
-                
+                <li class="nav-item">
+                    <a href="easy-hpo.html" class="nav-link">EasyHPO Examples</a>
+                </li>
+
                 <li class="nav-item">
                     <div class="nav-section">Resources</div>
                 </li>
@@ -70,216 +86,186 @@
                 </li>
             </ul>
         </nav>
-        
+
         <main class="content">
             <div class="content-header">
                 <nav class="breadcrumb">
-                    <a href="../index.html">Home</a> &gt; <a href="./">Examples</a> &gt; Simple Example
+                    <a href="../index.html">Home</a> > <a href="../examples/">Examples</a> > Quick Test
                 </nav>
-                <h1>Simple Example</h1>
+                <h1>Quick Test - Verify Installation</h1>
             </div>
-            
+
             <div class="main-content">
-                
+
                 <section class="content-section">
-                    <h2>📋 Neural Network Optimization</h2>
-                    <p>Complete example optimizing a neural network for classification using MAT-HPO.</p>
+                    <h2>🚀 Quick Installation Verification</h2>
+                    <p>Verify that MAT-HPO Library is correctly installed and working with these simple test commands.</p>
                 </section>
-                
+
                 <section class="content-section">
-                    <h2>🔧 1. Environment Setup</h2>
-                    
+                    <h2>🔧 Method 1: Working Examples Test (Recommended)</h2>
+                    <p>The fastest way to verify your installation - runs multiple examples to test core functionality:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code class="language-bash"><span class="token comment"># Run comprehensive working examples</span>
+<span class="token function">python</span> test_working_examples.py</code></pre>
+                    </div>
+
+                    <p><strong>What this tests:</strong></p>
+                    <ul>
+                        <li>✅ Basic classification optimization</li>
+                        <li>✅ FullControlHPO production interface</li>
+                        <li>✅ EasyHPO simplified interface</li>
+                        <li>✅ ECG time series classification</li>
+                    </ul>
+                </section>
+
+                <section class="content-section">
+                    <h2>🧪 Method 2: LLM Functionality Test</h2>
+                    <p>Test the advanced LLM-enhanced optimization features:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code class="language-bash"><span class="token comment"># Test LLM integration and advanced features</span>
+<span class="token function">python</span> -m pytest MAT_HPO_LIB/tests/test_llm_functionality.py -v</code></pre>
+                    </div>
+
+                    <p><strong>What this tests:</strong></p>
+                    <ul>
+                        <li>✅ LLM client connections</li>
+                        <li>✅ Hyperparameter mixing strategies</li>
+                        <li>✅ Adaptive alpha controllers</li>
+                        <li>✅ Time series analysis pipelines</li>
+                    </ul>
+                </section>
+
+                <section class="content-section">
+                    <h2>🔍 Method 3: Core Library Test</h2>
+                    <p>Test the fundamental MAT-HPO optimization algorithms:</p>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code class="language-bash"><span class="token comment"># Test core optimization algorithms and multi-agent system</span>
+<span class="token function">python</span> -m pytest MAT_HPO_LIB/tests/test_library.py -v</code></pre>
+                    </div>
+
+                    <p><strong>What this tests:</strong></p>
+                    <ul>
+                        <li>✅ Multi-agent SQDDPG algorithms</li>
+                        <li>✅ Hyperparameter space definitions</li>
+                        <li>✅ Optimization configurations</li>
+                        <li>✅ Environment interfaces</li>
+                    </ul>
+                </section>
+
+                <section class="content-section">
+                    <h2>⚡ Method 4: Quick Python Test</h2>
+                    <p>Test a single function import to verify basic installation:</p>
+
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code>from MAT_HPO_LIB import BaseEnvironment, HyperparameterSpace, MAT_HPO_Optimizer
-from MAT_HPO_LIB.utils import DefaultConfigs
-import torch
-import torch.nn as nn
-from sklearn.datasets import make_classification
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import accuracy_score, f1_score
-
-class SimpleNN(nn.Module):
-    def __init__(self, input_dim, hidden_size, num_classes):
-        super().__init__()
-        self.fc1 = nn.Linear(input_dim, hidden_size)
-        self.fc2 = nn.Linear(hidden_size, num_classes)
-        self.relu = nn.ReLU()
-        
-    def forward(self, x):
-        return self.fc2(self.relu(self.fc1(x)))</code></pre>
+                        <pre><code class="language-python"><span class="token comment"># Quick import test</span>
+<span class="token keyword">try</span><span class="token punctuation">:</span>
+    <span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> EasyHPO<span class="token punctuation">,</span> FullControlHPO
+    <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"✅ MAT-HPO Library imported successfully!"</span><span class="token punctuation">)</span>
+    <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"📦 Available interfaces: EasyHPO, FullControlHPO"</span><span class="token punctuation">)</span>
+<span class="token keyword">except</span> <span class="token builtin">ImportError</span> <span class="token keyword">as</span> e<span class="token punctuation">:</span>
+    <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"❌ Import failed: {e}"</span><span class="token punctuation">)</span></code></pre>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>🏗️ 2. Define Environment</h2>
-                    
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span class="code-language">python</span>
-                            <button class="copy-btn">Copy</button>
-                        </div>
-                        <pre><code>class NeuralNetEnvironment(BaseEnvironment):
-    def load_data(self):
-        X, y = make_classification(n_samples=1000, n_features=20, n_classes=3, random_state=42)
-        X_train, X_val, y_train, y_val = train_test_split(X, y, test_size=0.2, random_state=42)
-        
-        self.X_train = torch.FloatTensor(X_train)
-        self.y_train = torch.LongTensor(y_train)
-        self.X_val = torch.FloatTensor(X_val)
-        self.y_val = torch.LongTensor(y_val)
-        
-        return {"samples": len(X_train), "features": X.shape[1], "classes": len(set(y))}
-    
-    def create_model(self, hyperparams):
-        return SimpleNN(
-            input_dim=20,
-            hidden_size=int(hyperparams['hidden_size']),
-            num_classes=3
-        )
-    
-    def train_evaluate(self, model, hyperparams):
-        optimizer = torch.optim.Adam(model.parameters(), lr=hyperparams['learning_rate'])
-        criterion = nn.CrossEntropyLoss()
-        
-        # Simple training loop
-        model.train()
-        for epoch in range(20):
-            optimizer.zero_grad()
-            outputs = model(self.X_train)
-            loss = criterion(outputs, self.y_train)
-            loss.backward()
-            optimizer.step()
-        
-        # Evaluation
-        model.eval()
-        with torch.no_grad():
-            val_outputs = model(self.X_val)
-            _, predicted = torch.max(val_outputs, 1)
-            accuracy = accuracy_score(self.y_val.numpy(), predicted.numpy())
-            f1 = f1_score(self.y_val.numpy(), predicted.numpy(), average='weighted')
-        
-        return {'accuracy': accuracy, 'f1': f1}
-    
-    def compute_reward(self, metrics):
-        return metrics['f1']  # Optimize for F1-score</code></pre>
-                    </div>
-                </section>
+                    <h2>✅ Expected Output</h2>
+                    <p>If everything is working correctly, you should see output similar to:</p>
 
-                <section class="content-section">
-                    <h2>🎯 3. Define Hyperparameters</h2>
-                    
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span class="code-language">python</span>
-                            <button class="copy-btn">Copy</button>
-                        </div>
-                        <pre><code>space = HyperparameterSpace(
-    agent0_params=['weight_decay'],          # Problem-specific
-    agent1_params=['hidden_size'],           # Architecture
-    agent2_params=['learning_rate'],         # Training
-    bounds={
-        'weight_decay': (1e-6, 1e-3),
-        'hidden_size': (32, 256),
-        'learning_rate': (1e-4, 1e-2)
-    },
-    param_types={
-        'weight_decay': float,
-        'hidden_size': int,
-        'learning_rate': float
-    }
-)</code></pre>
-                    </div>
-                </section>
-
-                <section class="content-section">
-                    <h2>🚀 4. Run Optimization</h2>
-                    
-                    <div class="code-block">
-                        <div class="code-header">
-                            <span class="code-language">python</span>
-                            <button class="copy-btn">Copy</button>
-                        </div>
-                        <pre><code>def main():
-    # Create environment and load data
-    environment = NeuralNetEnvironment()
-    environment.load_data()
-    
-    # Setup optimization
-    config = DefaultConfigs.standard()
-    optimizer = MAT_HPO_Optimizer(
-        environment=environment,
-        hyperparameter_space=space,
-        config=config
-    )
-    
-    # Run optimization
-    print("Starting optimization...")
-    results = optimizer.optimize()
-    
-    # Print results
-    print(f"Best parameters: {results['best_hyperparameters']}")
-    print(f"Best performance: {results['best_performance']}")
-    
-    return results
-
-if __name__ == "__main__":
-    results = main()</code></pre>
-                    </div>
-                </section>
-
-                <section class="content-section">
-                    <h2>📊 Expected Output</h2>
-                    
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-language">text</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code>Starting optimization...
-[INFO] MAT-HPO Optimizer initialized successfully
-Step 1/100: F1=0.8234, Parameters={'hidden_size': 128, 'learning_rate': 0.003, 'weight_decay': 0.0001}
-...
-Step 100/100: F1=0.9156, Parameters={'hidden_size': 164, 'learning_rate': 0.0012, 'weight_decay': 0.00034}
-
-Best parameters: {'hidden_size': 164, 'learning_rate': 0.0012, 'weight_decay': 0.00034}
-Best performance: 0.9156</code></pre>
+                        <pre><code class="language-text">Testing MAT-HPO-Library examples...
+🚀 Starting basic classification optimization...
+✅ Best F1: 0.8949
+🧠 Starting FullControlHPO optimization...
+✅ FullControlHPO F1: 0.8949
+🧠 Starting EasyHPO LLM optimization...
+✅ EasyHPO F1: 0.8949
+❤️ Starting ECG classification optimization...
+✅ ECG F1: 0.8762
+✅ All examples work correctly!</code></pre>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>📁 Results Files</h2>
-                    <p>Results are automatically saved:</p>
-                    <ul>
-                        <li><code>best_hyperparams.json</code> - Best hyperparameters found</li>
-                        <li><code>optimization_results.json</code> - Complete results</li>
-                        <li><code>step_log.jsonl</code> - Step-by-step log</li>
-                    </ul>
+                    <h2>🚨 Troubleshooting</h2>
+
+                    <div class="alert alert-warning">
+                        <h4>Common Issues:</h4>
+                        <ul>
+                            <li><strong>Import Errors:</strong> Ensure all dependencies are installed: <code>pip install torch numpy scikit-learn</code></li>
+                            <li><strong>CUDA Issues:</strong> The library automatically detects and uses GPU if available, falls back to CPU</li>
+                            <li><strong>LLM Tests Failing:</strong> LLM features require local Ollama installation for full functionality</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="content-section">
+                    <h2>📋 All Test Commands Summary</h2>
+
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">bash</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code class="language-bash"><span class="token comment"># Method 1: Comprehensive examples (recommended)</span>
+<span class="token function">python</span> test_working_examples.py
+
+<span class="token comment"># Method 2: LLM functionality test</span>
+<span class="token function">python</span> -m pytest MAT_HPO_LIB/tests/test_llm_functionality.py -v
+
+<span class="token comment"># Method 3: Core library test</span>
+<span class="token function">python</span> -m pytest MAT_HPO_LIB/tests/test_library.py -v</code></pre>
+                    </div>
                 </section>
 
                 <section class="content-section">
                     <h2>📚 Next Steps</h2>
-                    
+
                     <div class="next-steps">
                         <div class="step-item">
-                            <h3><a href="../quickstart.html">More Examples</a></h3>
-                            <p>Explore additional use cases and configurations</p>
+                            <h3><a href="../quickstart.html">Quick Start Guide</a></h3>
+                            <p>Learn how to use MAT-HPO for your own optimization problems</p>
                         </div>
-                        
+
                         <div class="step-item">
-                            <h3><a href="../api/base-environment.html">API Reference</a></h3>
-                            <p>Complete documentation of all classes and methods</p>
+                            <h3><a href="easy-hpo.html">EasyHPO Examples</a></h3>
+                            <p>Complete working examples with real datasets</p>
+                        </div>
+
+                        <div class="step-item">
+                            <h3><a href="../api/full-control-hpo.html">FullControlHPO API</a></h3>
+                            <p>Production-grade interface used in research applications</p>
                         </div>
                     </div>
                 </section>
-                
+
             </div>
         </main>
     </div>
-    
+
     <script src="../js/main.js"></script>
 </body>
 </html>

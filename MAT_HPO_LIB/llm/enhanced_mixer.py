@@ -224,7 +224,7 @@ class EnhancedLLMHyperparameterMixer:
                  output_dir: str = None,
                  dataset_info_csv_path: str = "./Datasets_info.csv",
                  # Strategy selection
-                 mixing_strategy: str = "fixed_alpha",  # "fixed_alpha", "adaptive_alpha", "llmpipe", "hybrid"
+                 mixing_strategy: str = "fixed_alpha",  # "fixed_alpha", "adaptive", "llmpipe", "hybrid"
                  # Adaptive alpha parameters
                  alpha_min: float = 0.1,
                  alpha_max: float = 0.8,
@@ -246,7 +246,7 @@ class EnhancedLLMHyperparameterMixer:
             dataset_name: Dataset name for logging
             output_dir: Output directory for logs
             dataset_info_csv_path: Path to dataset information CSV file
-            mixing_strategy: Strategy to use ("fixed_alpha", "adaptive_alpha", "llmpipe", "hybrid")
+            mixing_strategy: Strategy to use ("fixed_alpha", "adaptive", "llmpipe", "hybrid")
             alpha_min/max: Alpha bounds for adaptive strategy
             slope_threshold: Performance slope threshold
             alpha_adjustment_rate: Rate of alpha adjustments
@@ -276,7 +276,7 @@ class EnhancedLLMHyperparameterMixer:
         if mixing_strategy == "fixed_alpha":
             print(f"📊 Fixed alpha strategy: {alpha}")
 
-        elif mixing_strategy == "adaptive_alpha":
+        elif mixing_strategy == "adaptive":
             # Note: This is an additional enhancement beyond LLaPipe
             # LLaPipe already includes slope monitoring for triggering
             # This adds continuous alpha adjustment based on performance trends
@@ -368,7 +368,7 @@ class EnhancedLLMHyperparameterMixer:
         if self.mixing_strategy == "fixed_alpha":
             return self._fixed_alpha_decision(decision_info)
 
-        elif self.mixing_strategy == "adaptive_alpha":
+        elif self.mixing_strategy == "adaptive":
             return self._adaptive_alpha_decision(current_performance, episode, decision_info)
 
         elif self.mixing_strategy == "llmpipe":
@@ -411,7 +411,7 @@ class EnhancedLLMHyperparameterMixer:
         use_llm = self.decision_rng.random() < current_alpha
 
         decision_info.update({
-            'method': 'adaptive_alpha',
+            'method': 'adaptive',
             'current_alpha': current_alpha,
             'unified_metric': unified_metric,
             'random_draw': use_llm
@@ -486,9 +486,9 @@ class EnhancedLLMHyperparameterMixer:
             # No LLaPipe trigger - use adaptive alpha probability
             final_decision = adaptive_trigger
             decision_info.update({
-                'method': 'hybrid_adaptive_alpha',
+                'method': 'hybrid_adaptive',
                 'llmpipe_reason': llmpipe_info.get('trigger_reason'),
-                'adaptive_alpha': adaptive_info.get('current_alpha'),
+                'adaptive': adaptive_info.get('current_alpha'),
                 'random_draw': adaptive_trigger
             })
 
@@ -563,7 +563,7 @@ class EnhancedLLMHyperparameterMixer:
         if method == 'fixed_alpha':
             print(f"🤖 LLM decision (fixed α={decision_info.get('alpha', 0):.3f})")
 
-        elif method == 'adaptive_alpha':
+        elif method == 'adaptive':
             alpha = decision_info.get('current_alpha', 0)
             slope = decision_info.get('current_slope', 0)
             print(f"🤖 LLM decision (adaptive α={alpha:.3f}, slope={slope:.6f})")
@@ -579,10 +579,10 @@ class EnhancedLLMHyperparameterMixer:
         elif method.startswith('hybrid'):
             if 'llmpipe_trigger' in method:
                 reason = decision_info.get('llmpipe_reason', 'unknown')
-                alpha = decision_info.get('adaptive_alpha', 0)
+                alpha = decision_info.get('adaptive', 0)
                 print(f"🤖 LLM triggered (Hybrid: LLaPipe {reason}, α={alpha:.3f})")
             else:
-                alpha = decision_info.get('adaptive_alpha', 0)
+                alpha = decision_info.get('adaptive', 0)
                 print(f"🤖 LLM decision (Hybrid: α={alpha:.3f})")
 
     def _print_rl_decision(self, decision_info: Dict, step: int):
@@ -592,7 +592,7 @@ class EnhancedLLMHyperparameterMixer:
         if method == 'fixed_alpha':
             print(f"🎯 RL decision (fixed α={decision_info.get('alpha', 0):.3f})")
 
-        elif method == 'adaptive_alpha':
+        elif method == 'adaptive':
             alpha = decision_info.get('current_alpha', 0)
             slope = decision_info.get('current_slope', 0)
             print(f"🎯 RL decision (adaptive α={alpha:.3f}, slope={slope:.6f})")
@@ -633,7 +633,7 @@ class EnhancedLLMHyperparameterMixer:
         # Add strategy-specific statistics
         if self.alpha_controller:
             base_stats.update({
-                'adaptive_alpha_stats': self.alpha_controller.get_statistics()
+                'adaptive_stats': self.alpha_controller.get_statistics()
             })
 
         if self.adaptive_advisor:

@@ -35,7 +35,7 @@
                     </div>
                 </a>
                 <div style="margin-top: 1rem;">
-                    <span class="version-badge">v1.0.0</span>
+                    <span class="version-badge">v1.1.0</span>
                 </div>
             </div>
             
@@ -52,7 +52,17 @@
                 <li class="nav-item">
                     <a href="quickstart.html" class="nav-link">Quick Start</a>
                 </li>
-                
+                <li class="nav-item">
+                    <a href="easy-hpo.html" class="nav-link">EasyHPO Interface</a>
+                </li>
+
+                <li class="nav-item">
+                    <div class="nav-section">Advanced Features</div>
+                </li>
+                <li class="nav-item">
+                    <a href="llm-strategies.html" class="nav-link">LLM Strategies</a>
+                </li>
+
                 <li class="nav-item">
                     <div class="nav-section">Examples</div>
                 </li>
@@ -65,6 +75,9 @@
                 </li>
                 <li class="nav-item">
                     <a href="api/base-environment.html" class="nav-link">BaseEnvironment</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/full-control-hpo.html" class="nav-link">FullControlHPO</a>
                 </li>
                 <li class="nav-item">
                     <a href="api/hyperparameter-space.html" class="nav-link">HyperparameterSpace</a>
@@ -113,7 +126,7 @@ cd MAT-HPO-Library
 pip install torch numpy scikit-learn
 
 # Test the installation
-python simple_functionality_test.py</code></pre>
+python test_working_examples.py</code></pre>
                     </div>
                 </section>
                 
@@ -228,7 +241,7 @@ print("✅ MAT-HPO Library imported successfully!")</code></pre>
                             <button class="copy-btn">Copy</button>
                         </div>
                         <pre><code># Run the comprehensive functionality test
-python simple_functionality_test.py
+python test_working_examples.py
 
 # Expected output:
 # 🚀 MAT-HPO Library Simple Functionality Test

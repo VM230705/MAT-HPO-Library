@@ -173,10 +173,18 @@ class FullControlHPO:
             優化結果字典
         """
 
-        # 自動分割驗證集
-        if X_val is None and y_val is None:
+        # 合併所有數據進行分析
+        if X_val is not None and y_val is not None:
+            # 如果有驗證集，合併用於分析
+            import numpy as np
+            X_combined = np.concatenate([X_train, X_val], axis=0) if isinstance(X_train, np.ndarray) else X_train + X_val
+            y_combined = np.concatenate([y_train, y_val], axis=0) if isinstance(y_train, np.ndarray) else y_train + y_val
+        else:
+            # 自動分割驗證集
             from sklearn.model_selection import train_test_split
             import numpy as np
+            X_combined = X_train
+            y_combined = y_train
             X_train, X_val, y_train, y_val = train_test_split(
                 X_train, y_train, test_size=0.2, random_state=self.seed,
                 stratify=y_train if len(np.unique(y_train)) > 1 else None
@@ -188,12 +196,14 @@ class FullControlHPO:
         if custom_environment:
             self.environment = custom_environment
         else:
-            self.environment = TimeSeriesEnvironment(
+            # 使用 EasyHPOEnvironment，它有完整的實現
+            from .easy_hpo import EasyHPOEnvironment
+            self.environment = EasyHPOEnvironment(
                 task_type=self.task_type,
                 dataset_name=self.dataset_name
             )
+            # 設置數據
             self.environment.set_data(X_train, y_train, X_val, y_val, X_test, y_test)
-            self.environment.load_data()
 
         # 設置超參數空間
         if custom_space:
