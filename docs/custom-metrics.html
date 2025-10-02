@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Custom Metrics & Rewards - MAT-HPO Library</title>
+    <meta name="description" content="Learn how to use custom metrics and reward functions in MAT-HPO for time series forecasting and other domains">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
+</head>
+<body>
+    <button class="mobile-toggle">☰</button>
+
+    <div class="container">
+        <nav class="sidebar">
+            <div class="sidebar-header">
+                <a href="index.html" class="logo">
+                    <div class="logo-icon">M</div>
+                    <div class="logo-text">
+                        <h1>MAT-HPO</h1>
+                        <p>Multi-Agent HPO</p>
+                    </div>
+                </a>
+                <div style="margin-top: 1rem;">
+                    <span class="version-badge">v1.1.0</span>
+                </div>
+            </div>
+
+            <ul class="nav-menu">
+                <li class="nav-item">
+                    <div class="nav-section">Getting Started</div>
+                </li>
+                <li class="nav-item">
+                    <a href="index.html" class="nav-link">Home</a>
+                </li>
+                <li class="nav-item">
+                    <a href="installation.html" class="nav-link">Installation</a>
+                </li>
+                <li class="nav-item">
+                    <a href="quickstart.html" class="nav-link">Quick Start</a>
+                </li>
+                <li class="nav-item">
+                    <a href="easy-hpo.html" class="nav-link">EasyHPO Interface</a>
+                </li>
+
+                <li class="nav-item">
+                    <div class="nav-section">Advanced Features</div>
+                </li>
+                <li class="nav-item">
+                    <a href="custom-metrics.html" class="nav-link active">Custom Metrics & Rewards</a>
+                </li>
+                <li class="nav-item">
+                    <a href="llm-strategies.html" class="nav-link">LLM Strategies</a>
+                </li>
+
+                <li class="nav-item">
+                    <div class="nav-section">API Reference</div>
+                </li>
+                <li class="nav-item">
+                    <a href="api/base-environment.html" class="nav-link">BaseEnvironment</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/full-control-hpo.html" class="nav-link">FullControlHPO</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/hyperparameter-space.html" class="nav-link">HyperparameterSpace</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/optimizer.html" class="nav-link">MAT_HPO_Optimizer</a>
+                </li>
+                <li class="nav-item">
+                    <a href="api/configs.html" class="nav-link">Configs</a>
+                </li>
+
+                <li class="nav-item">
+                    <div class="nav-section">Examples</div>
+                </li>
+                <li class="nav-item">
+                    <a href="examples/simple.html" class="nav-link">Simple Example</a>
+                </li>
+                <li class="nav-item">
+                    <a href="examples/easy-hpo.html" class="nav-link">EasyHPO Examples</a>
+                </li>
+
+                <li class="nav-item">
+                    <div class="nav-section">Resources</div>
+                </li>
+                <li class="nav-item">
+                    <a href="https://github.com/VM230705/MAT-HPO-Library" class="nav-link external">GitHub</a>
+                </li>
+            </ul>
+        </nav>
+
+        <main class="content">
+            <div class="content-header">
+                <nav class="breadcrumb">
+                    <a href="index.html">Home</a>
+                    <span class="separator">/</span>
+                    <span>Custom Metrics & Rewards</span>
+                </nav>
+                <h1>Custom Metrics & Rewards</h1>
+                <p class="subtitle">Flexible configuration for time series forecasting and beyond</p>
+            </div>
+
+            <div class="main-content">
+
+                <section class="doc-section">
+                    <h2 id="overview">Overview</h2>
+                    <p>MAT-HPO provides a <strong>flexible parameter-based interface</strong> that allows you to customize metrics tracking and reward computation <strong>without modifying the library code</strong>. This feature is especially useful for:</p>
+
+                    <ul>
+                        <li>🎯 <strong>Time Series Forecasting</strong>: Track MASE, SMAPE, MAE, RMSE instead of F1/AUC/G-mean</li>
+                        <li>📊 <strong>Regression Tasks</strong>: Use MSE, R², RMSE, MAE as metrics</li>
+                        <li>🔬 <strong>Custom Domains</strong>: Define any metrics specific to your problem</li>
+                        <li>🎁 <strong>Custom Rewards</strong>: Implement complex reward functions based on multiple objectives</li>
+                    </ul>
+
+                    <div class="info-box">
+                        <h3>✅ Key Benefits</h3>
+                        <ul>
+                            <li>No library code modification needed</li>
+                            <li>Support for arbitrary number of metrics (not limited to 3)</li>
+                            <li>Preserves original metric values for proper evaluation</li>
+                            <li>Backward compatible with existing F1/AUC/G-mean interface</li>
+                            <li>Domain-agnostic design</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="doc-section">
+                    <h2 id="three-components">Three Core Components</h2>
+
+                    <div class="feature-grid">
+                        <div class="feature-card">
+                            <h3>1️⃣ BaseEnvironment Parameters</h3>
+                            <p>Configure metrics and rewards in your environment:</p>
+                            <ul>
+                                <li><code>custom_metrics</code>: List of metrics to track</li>
+                                <li><code>metric_names_mapping</code>: Display name mapping</li>
+                                <li><code>reward_function</code>: Custom reward logic</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card">
+                            <h3>2️⃣ HPOLogger Configuration</h3>
+                            <p>Enhanced logging with custom metrics:</p>
+                            <ul>
+                                <li><code>metrics_extractor</code>: Extract metrics from hyperparams</li>
+                                <li><code>metric_names</code>: Custom display names</li>
+                                <li>Automatic separation of original vs. transformed values</li>
+                            </ul>
+                        </div>
+
+                        <div class="feature-card">
+                            <h3>3️⃣ Automatic Integration</h3>
+                            <p>Everything works seamlessly:</p>
+                            <ul>
+                                <li>Optimizer auto-detects environment config</li>
+                                <li>Logger inherits metric settings</li>
+                                <li>Flexible storage in <code>best_hyperparams.json</code></li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="doc-section">
+                    <h2 id="time-series-example">Complete Time Series Example</h2>
+
+                    <h3>Step 1: Define Custom Functions</h3>
+                    <pre><code class="language-python">import numpy as np
+
+# Define custom reward function
+def timeseries_reward(metrics: dict) -> float:
+    """Reward based on training loss (avoid data leakage)"""
+    train_loss = metrics.get('train_loss', 1.0)
+    if train_loss <= 0:
+        train_loss = 1.0
+
+    # Convert to reward (lower loss = higher reward)
+    reward = -np.log(max(train_loss, 1e-6))
+    reward = max(0.1, min(10.0, reward))
+    reward = max(0.05, min(0.9, reward / 10.0))
+    return reward
+
+
+# Define metrics extractor
+def extract_timeseries_metrics(hyperparams: dict) -> dict:
+    """Extract all time series metrics from hyperparams"""
+    return {
+        'train_loss': float(hyperparams.get('train_loss', 0.0)),
+        'val_loss': float(hyperparams.get('val_loss', 0.0)),
+        'mase': float(hyperparams.get('mase', 1.0)),
+        'smape': float(hyperparams.get('original_smape', 0.0)),
+        'mae': float(hyperparams.get('original_mae', 0.0)),
+        'rmse': float(hyperparams.get('original_rmse', 0.0)),
+    }</code></pre>
+
+                    <h3>Step 2: Configure Environment</h3>
+                    <pre><code class="language-python">from MAT_HPO_LIB import BaseEnvironment
+
+class TimeSeriesEnvironment(BaseEnvironment):
+    def __init__(self, model_name, dataset_name):
+        super().__init__(
+            name=f"TS-{model_name}-{dataset_name}",
+            # 🎯 Custom metrics list
+            custom_metrics=['train_loss', 'val_loss', 'mase', 'smape', 'mae', 'rmse'],
+            # 📊 Metric name mapping (for display)
+            metric_names_mapping={
+                'f1': 'SMAPE',
+                'auc': 'MAE',
+                'gmean': 'RMSE'
+            },
+            # 🎁 Custom reward function
+            reward_function=timeseries_reward
+        )
+
+    def train_evaluate(self, model, hyperparams):
+        # Train your model...
+        train_loss = 331.72
+        val_loss = 346.51
+
+        # Evaluate on test set...
+        mase = 2.304
+        mae = 632.53
+        rmse = 809.25
+        smape = 0.0618
+
+        # Return all metrics
+        return {
+            # Original training metrics
+            'train_loss': train_loss,
+            'val_loss': val_loss,
+            'overfitting_ratio': val_loss / train_loss,
+
+            # Original test metrics
+            'mase': mase,
+            'smape': smape,
+            'mae': mae,
+            'rmse': rmse,
+
+            # Transformed values for MAT-HPO (higher is better)
+            'f1': 0.8 - min(0.8, smape / 2.0),
+            'auc': 0.8 - min(0.8, mae / 1000.0),
+            'gmean': 0.8 - min(0.8, rmse / 1000.0),
+
+            # Save original values
+            'original_smape': smape,
+            'original_mae': mae,
+            'original_rmse': rmse
+        }
+
+    def compute_reward(self, metrics):
+        # Use custom reward function
+        if self.custom_reward_function:
+            return self.custom_reward_function(metrics)
+        return 0.5</code></pre>
+
+                    <h3>Step 3: Create Logger and Optimizer</h3>
+                    <pre><code class="language-python">from MAT_HPO_LIB import MAT_HPO_Optimizer, HyperparameterSpace
+from MAT_HPO_LIB.utils import DefaultConfigs
+from MAT_HPO_LIB.utils.logger import HPOLogger
+
+# Create environment
+env = TimeSeriesEnvironment("dlinear", "us_births")
+
+# Create hyperparameter space
+space = HyperparameterSpace()
+space.add_continuous('learning_rate', 1e-5, 1e-2, agent=0)
+space.add_discrete('batch_size', [8, 16, 32, 64], agent=0)
+
+# Create config
+config = DefaultConfigs.standard()
+config.max_steps = 100
+
+# Create optimizer (automatically inherits environment's custom metrics)
+optimizer = MAT_HPO_Optimizer(env, space, config)
+
+# Run optimization
+results = optimizer.optimize()
+
+print(f"Best reward: {results['best_performance']['reward']:.4f}")</code></pre>
+
+                    <div class="tip-box">
+                        <h3>💡 Pro Tip</h3>
+                        <p>The optimizer automatically detects and uses the custom metrics configuration from your environment. No manual logger setup needed!</p>
+                    </div>
+                </section>
+
+                <section class="doc-section">
+                    <h2 id="output-format">Output Format</h2>
+
+                    <h3>best_hyperparams.json</h3>
+                    <pre><code class="language-json">{
+  "hyperparameters": {
+    "learning_rate": 0.001,
+    "batch_size": 32
+  },
+  "performance": {
+    "smape": 0.0618,
+    "mae": 632.53,
+    "rmse": 809.25,
+    "mase": 2.304,
+    "train_loss": 331.72,
+    "val_loss": 346.51,
+    "overfitting_ratio": 1.045,
+    "reward": 0.7512
+  },
+  "step": 42
+}</code></pre>
+
+                    <h3>step_log.jsonl (each line)</h3>
+                    <pre><code class="language-json">{
+  "step": 0,
+  "timestamp": "2025-10-03T08:00:00",
+  "metrics": {
+    "train_loss": 331.72,
+    "val_loss": 346.51,
+    "overfitting_ratio": 1.045,
+    "mase": 2.304,
+    "smape": 0.0618,
+    "mae": 632.53,
+    "rmse": 809.25,
+    "f1_transformed": 0.7691,
+    "auc_transformed": 0.1675,
+    "gmean_transformed": 0.1000
+  },
+  "timing": {...},
+  "hyperparameters": {...}
+}</code></pre>
+
+                    <div class="info-box">
+                        <h3>📊 Metric Separation</h3>
+                        <p>The logger automatically separates:</p>
+                        <ul>
+                            <li><strong>Original values</strong>: <code>smape</code>, <code>mae</code>, <code>rmse</code> - True metric values for evaluation</li>
+                            <li><strong>Transformed values</strong>: <code>*_transformed</code> - Used internally by MAT-HPO for optimization</li>
+                        </ul>
+                    </div>
+                </section>
+
+                <section class="doc-section">
+                    <h2 id="advanced-usage">Advanced Usage</h2>
+
+                    <h3>Manual Logger Configuration</h3>
+                    <p>For full control, you can manually configure the logger:</p>
+                    <pre><code class="language-python">from MAT_HPO_LIB.utils.logger import HPOLogger
+
+# Create custom logger
+logger = HPOLogger(
+    output_dir='./results',
+    metric_names={'f1': 'SMAPE', 'auc': 'MAE', 'gmean': 'RMSE'},
+    custom_metrics=['train_loss', 'val_loss', 'mase', 'smape', 'mae', 'rmse'],
+    metrics_extractor=extract_timeseries_metrics
+)
+
+# Create optimizer
+optimizer = MAT_HPO_Optimizer(env, space, config)
+optimizer.logger = logger  # Override default logger
+
+# Run optimization
+results = optimizer.optimize()</code></pre>
+
+                    <h3>Flexible Metric Count</h3>
+                    <p>Track as many metrics as you need:</p>
+                    <pre><code class="language-python">super().__init__(
+    name="MyEnv",
+    custom_metrics=[
+        'train_loss', 'val_loss', 'test_loss',
+        'mase', 'smape', 'mae', 'rmse', 'mape', 'mse',
+        'overfitting_ratio', 'training_time', 'inference_time'
+    ],
+    # ... other parameters
+)</code></pre>
+
+                    <h3>Complex Reward Functions</h3>
+                    <pre><code class="language-python">def sophisticated_reward(metrics: dict) -> float:
+    """Multi-objective reward combining accuracy and efficiency"""
+    # Accuracy component (70%)
+    mase = metrics.get('mase', 10.0)
+    accuracy_reward = 0.7 * (1.0 / max(mase, 0.1))
+
+    # Efficiency component (20%)
+    train_time = metrics.get('training_time', 1000)
+    efficiency_reward = 0.2 * (1.0 / max(train_time / 100, 1.0))
+
+    # Stability component (10%)
+    overfitting = metrics.get('overfitting_ratio', 2.0)
+    stability_reward = 0.1 * (1.0 if overfitting <= 1.2 else 0.5)
+
+    total_reward = accuracy_reward + efficiency_reward + stability_reward
+    return max(0.0, min(1.0, total_reward))</code></pre>
+                </section>
+
+                <section class="doc-section">
+                    <h2 id="use-cases">Use Cases</h2>
+
+                    <div class="use-case-grid">
+                        <div class="use-case-card">
+                            <h3>🔮 Time Series Forecasting</h3>
+                            <ul>
+                                <li>Metrics: MASE, SMAPE, MAE, RMSE</li>
+                                <li>Reward: Based on validation loss</li>
+                                <li>Track overfitting ratio</li>
+                            </ul>
+                        </div>
+
+                        <div class="use-case-card">
+                            <h3>📈 Regression</h3>
+                            <ul>
+                                <li>Metrics: MSE, RMSE, MAE, R²</li>
+                                <li>Reward: Inverse of validation MSE</li>
+                                <li>Track prediction intervals</li>
+                            </ul>
+                        </div>
+
+                        <div class="use-case-card">
+                            <h3>🎯 Classification (Default)</h3>
+                            <ul>
+                                <li>Metrics: F1, AUC, G-mean, Precision, Recall</li>
+                                <li>Reward: Weighted combination</li>
+                                <li>Track per-class metrics</li>
+                            </ul>
+                        </div>
+
+                        <div class="use-case-card">
+                            <h3>🚀 Multi-Objective</h3>
+                            <ul>
+                                <li>Metrics: Accuracy + Speed + Memory</li>
+                                <li>Reward: Pareto optimization</li>
+                                <li>Track resource usage</li>
+                            </ul>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="doc-section">
+                    <h2 id="best-practices">Best Practices</h2>
+
+                    <div class="warning-box">
+                        <h3>⚠️ Important Considerations</h3>
+                        <ol>
+                            <li><strong>Avoid Data Leakage</strong>: Use training/validation metrics for rewards, not test metrics</li>
+                            <li><strong>Normalize Rewards</strong>: Keep rewards in a reasonable range (e.g., 0.0-1.0)</li>
+                            <li><strong>Save Original Values</strong>: Always preserve original metrics with <code>original_*</code> prefix</li>
+                            <li><strong>Transform Consistently</strong>: Ensure "higher is better" for f1/auc/gmean used in optimization</li>
+                        </ol>
+                    </div>
+
+                    <h3>✅ Recommended Patterns</h3>
+                    <pre><code class="language-python"># ✅ Good: Save both original and transformed
+return {
+    'mase': 2.304,                    # Original value
+    'f1': 0.8 - min(0.8, mase / 5),  # Transformed (higher is better)
+    'original_mase': 2.304            # Explicit original backup
+}
+
+# ❌ Bad: Only transformed values
+return {
+    'f1': 0.8 - min(0.8, mase / 5)   # Lost original information!
+}</code></pre>
+                </section>
+
+                <section class="doc-section">
+                    <h2 id="api-reference">API Reference</h2>
+
+                    <h3>BaseEnvironment Parameters</h3>
+                    <table class="api-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>custom_metrics</code></td>
+                                <td><code>List[str]</code></td>
+                                <td>List of custom metric names to track (e.g., ['mase', 'smape', 'mae'])</td>
+                            </tr>
+                            <tr>
+                                <td><code>metric_names_mapping</code></td>
+                                <td><code>Dict[str, str]</code></td>
+                                <td>Map internal names to display names (e.g., {'f1': 'SMAPE', 'auc': 'MAE'})</td>
+                            </tr>
+                            <tr>
+                                <td><code>reward_function</code></td>
+                                <td><code>Callable[[Dict], float]</code></td>
+                                <td>Custom reward computation function taking metrics dict, returning float</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <h3>HPOLogger Parameters</h3>
+                    <table class="api-table">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Type</th>
+                                <th>Description</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><code>metrics_extractor</code></td>
+                                <td><code>Callable[[Dict], Dict]</code></td>
+                                <td>Function to extract metrics from hyperparams dictionary</td>
+                            </tr>
+                            <tr>
+                                <td><code>metric_names</code></td>
+                                <td><code>Dict[str, str]</code></td>
+                                <td>Custom metric display names for console output</td>
+                            </tr>
+                            <tr>
+                                <td><code>custom_metrics</code></td>
+                                <td><code>List[str]</code></td>
+                                <td>List of metrics to track in logs</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </section>
+
+                <section class="doc-section">
+                    <h2 id="examples">More Examples</h2>
+
+                    <p>For complete runnable examples, see:</p>
+                    <ul>
+                        <li>📄 <a href="https://github.com/VM230705/MAT-HPO-Library/blob/main/CUSTOM_METRICS_GUIDE.md">CUSTOM_METRICS_GUIDE.md</a> - Detailed Chinese guide</li>
+                        <li>💻 <a href="https://github.com/VM230705/MAT-HPO-Library/blob/main/examples/timeseries_custom_metrics_example.py">examples/timeseries_custom_metrics_example.py</a> - Full working example</li>
+                    </ul>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <script src="js/main.js"></script>
+</body>
+</html>
