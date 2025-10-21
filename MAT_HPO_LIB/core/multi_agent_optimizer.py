@@ -146,13 +146,28 @@ class MAT_HPO_Optimizer:
         self.best_reward = float('-inf')
         self.best_hyperparams = None
         self.training_history = []
+
+        # Support flexible number of metrics (backward compatible with f1/auc/gmean)
         self.best_f1 = 0.0
-        self.best_auc = 0.0 
+        self.best_auc = 0.0
         self.best_gmean = 0.0
         self.best_step = 0
-        
-        # Initialize logger
-        self.logger = HPOLogger(output_dir, verbose=config.verbose)
+        self.best_metrics = {}  # Flexible storage for any number of metrics
+
+        # Extract metric names from environment if available
+        metric_names = getattr(environment, 'metric_names_mapping', None)
+        custom_metrics = getattr(environment, 'custom_metrics', None)
+
+        # Initialize logger with custom metrics support
+        self.logger = HPOLogger(
+            output_dir,
+            verbose=config.verbose,
+            metric_names=metric_names,
+            custom_metrics=custom_metrics
+        )
+
+        # Store metric names for later use
+        self.metric_names = metric_names
         
         # Move hyperparameter space to device
         self.hyperparameter_space.to_device(self.device)
@@ -316,12 +331,28 @@ class MAT_HPO_Optimizer:
                 self.best_reward = reward
                 self.best_hyperparams = hyperparams.copy()
                 self.best_f1, self.best_auc, self.best_gmean = f1, auc, gmean
+<<<<<<< HEAD
                 self.best_step = step
+
+                # Store metrics flexibly (support any number of metrics from hyperparams)
+                self.best_metrics = {}
+                for key, value in hyperparams.items():
+                    if key.startswith('original_') or key in ['mase', 'train_loss', 'val_loss', 'overfitting_ratio', 'mse', 'mape', 'msmape', 'smape', 'mae', 'rmse']:
+                        self.best_metrics[key] = value
+
                 self._save_best_model()
                 self._save_rl_model_input(state)  # Save current state as RL_model_input.pt
-                
-                self.logger.info(f"🎯 New best model at step {step}! "
-                               f"F1={f1:.4f}, AUC={auc:.4f}, G-mean={gmean:.4f}")
+
+                # Log with custom metric names if available
+                if self.metric_names:
+                    metric1_name = self.metric_names.get('f1', 'F1')
+                    metric2_name = self.metric_names.get('auc', 'AUC')
+                    metric3_name = self.metric_names.get('gmean', 'G-mean')
+                    self.logger.info(f"🎯 New best model at step {step}! "
+                                   f"{metric1_name}={f1:.4f}, {metric2_name}={auc:.4f}, {metric3_name}={gmean:.4f}")
+                else:
+                    self.logger.info(f"🎯 New best model at step {step}! "
+                                   f"F1={f1:.4f}, AUC={auc:.4f}, G-mean={gmean:.4f}")
             
             # Update replay buffer
             reward_array = np.array([reward] * len(self.action_optimizers))
@@ -579,15 +610,44 @@ class MAT_HPO_Optimizer:
         """
         # Save hyperparameters
         best_hyp_path = os.path.join(self.output_dir, 'best_hyperparams.json')
+        
+        # 使用自定義指標名稱（如果可用），否則使用默認名稱
+        if hasattr(self, 'metric_names') and self.metric_names:
+            metric_key1 = self.metric_names.get('f1', 'f1').lower()
+            metric_key2 = self.metric_names.get('auc', 'auc').lower()
+            metric_key3 = self.metric_names.get('gmean', 'gmean').lower()
+        else:
+            metric_key1, metric_key2, metric_key3 = 'f1', 'auc', 'gmean'
+        
+        # Build performance dict with flexible metric support
+        performance = {}
+
+        # Add all metrics from best_metrics (most flexible approach)
+        for key, value in self.best_metrics.items():
+            if isinstance(value, (int, float)) and not np.isnan(value) and not np.isinf(value):
+                # Remove 'original_' prefix for cleaner output
+                clean_key = key.replace('original_', '') if key.startswith('original_') else key
+                performance[clean_key] = float(value)
+
+        # Backward compatibility: add f1/auc/gmean if using custom names
+        if self.metric_names:
+            # Map the three primary metrics
+            performance[metric_key1] = float(self.best_f1)
+            performance[metric_key2] = float(self.best_auc)
+            performance[metric_key3] = float(self.best_gmean)
+        else:
+            # Default metric names
+            performance['f1'] = float(self.best_f1)
+            performance['auc'] = float(self.best_auc)
+            performance['gmean'] = float(self.best_gmean)
+
+        # Always include reward
+        performance['reward'] = float(self.best_reward)
+
         with open(best_hyp_path, 'w') as f:
             json.dump({
                 'hyperparameters': self.best_hyperparams,
-                'performance': {
-                    'f1': float(self.best_f1),
-                    'auc': float(self.best_auc),
-                    'gmean': float(self.best_gmean),
-                    'reward': float(self.best_reward)
-                },
+                'performance': performance,
                 'step': self.current_step
             }, f, indent=2)
         
@@ -726,12 +786,21 @@ class MAT_HPO_Optimizer:
         Results are automatically saved to the output directory as a JSON file
         with proper formatting for human readability and programmatic access.
         """
+        # 使用自定義指標名稱（如果可用），否則使用默認名稱
+        if hasattr(self, 'metric_names') and self.metric_names:
+            metric_key1 = self.metric_names.get('f1', 'f1').lower()
+            metric_key2 = self.metric_names.get('auc', 'auc').lower()
+            metric_key3 = self.metric_names.get('gmean', 'gmean').lower()
+        else:
+            metric_key1, metric_key2, metric_key3 = 'f1', 'auc', 'gmean'
+        
         results = {
             'best_hyperparameters': self.best_hyperparams,
             'best_performance': {
-                'f1': float(self.best_f1),
-                'auc': float(self.best_auc), 
-                'gmean': float(self.best_gmean),
+<<<<<<< HEAD
+                metric_key1: float(self.best_f1),
+                metric_key2: float(self.best_auc), 
+                metric_key3: float(self.best_gmean),
                 'reward': float(self.best_reward),
                 'step': self.best_step
             },
@@ -832,10 +901,16 @@ class MAT_HPO_Optimizer:
             with open(hyp_path, 'r') as f:
                 data = json.load(f)
                 self.best_hyperparams = data['hyperparameters']
-                self.best_f1 = data['performance']['f1']
-                self.best_auc = data['performance']['auc']
-                self.best_gmean = data['performance']['gmean']
-                self.best_reward = data['performance']['reward']
+                perf = data['performance']
+
+                # Load metrics flexibly
+                self.best_f1 = perf.get('f1', perf.get('smape', 0.0))
+                self.best_auc = perf.get('auc', perf.get('mae', 0.0))
+                self.best_gmean = perf.get('gmean', perf.get('rmse', 0.0))
+                self.best_reward = perf.get('reward', 0.0)
+
+                # Load all available metrics into best_metrics
+                self.best_metrics = {k: v for k, v in perf.items() if k != 'reward'}
         
         # Load models if they exist
         model_paths = [

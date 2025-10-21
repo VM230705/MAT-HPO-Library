@@ -66,7 +66,10 @@ class BaseEnvironment(ABC):
                  checkpoint_dir: Optional[str] = None,
                  verbose: bool = True,
                  save_history: bool = True,
-                 validation_split: float = 0.2):
+                 validation_split: float = 0.2,
+                 custom_metrics: Optional[List[str]] = None,
+                 metric_names_mapping: Optional[Dict[str, str]] = None,
+                 reward_function: Optional[Callable[[Dict[str, float]], float]] = None):
         """
         Initialize the base environment.
         
@@ -76,6 +79,10 @@ class BaseEnvironment(ABC):
             verbose: Whether to print progress information
             save_history: Whether to maintain detailed training history
             validation_split: Fraction of data to use for validation (if applicable)
+            custom_metrics: List of custom metric names to track (e.g. ['mase', 'smape', 'mae'])
+            metric_names_mapping: Mapping from internal names to display names 
+                                 (e.g. {'f1': 'SMAPE', 'auc': 'MAE', 'gmean': 'RMSE'})
+            reward_function: Custom reward computation function (takes metrics dict, returns float)
         """
         self.name = name
         self.current_step = 0
@@ -85,6 +92,11 @@ class BaseEnvironment(ABC):
         self.checkpoint_dir = checkpoint_dir
         self.verbose = verbose
         self.validation_split = validation_split
+        
+        # Custom metrics configuration
+        self.custom_metrics = custom_metrics or []
+        self.metric_names_mapping = metric_names_mapping or {}
+        self.custom_reward_function = reward_function
         
         # Data storage
         self.training_data = None
