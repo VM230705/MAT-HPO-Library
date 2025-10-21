@@ -264,6 +264,7 @@ class LLMEnhancedMAT_HPO_Optimizer(MAT_HPO_Optimizer):
                 self.best_reward = reward
                 self.best_hyperparams = final_hyperparams.copy()
                 self.best_f1, self.best_auc, self.best_gmean = f1, auc, gmean
+                self.best_step = step
                 self._save_best_model()
                 self._save_rl_model_input(state)  # Save current state as RL_model_input.pt
                 self.logger.info(

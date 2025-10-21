@@ -149,6 +149,7 @@ class MAT_HPO_Optimizer:
         self.best_f1 = 0.0
         self.best_auc = 0.0 
         self.best_gmean = 0.0
+        self.best_step = 0
         
         # Initialize logger
         self.logger = HPOLogger(output_dir, verbose=config.verbose)
@@ -315,6 +316,7 @@ class MAT_HPO_Optimizer:
                 self.best_reward = reward
                 self.best_hyperparams = hyperparams.copy()
                 self.best_f1, self.best_auc, self.best_gmean = f1, auc, gmean
+                self.best_step = step
                 self._save_best_model()
                 self._save_rl_model_input(state)  # Save current state as RL_model_input.pt
                 
@@ -730,7 +732,8 @@ class MAT_HPO_Optimizer:
                 'f1': float(self.best_f1),
                 'auc': float(self.best_auc), 
                 'gmean': float(self.best_gmean),
-                'reward': float(self.best_reward)
+                'reward': float(self.best_reward),
+                'step': self.best_step
             },
             'optimization_stats': {
                 'total_steps': self.current_step + 1,

@@ -457,8 +457,7 @@ class BaseEnvironment(ABC):
         - Maximum time limit reached
         """
         # Stop if perfect score achieved
-        if any(score >= 0.999 for score in metrics.values() 
-               if isinstance(score, (int, float))):
+        if reward >= 0.999:
             if self.verbose:
                 print("🎯 Perfect score achieved! Stopping optimization.")
             return True
