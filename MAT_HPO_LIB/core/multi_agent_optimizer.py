@@ -331,7 +331,6 @@ class MAT_HPO_Optimizer:
                 self.best_reward = reward
                 self.best_hyperparams = hyperparams.copy()
                 self.best_f1, self.best_auc, self.best_gmean = f1, auc, gmean
-<<<<<<< HEAD
                 self.best_step = step
 
                 # Store metrics flexibly (support any number of metrics from hyperparams)
@@ -797,7 +796,6 @@ class MAT_HPO_Optimizer:
         results = {
             'best_hyperparameters': self.best_hyperparams,
             'best_performance': {
-<<<<<<< HEAD
                 metric_key1: float(self.best_f1),
                 metric_key2: float(self.best_auc), 
                 metric_key3: float(self.best_gmean),

@@ -267,9 +267,16 @@ class LLMEnhancedMAT_HPO_Optimizer(MAT_HPO_Optimizer):
                 self.best_step = step
                 self._save_best_model()
                 self._save_rl_model_input(state)  # Save current state as RL_model_input.pt
-                self.logger.info(
-                    f"🎯 New best model at step {step}! F1={f1:.4f}, AUC={auc:.4f}, G-mean={gmean:.4f} (via {decision_source})"
-                )
+                if self.metric_names:
+                    metric1_name = self.metric_names.get('f1', 'F1')
+                    metric2_name = self.metric_names.get('auc', 'AUC')
+                    metric3_name = self.metric_names.get('gmean', 'G-mean')
+                    self.logger.info(f"🎯 New best model at step {step}! "
+                                   f"{metric1_name}={f1:.4f}, {metric2_name}={auc:.4f}, {metric3_name}={gmean:.4f} (via {decision_source})")
+                else:
+                    self.logger.info(
+                        f"🎯 New best model at step {step}! F1={f1:.4f}, AUC={auc:.4f}, G-mean={gmean:.4f} (via {decision_source})"
+                    )
 
             # Update replay buffer with reward signal
             reward_array = np.array([reward] * len(self.action_optimizers))
