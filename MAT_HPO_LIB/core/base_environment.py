@@ -66,10 +66,7 @@ class BaseEnvironment(ABC):
                  checkpoint_dir: Optional[str] = None,
                  verbose: bool = True,
                  save_history: bool = True,
-                 validation_split: float = 0.2,
-                 custom_metrics: Optional[List[str]] = None,
-                 metric_names_mapping: Optional[Dict[str, str]] = None,
-                 reward_function: Optional[Callable[[Dict[str, float]], float]] = None):
+                 validation_split: float = 0.2):
         """
         Initialize the base environment.
         
@@ -79,10 +76,6 @@ class BaseEnvironment(ABC):
             verbose: Whether to print progress information
             save_history: Whether to maintain detailed training history
             validation_split: Fraction of data to use for validation (if applicable)
-            custom_metrics: List of custom metric names to track (e.g. ['mase', 'smape', 'mae'])
-            metric_names_mapping: Mapping from internal names to display names 
-                                 (e.g. {'f1': 'SMAPE', 'auc': 'MAE', 'gmean': 'RMSE'})
-            reward_function: Custom reward computation function (takes metrics dict, returns float)
         """
         self.name = name
         self.current_step = 0
@@ -92,11 +85,6 @@ class BaseEnvironment(ABC):
         self.checkpoint_dir = checkpoint_dir
         self.verbose = verbose
         self.validation_split = validation_split
-        
-        # Custom metrics configuration
-        self.custom_metrics = custom_metrics or []
-        self.metric_names_mapping = metric_names_mapping or {}
-        self.custom_reward_function = reward_function
         
         # Data storage
         self.training_data = None
@@ -307,24 +295,23 @@ class BaseEnvironment(ABC):
         
         return initial_state
     
-    def step(self, hyperparams: Dict[str, Any]) -> Tuple[float, float, float, bool]:
+    def step(self, hyperparams: Dict[str, Any]) -> Tuple[float, Dict[str, float], bool]:
         """
         Execute one step of evaluation with given hyperparameters.
-        
+
         This is the main interface method called by the MAT-HPO optimizer.
         It orchestrates the entire training and evaluation process for one
         set of hyperparameters.
-        
+
         Args:
             hyperparams: Dictionary containing hyperparameter values
-            
+
         Returns:
             Tuple containing:
-            - f1_score (float): F1 score or primary performance metric
-            - auc_score (float): AUC score or secondary performance metric  
-            - gmean_score (float): G-mean score or tertiary performance metric
+            - reward (float): Scalar reward computed by compute_reward() (higher is better)
+            - metrics (Dict[str, float]): Dictionary of all evaluation metrics
             - done (bool): Whether optimization should stop early
-            
+
         The method includes:
         - Error handling and graceful degradation
         - Automatic progress tracking and logging
@@ -337,7 +324,7 @@ class BaseEnvironment(ABC):
         
         try:
             if self.verbose:
-                print(f"\nStep {self.current_step + 1}: Evaluating hyperparameters...")
+                print(f"\n🎯 Step {self.current_step + 1}: Evaluating hyperparameters...")
             
             # Load data if not already loaded
             if self.training_data is None:
@@ -357,18 +344,13 @@ class BaseEnvironment(ABC):
             
             # Compute reward
             reward = self.compute_reward(metrics)
-            
-            # Extract standard metrics with intelligent fallbacks
-            f1_score = self._extract_metric(metrics, ['f1', 'f1_score'], 0.0)
-            auc_score = self._extract_metric(metrics, ['auc', 'auc_score', 'accuracy'], 0.0)
-            gmean_score = self._extract_metric(metrics, ['gmean', 'g_mean', 'precision', 'recall'], 0.0)
-            
+
             # Update tracking
             self.current_step += 1
             step_time = time.time() - step_start_time
             self.step_times.append(step_time)
             self.reward_history.append(reward)
-            
+
             # Track best results
             is_best = reward > self.best_reward
             if is_best:
@@ -376,7 +358,7 @@ class BaseEnvironment(ABC):
                 self.best_hyperparams = hyperparams.copy()
                 if self.verbose:
                     print(f"🎊 New best reward: {reward:.4f}")
-            
+
             # Record training history
             if self.training_history is not None:
                 self.training_history.append({
@@ -388,7 +370,7 @@ class BaseEnvironment(ABC):
                     'is_best': is_best,
                     'timestamp': datetime.now().isoformat()
                 })
-            
+
             # Execute custom callbacks
             for callback in self.step_callbacks:
                 try:
@@ -396,26 +378,27 @@ class BaseEnvironment(ABC):
                 except Exception as e:
                     if self.verbose:
                         print(f"⚠️ Callback error: {e}")
-            
+
             # Check for early stopping
             done = self._should_stop(metrics, reward)
-            
+
             # Save checkpoint if configured
             if self.checkpoint_dir and (is_best or self.current_step % 10 == 0):
                 self._save_checkpoint()
-            
+
             if self.verbose:
                 print(f"✅ Step {self.current_step} completed in {step_time:.2f}s")
-                print(f"   Metrics: F1={f1_score:.4f}, AUC={auc_score:.4f}, G-mean={gmean_score:.4f}")
                 print(f"   Reward: {reward:.4f}")
-            
-            return f1_score, auc_score, gmean_score, done
+                if metrics:
+                    print(f"   Metrics: {metrics}")
+
+            return reward, metrics, done
             
         except Exception as e:
             error_msg = f"Error in environment step {self.current_step + 1}: {str(e)}"
             if self.verbose:
                 print(f"❌ {error_msg}")
-            
+
             # Log error to history
             if self.training_history is not None:
                 self.training_history.append({
@@ -424,9 +407,9 @@ class BaseEnvironment(ABC):
                     'error': error_msg,
                     'timestamp': datetime.now().isoformat()
                 })
-            
-            # Return poor scores on error to avoid breaking optimization
-            return 0.0, 0.0, 0.0, False
+
+            # Return poor reward and empty metrics on error to avoid breaking optimization
+            return float('-inf'), {}, False
     
     # ============================================================================
     # UTILITY AND HELPER METHODS
@@ -469,7 +452,8 @@ class BaseEnvironment(ABC):
         - Maximum time limit reached
         """
         # Stop if perfect score achieved
-        if reward >= 0.999:
+        if any(score >= 0.999 for score in metrics.values() 
+               if isinstance(score, (int, float))):
             if self.verbose:
                 print("🎯 Perfect score achieved! Stopping optimization.")
             return True

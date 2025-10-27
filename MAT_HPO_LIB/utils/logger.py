@@ -41,72 +41,64 @@ logger.log_step(step=1, f1=0.85, auc=0.92, gmean=0.88,
 import os
 import json
 import time
-from typing import Dict, Any, Optional, List, Callable
+from typing import Dict, Any, Optional
 from datetime import datetime
 
 
 class HPOLogger:
     """
     Advanced Multi-Format Logger for Comprehensive Optimization Monitoring.
-
+    
     This sophisticated logging system provides enterprise-grade monitoring and
     analysis capabilities for multi-agent hyperparameter optimization processes.
     It combines real-time progress tracking, persistent data storage, and
     comprehensive statistical analysis in a unified interface.
-
+    
     **Core Capabilities**:
-
+    
     1. **Multi-Level Logging**: Support for DEBUG, INFO, WARNING, and ERROR levels
        with appropriate filtering and routing to different output channels
-
+    
     2. **Structured Data Collection**: Automatic capture of optimization metrics,
        hyperparameter configurations, timing information, and system metadata
-
+    
     3. **Real-time Monitoring**: Live console output with progress indicators,
        performance metrics, and status updates for interactive monitoring
-
+    
     4. **Persistent Storage**: Durable logging to multiple file formats ensuring
        no data loss during long-running optimizations or system failures
-
+    
     5. **Statistical Analysis**: Automatic computation of optimization statistics
        including convergence metrics, timing analysis, and performance trends
-
+    
     6. **Experiment Integration**: Compatible with popular experiment tracking
        systems and research workflows through structured JSON output
-
+    
     **Output Formats**:
-
+    
     - **Text Logs** (`optimization_log.txt`): Human-readable chronological log
       with timestamps, log levels, and detailed messages for debugging
-
+    
     - **JSONL Logs** (`step_log.jsonl`): Machine-readable step-by-step data
       in JSON Lines format for programmatic analysis and visualization
-
+    
     - **Console Output**: Real-time progress updates with colored output,
       progress bars, and performance indicators for interactive monitoring
-
+    
     - **Summary Reports**: Aggregated statistics and final results in JSON
       format for integration with analysis pipelines and reporting systems
-
+    
     **Use Cases**:
     - Research experiments requiring detailed data collection and analysis
     - Production deployments needing comprehensive monitoring and alerting
     - Long-running optimizations requiring robust logging and recovery
     - Multi-experiment campaigns with centralized logging and comparison
-
-    **Custom Metric Names**:
-    - Support for custom metric names to adapt to different domains
-    - Default: F1, AUC, G-mean (classification)
-    - Can be customized for time series: SMAPE, MAE, RMSE
     """
     
     def __init__(self, 
                  output_dir: str,
                  log_level: str = "INFO",
-                 verbose: bool = True,
-                 metric_names: Optional[Dict[str, str]] = None,
-                 custom_metrics: Optional[List[str]] = None,
-                 metrics_extractor: Optional[Callable[[Dict[str, Any]], Dict[str, float]]] = None):
+                 verbose: bool = True):
         """
         Initialize comprehensive logging system with multi-format output capabilities.
         
@@ -158,13 +150,6 @@ class HPOLogger:
         self.output_dir = output_dir
         self.log_level = log_level
         self.verbose = verbose
-        
-        # Set up custom metric names
-        self.metric_names = metric_names or {'f1': 'F1', 'auc': 'AUC', 'gmean': 'G-mean'}
-        
-        # Set up custom metrics tracking
-        self.custom_metrics = custom_metrics or []
-        self.metrics_extractor = metrics_extractor  # Function to extract metrics from hyperparams
         
         # Create log files
         self.log_file = os.path.join(output_dir, 'optimization_log.txt')
@@ -264,73 +249,70 @@ class HPOLogger:
         if self.verbose:
             print(f"[{level}] {message}")
     
-    def log_step(self, 
+    def log_step(self,
                  step: int,
-                 f1: float,
-                 auc: float, 
-                 gmean: float,
+                 reward: float,
+                 metrics: Dict[str, float],
                  step_time: float,
                  hyperparams: Dict[str, Any]):
         """
         Log comprehensive optimization step data with multi-format output.
-        
+
         This method captures and records complete information about each optimization
         step, including performance metrics, hyperparameter configurations, timing
         data, and derived statistics. The data is simultaneously written to multiple
         output formats for different analysis and monitoring needs.
-        
+
         **Captured Data**:
-        1. **Performance Metrics**: F1, AUC, and G-mean scores with full precision
-        2. **Hyperparameter Configuration**: Complete parameter set used in this step
-        3. **Timing Information**: Step duration, cumulative time, and performance trends
-        4. **Statistical Analysis**: Running averages, extrema, and convergence indicators
-        5. **Metadata**: Timestamps, step numbers, and system context information
-        
+        1. **Performance Metrics**: All metrics from the metrics dictionary
+        2. **Reward**: Computed reward value (used for optimization)
+        3. **Hyperparameter Configuration**: Complete parameter set used in this step
+        4. **Timing Information**: Step duration, cumulative time, and performance trends
+        5. **Statistical Analysis**: Running averages, extrema, and convergence indicators
+        6. **Metadata**: Timestamps, step numbers, and system context information
+
         **Output Formats**:
         - **Console**: Real-time progress display with formatted metrics and timing
         - **Text Log**: Human-readable chronological record with contextual information
         - **JSON Log**: Structured data in JSON Lines format for programmatic analysis
-        
+
         **Statistical Tracking**:
         The method automatically maintains running statistics including:
         - Average step time with trend analysis
         - Performance metric trends and extrema
         - Convergence indicators and plateau detection
         - Resource utilization and efficiency metrics
-        
+
         Args:
             step: Current optimization step number (0-indexed or 1-indexed).
                  Used for progress tracking and convergence analysis.
-                 
-            f1: F1-score performance metric (0.0-1.0). Harmonic mean of precision
-                and recall, providing balanced classification performance measure.
-                
-            auc: Area Under the ROC Curve (0.0-1.0). Measures classification
-                performance across all threshold settings, robust to class imbalance.
-                
-            gmean: Geometric mean of sensitivity and specificity (0.0-1.0).
-                  Particularly useful for imbalanced classification problems.
-                  
+
+            reward: Reward value computed by environment.compute_reward().
+                   Higher values indicate better performance.
+
+            metrics: Dictionary of all evaluation metrics.
+                    Can contain any task-specific metrics (e.g., MASE, WQL, sMAPE for
+                    time series forecasting; f1, auc, gmean for classification).
+
             step_time: Wall-clock time for this optimization step in seconds.
                       Used for performance analysis and bottleneck identification.
-                      
+
             hyperparams: Complete hyperparameter configuration dictionary.
                         Keys should be parameter names, values should be the
                         selected parameter values for this step.
-        
+
         Side Effects:
         - Updates internal timing and performance statistics
         - Writes to console (if verbose=True)
         - Appends to text log file
         - Appends structured data to JSONL log file
         - Updates convergence and trend analysis metrics
-        
+
         Example:
             logger.log_step(
                 step=42,
-                f1=0.8734,
-                auc=0.9156,
-                gmean=0.8892,
+                reward=0.8956,
+                metrics={'MASE': 4.56, 'WQL': 0.32, 'sMAPE': 0.18},
                 step_time=23.45,
                 hyperparams={
                     'learning_rate': 0.001,
@@ -341,77 +323,46 @@ class HPOLogger:
         """
         self.step_times.append(step_time)
         avg_time = sum(self.step_times) / len(self.step_times)
-        
+
         # Enhanced console output with progress indicators
         if self.verbose:
             # Create visual progress indicator
             elapsed_total = time.time() - self.start_time
             steps_per_sec = (step + 1) / elapsed_total if elapsed_total > 0 else 0
-            
-            print(f"🔄 Step {step+1:3d}: {self.metric_names['f1']}={f1:.4f} {self.metric_names['auc']}={auc:.4f} {self.metric_names['gmean']}={gmean:.4f} "
+
+            # Format metrics for display
+            metrics_str = ' '.join([f"{k}={v:.4f}" for k, v in sorted(metrics.items())[:3]])
+
+            print(f"🔄 Step {step+1:3d}: Reward={reward:.4f} {metrics_str} "
                   f"⏱️ {step_time:.2f}s (avg: {avg_time:.2f}s) 🚀 {steps_per_sec:.2f} steps/s")
-        
+
         # Text log
+        metrics_str = ', '.join([f"{k}={v:.4f}" for k, v in sorted(metrics.items())])
         with open(self.log_file, 'a') as f:
-            f.write(f"Step {step}: {self.metric_names['f1']}={f1:.4f}, {self.metric_names['auc']}={auc:.4f}, {self.metric_names['gmean']}={gmean:.4f}, "
+            f.write(f"Step {step}: Reward={reward:.4f}, {metrics_str}, "
                    f"Time={step_time:.3f}s\n")
-        
+
         # Enhanced structured JSON log with additional metadata
-        # 如果提供了自訂metrics_extractor，使用它來提取指標
-        if self.metrics_extractor:
-            metrics_dict = self.metrics_extractor(hyperparams)
-            # 添加轉換後的值供參考
-            metrics_dict.update({
-                'f1_transformed': float(f1),
-                'auc_transformed': float(auc),
-                'gmean_transformed': float(gmean),
-                'composite_score': float((f1 + auc + gmean) / 3)
-            })
-        else:
-            # 默認行為：提取所有指標（包括從hyperparams中傳遞的原始值）
-            metrics_dict = {
-                # 原始時間序列指標（未經轉換）- 優先從hyperparams中讀取，使用original_作為主要來源
-                'train_loss': float(hyperparams.get('train_loss', 0.0)),
-                'val_loss': float(hyperparams.get('val_loss', 0.0)) if 'val_loss' in hyperparams else None,
-                'val_mase': float(hyperparams.get('val_mase', 10.0)) if 'val_mase' in hyperparams else None,
-                'overfitting_ratio': float(hyperparams.get('overfitting_ratio', 0.0)) if 'overfitting_ratio' in hyperparams else None,
-                'mase': float(hyperparams.get('mase', 1.0)),
-                'smape': float(hyperparams.get('original_smape', hyperparams.get('smape', 0.0))),
-                'mae': float(hyperparams.get('original_mae', hyperparams.get('mae', 0.0))),
-                'rmse': float(hyperparams.get('original_rmse', hyperparams.get('rmse', 0.0))),
-                'mse': float(hyperparams.get('mse', 0.0)),
-                'mape': float(hyperparams.get('mape', 0.0)),
-                'msmape': float(hyperparams.get('msmape', 0.0)),
-                # 轉換後的值（僅用於MAT-HPO內部優化，供參考）
-                'f1_transformed': float(f1),
-                'auc_transformed': float(auc),
-                'gmean_transformed': float(gmean),
-                'composite_score': float((f1 + auc + gmean) / 3)
-            }
-            
-            # 過濾掉None值和0.0的驗證指標
-            metrics_dict = {k: v for k, v in metrics_dict.items() if v is not None and not (k in ['val_loss', 'val_mase', 'overfitting_ratio'] and v == 0.0)}
-        
         step_data = {
             'step': step,
             'timestamp': datetime.now().isoformat(),
-            'metrics': metrics_dict,
+            'reward': float(reward),
+            'metrics': {k: float(v) for k, v in metrics.items()},
             'timing': {
                 'step_time': float(step_time),
                 'avg_step_time': float(avg_time),
                 'total_time': float(time.time() - self.start_time),
                 'steps_per_second': float((step + 1) / (time.time() - self.start_time)) if (time.time() - self.start_time) > 0 else 0
             },
-            'hyperparameters': {k: float(v) if isinstance(v, (int, float)) and not isinstance(v, bool) else (str(v) if isinstance(v, (str, bool)) else v)
-                              for k, v in hyperparams.items() 
-                              if not k.startswith('original_') and k not in ['mase', 'val_mase', 'smape', 'mae', 'rmse', 'mse', 'msmape', 'mape', 'train_loss', 'val_loss', 'overfitting_ratio', 'test_loss', 'abs_error', 'abs_target_sum', 'abs_target_mean', 'seasonal_error', 'f1', 'auc', 'gmean', 'error']},
+            'hyperparameters': {k: float(v) if isinstance(v, (int, float)) else str(v)
+                              for k, v in hyperparams.items()},
             'statistics': {
                 'min_step_time': float(min(self.step_times)),
                 'max_step_time': float(max(self.step_times)),
                 'step_time_std': float(sum((t - avg_time) ** 2 for t in self.step_times) / len(self.step_times)) ** 0.5 if len(self.step_times) > 1 else 0.0
             }
         }
-        
+
         with open(self.step_log_file, 'a') as f:
             f.write(json.dumps(step_data) + '\n')
     
@@ -456,9 +407,16 @@ class HPOLogger:
         self.info("🎉 Optimization completed successfully!")
         self.info(f"⏱️  Total time: {total_time:.2f}s ({total_time/60:.1f}m)")
         self.info(f"🔢 Total steps: {total_steps} (avg: {avg_step_time:.2f}s/step)")
-        self.info(f"🏆 Best F1: {results['best_performance']['f1']:.4f}")
-        self.info(f"📊 Best AUC: {results['best_performance']['auc']:.4f}")
-        self.info(f"⚖️  Best G-mean: {results['best_performance']['gmean']:.4f}")
+
+        # Log best performance metrics
+        if 'best_performance' in results:
+            best_perf = results['best_performance']
+            if 'reward' in best_perf:
+                self.info(f"🏆 Best Reward: {best_perf['reward']:.4f}")
+            # Log all other metrics
+            for key, value in best_perf.items():
+                if key != 'reward' and isinstance(value, (int, float)):
+                    self.info(f"📊 Best {key}: {value:.4f}")
         
         # Log efficiency metrics
         if self.step_times:
@@ -547,7 +505,7 @@ class SimpleLogger:
     - No I/O blocking or file system dependencies
     """
     
-    def __init__(self, verbose: bool = True, metric_names: Optional[Dict[str, str]] = None):
+    def __init__(self, verbose: bool = True):
         """
         Initialize lightweight logger with minimal configuration.
         
@@ -555,35 +513,31 @@ class SimpleLogger:
             verbose: Enable console output for progress monitoring.
                     True (default) shows step progress and key metrics.
                     False provides completely silent operation.
-            metric_names: Optional dictionary to customize metric display names.
-                         Format: {'f1': 'SMAPE', 'auc': 'MAE', 'gmean': 'RMSE'}
-                         Defaults to None (uses standard F1, AUC, G-mean names).
         """
         self.verbose = verbose
         self.start_time = time.time()
-        self.metric_names = metric_names or {'f1': 'F1', 'auc': 'AUC', 'gmean': 'G-mean'}
     
     def info(self, message: str):
         if self.verbose:
             print(f"[INFO] {message}")
     
-    def log_step(self, step: int, f1: float, auc: float, gmean: float, step_time: float, hyperparams: Dict[str, Any]):
+    def log_step(self, step: int, reward: float, metrics: Dict[str, float], step_time: float, hyperparams: Dict[str, Any]):
         """
         Log optimization step with minimal overhead console output.
-        
+
         Provides essential progress monitoring without the overhead of file I/O
         or statistical analysis. Optimized for production environments requiring
         fast, lightweight logging.
-        
+
         Args:
             step: Optimization step number
-            f1: F1-score performance metric
-            auc: AUC performance metric  
-            gmean: G-mean performance metric
+            reward: Reward value computed by environment
+            metrics: Dictionary of evaluation metrics
             step_time: Step execution time in seconds
             hyperparams: Hyperparameter configuration (not logged to reduce overhead)
         """
         if self.verbose:
             elapsed_total = time.time() - self.start_time
             steps_per_sec = (step + 1) / elapsed_total if elapsed_total > 0 else 0
-            print(f"⚡ Step {step+1:3d}: {self.metric_names['f1']}={f1:.4f} {self.metric_names['auc']}={auc:.4f} {self.metric_names['gmean']}={gmean:.4f} ⏱️ {step_time:.2f}s 🚀 {steps_per_sec:.2f}/s")
+            metrics_str = ' '.join([f"{k}={v:.4f}" for k, v in sorted(metrics.items())[:3]])
+            print(f"⚡ Step {step+1:3d}: Reward={reward:.4f} {metrics_str} ⏱️ {step_time:.2f}s 🚀 {steps_per_sec:.2f}/s")

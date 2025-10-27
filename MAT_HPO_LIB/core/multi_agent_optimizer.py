@@ -27,11 +27,9 @@ distributed training, extensive logging, and production deployment consideration
 
 import os
 import json
-import sys
 import time
 import torch
 import numpy as np
-
 from typing import Dict, Any, List, Optional, Tuple
 from torch import optim
 import torch.nn as nn
@@ -41,8 +39,8 @@ from .hyperparameter_space import HyperparameterSpace
 from .agent import Actor, Critic, get_device
 from .replay_buffer import TransReplayBuffer, Transition
 from .sqddpg import SQDDPG
-from ..utils.config import OptimizationConfig
-from ..utils.logger import HPOLogger
+from mat_hpo_utils.config import OptimizationConfig
+from mat_hpo_utils.logger import HPOLogger
 
 
 class MAT_HPO_Optimizer:
@@ -145,29 +143,11 @@ class MAT_HPO_Optimizer:
         self.current_step = 0
         self.best_reward = float('-inf')
         self.best_hyperparams = None
+        self.best_metrics = {}
         self.training_history = []
-
-        # Support flexible number of metrics (backward compatible with f1/auc/gmean)
-        self.best_f1 = 0.0
-        self.best_auc = 0.0
-        self.best_gmean = 0.0
-        self.best_step = 0
-        self.best_metrics = {}  # Flexible storage for any number of metrics
-
-        # Extract metric names from environment if available
-        metric_names = getattr(environment, 'metric_names_mapping', None)
-        custom_metrics = getattr(environment, 'custom_metrics', None)
-
-        # Initialize logger with custom metrics support
-        self.logger = HPOLogger(
-            output_dir,
-            verbose=config.verbose,
-            metric_names=metric_names,
-            custom_metrics=custom_metrics
-        )
-
-        # Store metric names for later use
-        self.metric_names = metric_names
+        
+        # Initialize logger
+        self.logger = HPOLogger(output_dir, verbose=config.verbose)
         
         # Move hyperparameter space to device
         self.hyperparameter_space.to_device(self.device)
@@ -209,9 +189,11 @@ class MAT_HPO_Optimizer:
         """
         # Get dimensions for each agent
         hyp_num0, hyp_num1, hyp_num2 = self.hyperparameter_space.agent_dims
-        
-        # Initialize SQDDPG with agent dimensions
-        self.sqddpg = SQDDPG(hyp_num0, hyp_num1, hyp_num2, device=self.device)
+
+        # Initialize SQDDPG with agent dimensions and noise
+        self.sqddpg = SQDDPG(hyp_num0, hyp_num1, hyp_num2,
+                             noise_std=self.config.noise_std,
+                             device=self.device)
         
         # Initialize replay buffer
         self.replay_buffer = TransReplayBuffer(self.config.replay_buffer_size)
@@ -273,7 +255,7 @@ class MAT_HPO_Optimizer:
             ValueError: If invalid configurations are encountered during optimization
         """
         self.logger.info(f"🚀 Starting MAT-HPO optimization for {self.config.max_steps} steps")
-        
+
         # Get parameter count in a compatible way
         if hasattr(self.hyperparameter_space, 'parameters'):
             # New dynamic initialization
@@ -310,7 +292,26 @@ class MAT_HPO_Optimizer:
             # Generate actions using SQDDPG
             actions = self.sqddpg.policy(state)
             selected_actions = self.sqddpg.select_action(actions)
-            
+
+            # Epsilon-greedy exploration for model selection
+            # Early in training, explore more; later, exploit more
+            epsilon = max(0.1, 0.5 - step / self.config.max_steps * 0.4)  # Decay from 0.5 to 0.1
+
+            if np.random.random() < epsilon:
+                # Explore: randomly select model (first action of agent 0)
+                n_models = len(self.environment.model_pool) if hasattr(self.environment, 'model_pool') else 3
+                random_model_action = np.random.uniform(-1, 1)  # Random value in [-1, 1]
+
+                # Replace model selection action (agent 0, first dimension)
+                selected_actions_np = selected_actions.detach().cpu().numpy()
+                if selected_actions_np.ndim == 3:  # [batch, agents, dims]
+                    selected_actions_np[0, 0, 0] = random_model_action
+                elif selected_actions_np.ndim == 2:  # [agents, dims]
+                    selected_actions_np[0, 0] = random_model_action
+                selected_actions = torch.tensor(selected_actions_np,
+                                              dtype=selected_actions.dtype,
+                                              device=selected_actions.device)
+
             # Extract hyperparameters from actions
             hyperparams = self._extract_hyperparameters(selected_actions)
             
@@ -318,67 +319,51 @@ class MAT_HPO_Optimizer:
             self._display_step_hyperparameters(step, hyperparams)
             
             # Evaluate hyperparameters in environment
-            f1, auc, gmean, done = self.environment.step(hyperparams)
-            
+            reward, metrics, done = self.environment.step(hyperparams)
+
             step_time = time.time() - step_start_time
-            
+
             # Log step results
-            self.logger.log_step(step, f1, auc, gmean, step_time, hyperparams)
-            
+            self.logger.log_step(step, reward, metrics, step_time, hyperparams)
+
             # Track best results
-            reward = gmean * 100  # Convert to reward scale
             if reward > self.best_reward:
                 self.best_reward = reward
                 self.best_hyperparams = hyperparams.copy()
-                self.best_f1, self.best_auc, self.best_gmean = f1, auc, gmean
-                self.best_step = step
-
-                # Store metrics flexibly (support any number of metrics from hyperparams)
-                self.best_metrics = {}
-                for key, value in hyperparams.items():
-                    if key.startswith('original_') or key in ['mase', 'train_loss', 'val_loss', 'overfitting_ratio', 'mse', 'mape', 'msmape', 'smape', 'mae', 'rmse']:
-                        self.best_metrics[key] = value
-
+                self.best_metrics = metrics.copy()
                 self._save_best_model()
                 self._save_rl_model_input(state)  # Save current state as RL_model_input.pt
 
-                # Log with custom metric names if available
-                if self.metric_names:
-                    metric1_name = self.metric_names.get('f1', 'F1')
-                    metric2_name = self.metric_names.get('auc', 'AUC')
-                    metric3_name = self.metric_names.get('gmean', 'G-mean')
-                    self.logger.info(f"🎯 New best model at step {step}! "
-                                   f"{metric1_name}={f1:.4f}, {metric2_name}={auc:.4f}, {metric3_name}={gmean:.4f}")
-                else:
-                    self.logger.info(f"🎯 New best model at step {step}! "
-                                   f"F1={f1:.4f}, AUC={auc:.4f}, G-mean={gmean:.4f}")
+                metrics_str = ' '.join([f"{k}={v:.4f}" for k, v in sorted(metrics.items())[:3]])
+                self.logger.info(f"🎯 New best model at step {step}! Reward={reward:.4f} {metrics_str}")
             
             # Update replay buffer
             reward_array = np.array([reward] * len(self.action_optimizers))
+
+            # Squeeze batch dimension if present: [1, n_agents, act_dim] -> [n_agents, act_dim]
+            actions_to_store = selected_actions.detach().cpu().numpy()
+            if actions_to_store.ndim == 3 and actions_to_store.shape[0] == 1:
+                actions_to_store = actions_to_store.squeeze(0)
+
             transition = Transition(
                 state.cpu().numpy(),
-                selected_actions.detach().cpu().numpy(),
+                actions_to_store,
                 reward_array
             )
             self.replay_buffer.add_experience(transition)
             
-            # Update agents if enough samples - with enhanced error handling
+            # Update agents if enough samples
             if (len(self.replay_buffer) >= self.config.batch_size and 
                 step % self.config.behaviour_update_freq == 0):
-                try:
-                    self._update_agents()
-                except Exception as e:
-                    print(f"⚠️ Agent update failed at step {step}: {e}")
-                    # Continue optimization even if agent update fails
-                    pass
+                self._update_agents()
             
             # Early stopping check
             if done or self._check_early_stopping():
                 self.logger.info(f"Early stopping at step {step}")
                 break
-            
-            # Update state for next iteration
-            state = self.environment.reset().to(self.device)
+
+            # Keep state unchanged for next iteration (stateless environment)
+            # Note: For stateful environments, update state based on history
         
         end_time = time.time()
         total_time = end_time - start_time
@@ -388,8 +373,8 @@ class MAT_HPO_Optimizer:
         
         self.logger.info(f"Optimization completed in {total_time:.2f} seconds")
         self.logger.info(f"Best hyperparameters: {self.best_hyperparams}")
-        self.logger.info(f"Best performance: F1={self.best_f1:.4f}, "
-                        f"AUC={self.best_auc:.4f}, G-mean={self.best_gmean:.4f}")
+        metrics_str = ', '.join([f"{k}={v:.4f}" for k, v in sorted(self.best_metrics.items())])
+        self.logger.info(f"Best performance: Reward={self.best_reward:.4f}, {metrics_str}")
         
         return results
     
@@ -475,112 +460,64 @@ class MAT_HPO_Optimizer:
         self._update_actors()
     
     def _update_critics(self):
-        """Update critic networks with enhanced error handling"""
+        """Update critic networks"""
         if len(self.replay_buffer) < self.config.batch_size:
             return
-        
-        try:
-            batch = self.replay_buffer.get_batch(self.config.batch_size)
-            batch_transitions = self.sqddpg.Transition(*zip(*batch))
-            
-            # Disable anomaly detection to avoid performance issues
-            torch.autograd.set_detect_anomaly(False)
-            _, value_losses, _ = self.sqddpg.get_loss(batch_transitions)
-            
-            # Validate losses
-            valid_losses = []
-            for i, loss in enumerate(value_losses):
-                if torch.isnan(loss) or torch.isinf(loss):
-                    print(f"⚠️ Invalid loss value in critic {i}: {loss.item()}")
-                else:
-                    valid_losses.append(loss)
-            if not valid_losses:
-                return
-            
-            # Combine losses to avoid retain_graph/backward-on-stale-graph issues
-            combined_loss = sum(valid_losses)
-            
-            # Zero all critic grads
-            for opt in self.value_optimizers:
-                opt.zero_grad()
-            
-            # Backward once through a single graph
-            combined_loss.backward()
-            
-            # Gradient clipping (safe, non-inplace)
-            for i, opt in enumerate(self.value_optimizers):
-                params = [p for group in opt.param_groups for p in group['params'] if p.grad is not None]
-                if params:
-                    torch.nn.utils.clip_grad_norm_(params, self.config.gradient_clip)
-            
-            # Step all optimizers after gradients are computed
-            for opt in self.value_optimizers:
-                opt.step()
-            
-        except Exception as e:
-            print(f"⚠️ Critical error in _update_critics: {e}")
-            # Clear all gradients to prevent accumulation
-            for optimizer in self.value_optimizers:
-                optimizer.zero_grad()
+
+        # 只采样一次batch（保持算法正确性）
+        batch = self.replay_buffer.get_batch(self.config.batch_size)
+        batch_transitions = self.sqddpg.Transition(*zip(*batch))
+
+        # 计算所有losses（基于同一个batch）
+        _, value_losses, _ = self.sqddpg.get_loss(batch_transitions)
+
+        # 方法1：将所有losses求和，一次backward（最安全）
+        # total_loss = sum(value_losses)
+        # for optimizer in self.value_optimizers:
+        #     optimizer.zero_grad()
+        # total_loss.backward()
+        # for optimizer in self.value_optimizers:
+        #     optimizer.step()
+
+        # 方法2：分别backward，但最后统一裁剪（保持独立优化）
+        for optimizer in self.value_optimizers:
+            optimizer.zero_grad()
+
+        # 先做所有backward，使用retain_graph
+        for i, loss in enumerate(value_losses):
+            loss.backward(retain_graph=(i < len(value_losses) - 1))
+
+        # backward完成后，统一做梯度裁剪和优化（避免inplace干扰）
+        for i, optimizer in enumerate(self.value_optimizers):
+            critic = [self.sqddpg.critic0, self.sqddpg.critic1, self.sqddpg.critic2][i]
+            torch.nn.utils.clip_grad_norm_(critic.parameters(), self.config.gradient_clip)
+            optimizer.step()
     
     def _update_actors(self):
-        """Update actor networks with enhanced error handling"""
+        """Update actor networks"""
         if len(self.replay_buffer) < self.config.batch_size:
             return
-        
-        try:
-            batch = self.replay_buffer.get_batch(self.config.batch_size)
-            batch_transitions = self.sqddpg.Transition(*zip(*batch))
-            
-            # Disable anomaly detection during training step for speed
-            torch.autograd.set_detect_anomaly(False)
-            action_losses, _, _ = self.sqddpg.get_loss(batch_transitions)
-            
-            # Validate losses and combine to avoid retain_graph complications
-            valid_losses = []
-            for i, loss in enumerate(action_losses):
-                if torch.isnan(loss) or torch.isinf(loss):
-                    print(f"⚠️ Invalid loss value in actor {i}: {loss.item()}")
-                else:
-                    valid_losses.append(loss)
-            if not valid_losses:
-                return
-            combined_loss = sum(valid_losses)
-            
-            # Zero all actor grads
-            for opt in self.action_optimizers:
-                opt.zero_grad()
-            
-            # Freeze critics to prevent gradient updates to critic parameters during actor step
-            critics = [self.sqddpg.critic0, self.sqddpg.critic1, self.sqddpg.critic2]
-            try:
-                for c in critics:
-                    for p in c.parameters():
-                        p.requires_grad_(False)
-                
-                # Single backward pass through shared graph
-                combined_loss.backward()
-            finally:
-                # Unfreeze critics regardless of success
-                for c in critics:
-                    for p in c.parameters():
-                        p.requires_grad_(True)
-            
-            # Gradient clipping (safe, non-inplace)
-            for opt in self.action_optimizers:
-                params = [p for group in opt.param_groups for p in group['params'] if p.grad is not None]
-                if params:
-                    torch.nn.utils.clip_grad_norm_(params, self.config.gradient_clip)
-            
-            # Step all actor optimizers
-            for opt in self.action_optimizers:
-                opt.step()
-        
-        except Exception as e:
-            print(f"⚠️ Critical error in _update_actors: {e}")
-            # Clear all gradients to prevent accumulation
-            for optimizer in self.action_optimizers:
-                optimizer.zero_grad()
+
+        # 只采样一次batch（保持算法正确性）
+        batch = self.replay_buffer.get_batch(self.config.batch_size)
+        batch_transitions = self.sqddpg.Transition(*zip(*batch))
+
+        # 计算所有losses（基于同一个batch）
+        action_losses, _, _ = self.sqddpg.get_loss(batch_transitions)
+
+        # 分别backward，但最后统一裁剪
+        for optimizer in self.action_optimizers:
+            optimizer.zero_grad()
+
+        # 先做所有backward
+        for i, loss in enumerate(action_losses):
+            loss.backward(retain_graph=(i < len(action_losses) - 1))
+
+        # backward完成后，统一做梯度裁剪和优化
+        for i, optimizer in enumerate(self.action_optimizers):
+            actor = [self.sqddpg.actor0, self.sqddpg.actor1, self.sqddpg.actor2][i]
+            torch.nn.utils.clip_grad_norm_(actor.parameters(), self.config.gradient_clip)
+            optimizer.step()
     
     def _save_best_model(self):
         """
@@ -609,44 +546,13 @@ class MAT_HPO_Optimizer:
         """
         # Save hyperparameters
         best_hyp_path = os.path.join(self.output_dir, 'best_hyperparams.json')
-        
-        # 使用自定義指標名稱（如果可用），否則使用默認名稱
-        if hasattr(self, 'metric_names') and self.metric_names:
-            metric_key1 = self.metric_names.get('f1', 'f1').lower()
-            metric_key2 = self.metric_names.get('auc', 'auc').lower()
-            metric_key3 = self.metric_names.get('gmean', 'gmean').lower()
-        else:
-            metric_key1, metric_key2, metric_key3 = 'f1', 'auc', 'gmean'
-        
-        # Build performance dict with flexible metric support
-        performance = {}
-
-        # Add all metrics from best_metrics (most flexible approach)
-        for key, value in self.best_metrics.items():
-            if isinstance(value, (int, float)) and not np.isnan(value) and not np.isinf(value):
-                # Remove 'original_' prefix for cleaner output
-                clean_key = key.replace('original_', '') if key.startswith('original_') else key
-                performance[clean_key] = float(value)
-
-        # Backward compatibility: add f1/auc/gmean if using custom names
-        if self.metric_names:
-            # Map the three primary metrics
-            performance[metric_key1] = float(self.best_f1)
-            performance[metric_key2] = float(self.best_auc)
-            performance[metric_key3] = float(self.best_gmean)
-        else:
-            # Default metric names
-            performance['f1'] = float(self.best_f1)
-            performance['auc'] = float(self.best_auc)
-            performance['gmean'] = float(self.best_gmean)
-
-        # Always include reward
-        performance['reward'] = float(self.best_reward)
-
         with open(best_hyp_path, 'w') as f:
             json.dump({
                 'hyperparameters': self.best_hyperparams,
-                'performance': performance,
+                'performance': {
+                    **{k: float(v) for k, v in self.best_metrics.items()},
+                    'reward': float(self.best_reward)
+                },
                 'step': self.current_step
             }, f, indent=2)
         
@@ -785,22 +691,11 @@ class MAT_HPO_Optimizer:
         Results are automatically saved to the output directory as a JSON file
         with proper formatting for human readability and programmatic access.
         """
-        # 使用自定義指標名稱（如果可用），否則使用默認名稱
-        if hasattr(self, 'metric_names') and self.metric_names:
-            metric_key1 = self.metric_names.get('f1', 'f1').lower()
-            metric_key2 = self.metric_names.get('auc', 'auc').lower()
-            metric_key3 = self.metric_names.get('gmean', 'gmean').lower()
-        else:
-            metric_key1, metric_key2, metric_key3 = 'f1', 'auc', 'gmean'
-        
         results = {
             'best_hyperparameters': self.best_hyperparams,
             'best_performance': {
-                metric_key1: float(self.best_f1),
-                metric_key2: float(self.best_auc), 
-                metric_key3: float(self.best_gmean),
-                'reward': float(self.best_reward),
-                'step': self.best_step
+                **{k: float(v) for k, v in self.best_metrics.items()},
+                'reward': float(self.best_reward)
             },
             'optimization_stats': {
                 'total_steps': self.current_step + 1,
@@ -900,14 +795,7 @@ class MAT_HPO_Optimizer:
                 data = json.load(f)
                 self.best_hyperparams = data['hyperparameters']
                 perf = data['performance']
-
-                # Load metrics flexibly
-                self.best_f1 = perf.get('f1', perf.get('smape', 0.0))
-                self.best_auc = perf.get('auc', perf.get('mae', 0.0))
-                self.best_gmean = perf.get('gmean', perf.get('rmse', 0.0))
-                self.best_reward = perf.get('reward', 0.0)
-
-                # Load all available metrics into best_metrics
+                self.best_reward = perf['reward']
                 self.best_metrics = {k: v for k, v in perf.items() if k != 'reward'}
         
         # Load models if they exist
@@ -947,7 +835,7 @@ class MAT_HPO_Optimizer:
             This method uses Chinese labels (Agent 0: 📊, Agent 1: 🏗️, Agent 2: ⚙️) for
             better visualization and can be easily localized for different languages.
         """
-        print(f"\nStep {step + 1} - Selected hyperparameters:")
+        print(f"\n🎯 Step {step + 1} 選擇的超參數:")
         print("-" * 45)
         
         # Agent 0: 類別權重 (顯示前3個和總結)
@@ -958,7 +846,7 @@ class MAT_HPO_Optimizer:
                 weight_str = ', '.join([f"{w:.2f}" for w in class_weights])
             else:
                 weight_str = f"{class_weights[0]:.2f}, {class_weights[1]:.2f}, {class_weights[2]:.2f}...({len(class_weights)} total)"
-            print(f"Agent 0 (Class Weights): [{weight_str}]")
+            print(f"📊 Agent 0: class_weights = [{weight_str}]")
         
         # Agent 1: 架構參數
         agent1_params = []
@@ -968,7 +856,7 @@ class MAT_HPO_Optimizer:
             agent1_params.append(f"loss_function = {hyperparams['loss_function']}")
         
         if agent1_params:
-            print(f"Agent 1 (Architecture): {', '.join(agent1_params)}")
+            print(f"🏗️  Agent 1: {', '.join(agent1_params)}")
         
         # Agent 2: 訓練參數
         training_params = []
@@ -978,6 +866,6 @@ class MAT_HPO_Optimizer:
             training_params.append(f"lr={hyperparams['learning_rate']:.2e}")
         
         if training_params:
-            print(f"Agent 2 (Training): {', '.join(training_params)}")
+            print(f"⚙️  Agent 2: {', '.join(training_params)}")
         
         print("-" * 45)
