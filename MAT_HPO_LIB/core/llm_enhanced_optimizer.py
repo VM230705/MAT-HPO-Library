@@ -8,6 +8,7 @@ import torch
 import time
 from typing import Dict, Any, List, Optional, Tuple
 from .multi_agent_optimizer import MAT_HPO_Optimizer
+from .evaluation_criteria import ModelSaveCriteria, FlexibleEvaluator, OptimizationTarget, create_spnv2_criteria
 from ..llm import EnhancedLLMHyperparameterMixer, OllamaLLMClient
 from ..utils.config import OptimizationConfig
 from .replay_buffer import Transition
@@ -72,6 +73,7 @@ class LLMEnhancedMAT_HPO_Optimizer(MAT_HPO_Optimizer):
                  environment,
                  hyperparameter_space,
                  config: LLMEnhancedOptimizationConfig,
+                 evaluation_criteria: Optional[ModelSaveCriteria] = None,
                  output_dir: str = None):
         """
         Initialize LLM Enhanced MAT-HPO Optimizer
@@ -80,14 +82,23 @@ class LLMEnhancedMAT_HPO_Optimizer(MAT_HPO_Optimizer):
             environment: The environment to optimize
             hyperparameter_space: Hyperparameter search space
             config: LLM enhanced optimization configuration
+            evaluation_criteria: Custom evaluation criteria (defaults to SPNV2 criteria)
             output_dir: Custom output directory (overrides default)
         """
         # Use custom output_dir if provided, otherwise use default
         actual_output_dir = output_dir if output_dir is not None else "./mat_hpo_results"
-        super().__init__(environment, hyperparameter_space, config, actual_output_dir)
+        
+        # ✅ 修復：使用評估標準
+        if evaluation_criteria is None:
+            evaluation_criteria = create_spnv2_criteria()
+            
+        super().__init__(environment, hyperparameter_space, config, evaluation_criteria, actual_output_dir)
 
         self.llm_config = config
         self.llm_mixer = None
+        
+        # ✅ 修復：初始化 metric_names 屬性
+        self.metric_names = {}
 
         if config.enable_llm:
             self._initialize_llm_components()
@@ -240,12 +251,17 @@ class LLMEnhancedMAT_HPO_Optimizer(MAT_HPO_Optimizer):
             self._display_step_hyperparameters(step, final_hyperparams)
 
             # Evaluate in environment
-            f1, auc, gmean, done = self.environment.step(final_hyperparams)
+            reward, metrics, done = self.environment.step(final_hyperparams)
+            
+            # Extract metrics for logging
+            f1 = metrics.get('val_f1', metrics.get('f1', 0.0))
+            auc = metrics.get('val_auc', metrics.get('auc', 0.0))
+            gmean = metrics.get('val_gmean', metrics.get('gmean', 0.0))
 
             step_time = time.time() - step_start_time
 
             # Log step results
-            self.logger.log_step(step, f1, auc, gmean, step_time, final_hyperparams)
+            self.logger.log_step(step, reward, metrics, step_time, final_hyperparams)
 
             # Update LLM training history (non-fatal if it fails)
             if self.llm_mixer is not None and self.llm_config.enable_llm:
@@ -258,15 +274,20 @@ class LLMEnhancedMAT_HPO_Optimizer(MAT_HPO_Optimizer):
                 except Exception as e:
                     print(f"⚠️  Failed to update LLM history at step {step}: {e}")
 
-            # Track best results
-            reward = gmean * 100  # Convert to reward scale
-            if reward > self.best_reward:
-                self.best_reward = reward
-                self.best_hyperparams = final_hyperparams.copy()
-                self.best_f1, self.best_auc, self.best_gmean = f1, auc, gmean
-                self.best_step = step
-                self._save_best_model()
+            # ✅ 修復：使用靈活的評估器（繼承自父類）
+            should_save = self.evaluator.evaluate(metrics, step, final_hyperparams)
+            
+            if should_save:
+                self._save_best_model(step)  # 傳入正確的 step
                 self._save_rl_model_input(state)  # Save current state as RL_model_input.pt
+                
+                # 更新內部追蹤變量（向後兼容）
+                self.best_reward = self.evaluator.best_score
+                self.best_hyperparams = self.evaluator.best_hyperparams
+                self.best_metrics = self.evaluator.best_metrics
+                self.best_step = self.evaluator.best_step
+                self.best_f1, self.best_auc, self.best_gmean = f1, auc, gmean
+                
                 if self.metric_names:
                     metric1_name = self.metric_names.get('f1', 'F1')
                     metric2_name = self.metric_names.get('auc', 'AUC')

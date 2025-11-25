@@ -39,8 +39,9 @@ from .hyperparameter_space import HyperparameterSpace
 from .agent import Actor, Critic, get_device
 from .replay_buffer import TransReplayBuffer, Transition
 from .sqddpg import SQDDPG
-from mat_hpo_utils.config import OptimizationConfig
-from mat_hpo_utils.logger import HPOLogger
+from .evaluation_criteria import ModelSaveCriteria, FlexibleEvaluator, OptimizationTarget, create_spnv2_criteria
+from ..utils.config import OptimizationConfig
+from ..utils.logger import HPOLogger
 
 
 class MAT_HPO_Optimizer:
@@ -96,6 +97,7 @@ class MAT_HPO_Optimizer:
                  environment: BaseEnvironment,
                  hyperparameter_space: HyperparameterSpace,
                  config: OptimizationConfig,
+                 evaluation_criteria: Optional[ModelSaveCriteria] = None,
                  output_dir: str = "./mat_hpo_results"):
         """
         Initialize the MAT-HPO optimizer with comprehensive setup and validation.
@@ -146,6 +148,16 @@ class MAT_HPO_Optimizer:
         self.best_metrics = {}
         self.training_history = []
         
+        # ✅ 修復：設置評估標準
+        if evaluation_criteria is None:
+            # 默認：以 val_f1_macro 為主要目標（SPNV2 兼容）
+            evaluation_criteria = create_spnv2_criteria()
+        
+        self.evaluator = FlexibleEvaluator(evaluation_criteria)
+        
+        # ✅ 修復：正確追蹤 best_step
+        self.best_step = -1
+        
         # Initialize logger
         self.logger = HPOLogger(output_dir, verbose=config.verbose)
         
@@ -190,9 +202,8 @@ class MAT_HPO_Optimizer:
         # Get dimensions for each agent
         hyp_num0, hyp_num1, hyp_num2 = self.hyperparameter_space.agent_dims
 
-        # Initialize SQDDPG with agent dimensions and noise
+        # Initialize SQDDPG with agent dimensions
         self.sqddpg = SQDDPG(hyp_num0, hyp_num1, hyp_num2,
-                             noise_std=self.config.noise_std,
                              device=self.device)
         
         # Initialize replay buffer
@@ -326,16 +337,21 @@ class MAT_HPO_Optimizer:
             # Log step results
             self.logger.log_step(step, reward, metrics, step_time, hyperparams)
 
-            # Track best results
-            if reward > self.best_reward:
-                self.best_reward = reward
-                self.best_hyperparams = hyperparams.copy()
-                self.best_metrics = metrics.copy()
-                self._save_best_model()
+            # ✅ 修復：使用靈活的評估器
+            should_save = self.evaluator.evaluate(metrics, step, hyperparams)
+            
+            if should_save:
+                self._save_best_model(step)  # 傳入正確的 step
                 self._save_rl_model_input(state)  # Save current state as RL_model_input.pt
-
+                
+                # 更新內部追蹤變量（向後兼容）
+                self.best_reward = self.evaluator.best_score
+                self.best_hyperparams = self.evaluator.best_hyperparams
+                self.best_metrics = self.evaluator.best_metrics
+                self.best_step = self.evaluator.best_step
+                
                 metrics_str = ' '.join([f"{k}={v:.4f}" for k, v in sorted(metrics.items())[:3]])
-                self.logger.info(f"🎯 New best model at step {step}! Reward={reward:.4f} {metrics_str}")
+                self.logger.info(f"🎯 New best model at step {step}! Score={self.evaluator.best_score:.4f} {metrics_str}")
             
             # Update replay buffer
             reward_array = np.array([reward] * len(self.action_optimizers))
@@ -519,9 +535,11 @@ class MAT_HPO_Optimizer:
             torch.nn.utils.clip_grad_norm_(actor.parameters(), self.config.gradient_clip)
             optimizer.step()
     
-    def _save_best_model(self):
+    def _save_best_model(self, step: int):
         """
         Persist the current best-performing model state and associated hyperparameters.
+        
+        ✅ 修復版本：使用正確的 step 和評估器數據
         
         This method implements comprehensive checkpointing functionality that saves
         both the neural network parameters and the corresponding hyperparameter
@@ -544,16 +562,24 @@ class MAT_HPO_Optimizer:
         The saved files follow a consistent naming convention and include comprehensive
         metadata to support various downstream applications and analysis workflows.
         """
-        # Save hyperparameters
+        # ✅ 修復：使用 evaluator 中的正確數據
         best_hyp_path = os.path.join(self.output_dir, 'best_hyperparams.json')
         with open(best_hyp_path, 'w') as f:
             json.dump({
-                'hyperparameters': self.best_hyperparams,
+                'hyperparameters': self.evaluator.best_hyperparams,
                 'performance': {
-                    **{k: float(v) for k, v in self.best_metrics.items()},
-                    'reward': float(self.best_reward)
+                    **{k: float(v) for k, v in self.evaluator.best_metrics.items()},
+                    'primary_score': float(self.evaluator.best_score),
+                    'reward': float(self.evaluator.best_score)  # 向後兼容
                 },
-                'step': self.current_step
+                'step': self.evaluator.best_step,  # ✅ 修復：使用正確的 step
+                'optimization_target': self.evaluator.criteria.primary_target.value,
+                'timestamp': time.strftime('%Y-%m-%dT%H:%M:%S'),
+                'metadata': {
+                    'total_steps': self.current_step,
+                    'improvement_threshold': self.evaluator.criteria.min_improvement_threshold,
+                    'milestone_steps': self.evaluator.criteria.milestone_steps
+                }
             }, f, indent=2)
         
         # Note: Removed best_actor*.pt files as they are redundant with RL_model*.pt
@@ -565,9 +591,9 @@ class MAT_HPO_Optimizer:
         
         # Save hyperparameters in numpy format (original MAT_HPO compatibility)
         import numpy as np
-        if self.best_hyperparams:
+        if self.evaluator.best_hyperparams:
             # Convert hyperparameters to list format compatible with original system
-            hyp_list = self._convert_hyperparams_to_list(self.best_hyperparams)
+            hyp_list = self._convert_hyperparams_to_list(self.evaluator.best_hyperparams)
             np.save(os.path.join(self.output_dir, 'CNNLSTM_model_hyp.npy'), np.array(hyp_list))
     
     def _convert_hyperparams_to_list(self, hyperparams: Dict[str, Any]) -> List[float]:
@@ -692,15 +718,25 @@ class MAT_HPO_Optimizer:
         with proper formatting for human readability and programmatic access.
         """
         results = {
-            'best_hyperparameters': self.best_hyperparams,
+            'best_hyperparameters': self.evaluator.best_hyperparams,
             'best_performance': {
-                **{k: float(v) for k, v in self.best_metrics.items()},
-                'reward': float(self.best_reward)
+                **{k: float(v) for k, v in self.evaluator.best_metrics.items()},
+                'primary_score': float(self.evaluator.best_score),
+                'reward': float(self.evaluator.best_score)  # 向後兼容
             },
             'optimization_stats': {
                 'total_steps': self.current_step + 1,
+                'best_step': self.evaluator.best_step,  # ✅ 修復：使用正確的 step
+                'optimization_target': self.evaluator.criteria.primary_target.value,
                 'total_time': total_time,
-                'avg_time_per_step': total_time / (self.current_step + 1)
+                'avg_time_per_step': total_time / (self.current_step + 1),
+                'early_stopped': self.current_step < self.config.max_steps
+            },
+            'evaluation_criteria': {
+                'primary_target': self.evaluator.criteria.primary_target.value,
+                'secondary_targets': [t.value for t in (self.evaluator.criteria.secondary_targets or [])],
+                'min_improvement_threshold': self.evaluator.criteria.min_improvement_threshold,
+                'milestone_steps': self.evaluator.criteria.milestone_steps
             },
             'config': self.config.to_dict(),
             'environment_name': self.environment.name,
@@ -748,7 +784,7 @@ class MAT_HPO_Optimizer:
             model = create_model(**best_params)
             ```
         """
-        return self.best_hyperparams.copy() if self.best_hyperparams else {}
+        return self.evaluator.best_hyperparams.copy() if self.evaluator.best_hyperparams else {}
     
     def load_checkpoint(self, checkpoint_path: str):
         """
