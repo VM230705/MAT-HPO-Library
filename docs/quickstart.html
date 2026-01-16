@@ -6,8 +6,7 @@
     <title>Quick Start - MAT-HPO Library</title>
     <meta name="description" content="Get started with MAT-HPO Library in minutes">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-</head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>"></head>
 <body>
     <button class="mobile-toggle">☰</button>
     
@@ -99,18 +98,18 @@
             <div class="main-content">
                 
                 <section class="content-section">
-                    <h2>📦 Step 1: Installation</h2>
+                    <h2>🚀 Quick Start</h2>
                     
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-language">bash</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-bash"><span class="token comment"># 📦 Clone the repository</span>
+                        <pre><code class="language-bash"><span class="token comment">#  Clone the repository</span>
 <span class="token function">git</span> clone https://github.com/VM230705/MAT-HPO-Library.git
 <span class="token builtin">cd</span> MAT-HPO-Library
 
-<span class="token comment"># ⚡ Install dependencies</span>
+<span class="token comment">#  Install dependencies</span>
 <span class="token function">pip</span> install torch numpy scikit-learn
 
 <span class="token comment"># ✅ Test installation</span>
@@ -119,7 +118,7 @@
                 </section>
 
                 <section class="content-section">
-                    <h2>🏗️ Step 2: Define Environment</h2>
+                    <h2>️ Step 2: Define Environment</h2>
                     <p>Create a class that inherits from <code>BaseEnvironment</code>:</p>
                     
                     <div class="code-block">
@@ -127,16 +126,16 @@
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> BaseEnvironment
+                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> <span class="token class-name">BaseEnvironment</span>
 
-<span class="token keyword">class</span> <span class="token class-name">MyEnvironment</span><span class="token punctuation">(</span>BaseEnvironment<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token keyword">class</span> <span class="token class-name">MyEnvironment</span><span class="token punctuation">(</span><span class="token class-name">BaseEnvironment</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"MyEnvironment"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">__init__</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span>
-        <span class="token comment"># 🚀 Initialize your data, model, etc.</span>
+        <span class="token comment">#  Initialize your data, model, etc.</span>
 
     <span class="token keyword">def</span> <span class="token function">step</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> hyperparams<span class="token punctuation">)</span><span class="token punctuation">:</span>
         <span class="token comment">"""</span>
-<span class="token comment">        🎯 Train and evaluate model with given hyperparameters</span>
+<span class="token comment">         Train and evaluate model with given hyperparameters</span>
 <span class="token comment">        </span>
 <span class="token comment">        Args:</span>
 <span class="token comment">            hyperparams: dict of hyperparameter values</span>
@@ -144,11 +143,11 @@
 <span class="token comment">        Returns:</span>
 <span class="token comment">            f1_score, auc_score, gmean_score, done</span>
 <span class="token comment">        """</span>
-        <span class="token comment"># 🏗️ 1. Train your model with hyperparams</span>
+        <span class="token comment"># ️ 1. Train your model with hyperparams</span>
         model <span class="token operator">=</span> <span class="token function">create_model</span><span class="token punctuation">(</span>hyperparams<span class="token punctuation">)</span>
         trained_model <span class="token operator">=</span> <span class="token function">train_model</span><span class="token punctuation">(</span>model<span class="token punctuation">,</span> hyperparams<span class="token punctuation">)</span>
 
-        <span class="token comment"># 📊 2. Evaluate the model</span>
+        <span class="token comment">#  2. Evaluate the model</span>
         f1 <span class="token operator">=</span> <span class="token function">evaluate_f1</span><span class="token punctuation">(</span>trained_model<span class="token punctuation">)</span>
         auc <span class="token operator">=</span> <span class="token function">evaluate_auc</span><span class="token punctuation">(</span>trained_model<span class="token punctuation">)</span>
         gmean <span class="token operator">=</span> <span class="token function">evaluate_gmean</span><span class="token punctuation">(</span>trained_model<span class="token punctuation">)</span>
@@ -161,7 +160,7 @@
                 </section>
 
                 <section class="content-section">
-                    <h2>🎯 Step 3: Define Hyperparameter Space</h2>
+                    <h2> Step 3: Define Hyperparameter Space</h2>
                     <p>Specify hyperparameter ranges for optimization. Use continuous bounds (min, max) - the system will automatically handle int/float casting based on your model's needs:</p>
                     
                     <div class="code-block">
@@ -171,31 +170,31 @@
                         </div>
                         <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> HyperparameterSpace
 
-<span class="token comment"># 🎯 Method 1: Using add_continuous with agent assignment</span>
-space <span class="token operator">=</span> <span class="token function">HyperparameterSpace</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">#  Method 1: Using add_continuous with agent assignment</span>
+space <span class="token operator">=</span> <span class="token class-name">HyperparameterSpace</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 🤖 Agent 0: Problem-specific parameters (float ranges)</span>
+<span class="token comment">#  Agent 0: Problem-specific parameters (float ranges)</span>
 space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'class_weight_0'</span><span class="token punctuation">,</span> <span class="token number">0.1</span><span class="token punctuation">,</span> <span class="token number">5.0</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
 space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'class_weight_1'</span><span class="token punctuation">,</span> <span class="token number">0.1</span><span class="token punctuation">,</span> <span class="token number">5.0</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 🏗️ Agent 1: Architecture parameters (int ranges)</span>
+<span class="token comment"># ️ Agent 1: Architecture parameters (int ranges)</span>
 space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'hidden_size'</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">512</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>    <span class="token comment"># Will be cast to int</span>
 space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'num_layers'</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>        <span class="token comment"># Will be cast to int</span>
 
-<span class="token comment"># 🎯 Agent 2: Training parameters</span>
+<span class="token comment">#  Agent 2: Training parameters</span>
 space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'learning_rate'</span><span class="token punctuation">,</span> <span class="token number">1e-5</span><span class="token punctuation">,</span> <span class="token number">1e-2</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment"># float</span>
 space<span class="token punctuation">.</span><span class="token function">add_discrete</span><span class="token punctuation">(</span><span class="token string">'batch_size'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">]</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>        <span class="token comment"># Discrete choices</span>
 
-<span class="token comment"># 📊 Method 2: Using bounds dictionary (more explicit)</span>
-space <span class="token operator">=</span> <span class="token function">HyperparameterSpace</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'learning_rate'</span><span class="token punctuation">,</span> <span class="token number">1e-5</span><span class="token punctuation">,</span> <span class="token number">1e-1</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
-space<span class="token punctuation">.</span><span class="token function">add_discrete</span><span class="token punctuation">(</span><span class="token string">'optimizer'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'adam'</span><span class="token punctuation">,</span> <span class="token string">'sgd'</span><span class="token punctuation">,</span> <span class="token string">'rmsprop'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
-space<span class="token punctuation">.</span><span class="token function">add_boolean</span><span class="token punctuation">(</span><span class="token string">'use_dropout'</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span></code></pre>
+<span class="token comment">#  Method 2: Using bounds dictionary (more explicit)</span>
+space <span class="token operator">=</span> <span class="token class-name">HyperparameterSpace</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'class_weight_0'</span><span class="token punctuation">,</span> <span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token number">3.0</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>  <span class="token comment"># Problem-specific</span>
+space<span class="token punctuation">.</span><span class="token function">add_discrete</span><span class="token punctuation">(</span><span class="token string">'optimizer'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'adam'</span><span class="token punctuation">,</span> <span class="token string">'sgd'</span><span class="token punctuation">,</span> <span class="token string">'rmsprop'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment"># Training</span>
+space<span class="token punctuation">.</span><span class="token function">add_boolean</span><span class="token punctuation">(</span><span class="token string">'use_dropout'</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># Architecture</span></code></pre>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>🚀 Step 4: Run Optimization</h2>
+                    <h2> Step 4: Run Optimization</h2>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -205,35 +204,35 @@ space<span class="token punctuation">.</span><span class="token function">add_bo
                         <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> MAT_HPO_Optimizer
 <span class="token keyword">from</span> MAT_HPO_LIB<span class="token punctuation">.</span>utils <span class="token keyword">import</span> DefaultConfigs
 
-<span class="token comment"># 🏗️ Create environment and space (from previous steps)</span>
+<span class="token comment"># ️ Create environment and space (from previous steps)</span>
 environment <span class="token operator">=</span> <span class="token function">MyEnvironment</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-space <span class="token operator">=</span> <span class="token function">HyperparameterSpace</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># (configured above)</span>
+space <span class="token operator">=</span> <span class="token class-name">HyperparameterSpace</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># (configured above)</span>
 
 <span class="token comment"># ⚙️ Choose configuration</span>
-config <span class="token operator">=</span> DefaultConfigs<span class="token punctuation">.</span><span class="token function">standard</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 100 optimization steps</span>
+config <span class="token operator">=</span> <span class="token class-name">DefaultConfigs</span><span class="token punctuation">.</span><span class="token function">standard</span><span class="token punctuation">(</span><span class="token punctuation">)</span>  <span class="token comment"># 100 optimization steps</span>
 
-<span class="token comment"># 🤖 Create optimizer</span>
-optimizer <span class="token operator">=</span> <span class="token function">MAT_HPO_Optimizer</span><span class="token punctuation">(</span>
+<span class="token comment">#  Create optimizer</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">MAT_HPO_Optimizer</span><span class="token punctuation">(</span>
     environment<span class="token operator">=</span>environment<span class="token punctuation">,</span>
     hyperparameter_space<span class="token operator">=</span>space<span class="token punctuation">,</span>
     config<span class="token operator">=</span>config
 <span class="token punctuation">)</span>
 
-<span class="token comment"># 🚀 Run optimization</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"🏁 Starting optimization..."</span><span class="token punctuation">)</span>
+<span class="token comment">#  Run optimization</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">" Starting optimization..."</span><span class="token punctuation">)</span>
 results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 📊 Get results</span>
+<span class="token comment">#  Get results</span>
 best_params <span class="token operator">=</span> results<span class="token punctuation">[</span><span class="token string">'best_hyperparameters'</span><span class="token punctuation">]</span>
 best_performance <span class="token operator">=</span> results<span class="token punctuation">[</span><span class="token string">'best_performance'</span><span class="token punctuation">]</span>
 
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"🎉 Best hyperparameters: {best_params}"</span><span class="token punctuation">)</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"💯 Best performance: {best_performance}"</span><span class="token punctuation">)</span></code></pre>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f" Best hyperparameters: {best_params}"</span><span class="token punctuation">)</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f" Best performance: {best_performance}"</span><span class="token punctuation">)</span></code></pre>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>📊 Step 5: View Results</h2>
+                    <h2> Step 5: View Results</h2>
                     <p>Results are automatically saved to files:</p>
                     
                     <ul>
@@ -247,15 +246,15 @@ best_performance <span class="token operator">=</span> results<span class="token
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python"><span class="token comment"># 📝 Load results from file</span>
+                        <pre><code class="language-python"><span class="token comment">#  Load results from file</span>
 <span class="token keyword">import</span> json
 
 <span class="token keyword">with</span> <span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'best_hyperparams.json'</span><span class="token punctuation">,</span> <span class="token string">'r'</span><span class="token punctuation">)</span> <span class="token keyword">as</span> f<span class="token punctuation">:</span>
     best_params <span class="token operator">=</span> json<span class="token punctuation">.</span><span class="token function">load</span><span class="token punctuation">(</span>f<span class="token punctuation">)</span>
 
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"🎉 Optimized hyperparameters:"</span><span class="token punctuation">)</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">" Optimized hyperparameters:"</span><span class="token punctuation">)</span>
 <span class="token keyword">for</span> param<span class="token punctuation">,</span> value <span class="token keyword">in</span> best_params<span class="token punctuation">.</span><span class="token function">items</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"  🔹 {param}: {value}"</span><span class="token punctuation">)</span></code></pre>
+    <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   {param}: {value}"</span><span class="token punctuation">)</span></code></pre>
                     </div>
                 </section>
 
@@ -267,18 +266,18 @@ best_performance <span class="token operator">=</span> results<span class="token
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB<span class="token punctuation">.</span>utils <span class="token keyword">import</span> DefaultConfigs<span class="token punctuation">,</span> OptimizationConfig
+                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB<span class="token punctuation">.</span>utils <span class="token keyword">import</span> <span class="token class-name">DefaultConfigs</span><span class="token punctuation">,</span> <span class="token class-name">OptimizationConfig</span>
 
-<span class="token comment"># 🏃‍♂️ Quick test (10 steps) - Perfect for debugging</span>
-config <span class="token operator">=</span> DefaultConfigs<span class="token punctuation">.</span><span class="token function">quick_test</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">#  Quick test (10 steps) - Perfect for debugging</span>
+config <span class="token operator">=</span> <span class="token class-name">DefaultConfigs</span><span class="token punctuation">.</span><span class="token function">quick_test</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 🎯 Standard optimization (100 steps) - Recommended for most use cases</span>
-config <span class="token operator">=</span> DefaultConfigs<span class="token punctuation">.</span><span class="token function">standard</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">#  Standard optimization (100 steps) - Recommended for most use cases</span>
+config <span class="token operator">=</span> <span class="token class-name">DefaultConfigs</span><span class="token punctuation">.</span><span class="token function">standard</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 💻 CPU-only mode - For environments without GPU</span>
-config <span class="token operator">=</span> DefaultConfigs<span class="token punctuation">.</span><span class="token function">cpu_only</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token comment">#  CPU-only mode - For environments without GPU</span>
+config <span class="token operator">=</span> <span class="token class-name">DefaultConfigs</span><span class="token punctuation">.</span><span class="token function">cpu_only</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 🔧 Custom configuration - Full control over parameters</span>
+<span class="token comment">#  Custom configuration - Full control over parameters</span>
 config <span class="token operator">=</span> <span class="token function">OptimizationConfig</span><span class="token punctuation">(</span>
     max_steps<span class="token operator">=</span><span class="token number">50</span><span class="token punctuation">,</span>          <span class="token comment"># Number of optimization steps</span>
     batch_size<span class="token operator">=</span><span class="token number">32</span><span class="token punctuation">,</span>         <span class="token comment"># Training batch size</span>
@@ -290,7 +289,7 @@ config <span class="token operator">=</span> <span class="token function">Optimi
 
 
                 <section class="content-section">
-                    <h2>📚 Next Steps</h2>
+                    <h2> Next Steps</h2>
                     
                     <div class="next-steps">
                         <div class="step-item">
@@ -309,6 +308,5 @@ config <span class="token operator">=</span> <span class="token function">Optimi
         </main>
     </div>
     
-    <script src="js/main.js"></script>
-</body>
+    <script src="js/main.js"></script></body>
 </html>

@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>BaseEnvironment API - MAT-HPO Library</title>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-</head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>"></head>
 <body>
     <button class="mobile-toggle">☰</button>
     
@@ -101,28 +100,29 @@
             <div class="main-content">
                 
                 <section class="content-section">
-                    <h2>📋 Overview</h2>
+                    <h2> Overview</h2>
                     <p>The <code>BaseEnvironment</code> class is the core abstract interface for MAT-HPO optimization. Inherit from this class to define your optimization problem.</p>
                 </section>
 
                 <section class="content-section">
-                    <h2>🏗️ Class Definition</h2>
+                    <h2>️ Class Definition</h2>
                     
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code>from MAT_HPO_LIB import BaseEnvironment
+                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> <span class="token class-name">BaseEnvironment</span>
 
-class MyEnvironment(BaseEnvironment):
-    def __init__(self, name="MyEnvironment"):
-        super().__init__(name)</code></pre>
+<span class="token keyword">class</span> <span class="token class-name">MyEnvironment</span><span class="token punctuation">(</span><span class="token class-name">BaseEnvironment</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> name<span class="token operator">=</span><span class="token string">"MyEnvironment"</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">__init__</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span>
+</code></pre>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>🔧 Required Methods</h2>
+                    <h2> Required Methods</h2>
                     
                     <div class="api-section">
                         <div class="api-header">
@@ -224,7 +224,7 @@ class MyEnvironment(BaseEnvironment):
                 </section>
 
                 <section class="content-section">
-                    <h2>📝 Complete Example</h2>
+                    <h2> Complete Example</h2>
                     
                     <div class="code-block">
                         <div class="code-header">
@@ -266,7 +266,7 @@ class MyEnvironment(BaseEnvironment):
                 </section>
 
                 <section class="content-section">
-                    <h2>📚 Next Steps</h2>
+                    <h2> Next Steps</h2>
                     
                     <div class="next-steps">
                         <div class="step-item">
@@ -285,6 +285,5 @@ class MyEnvironment(BaseEnvironment):
         </main>
     </div>
     
-    <script src="../js/main.js"></script>
-</body>
+    <script src="../js/main.js"></script></body>
 </html>

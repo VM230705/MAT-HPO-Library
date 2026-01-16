@@ -1,8 +1,8 @@
-# 🛠️ MAT-HPO Library 故障排除指南
+# MAT-HPO Library - Troubleshooting Guide
 
 完整的問題診斷和解決方案指南。
 
-## 📋 目錄
+## 目錄
 
 - [常見問題快速修復](#-常見問題快速修復)
 - [安裝問題](#-安裝問題)
@@ -13,7 +13,7 @@
 - [配置問題](#-配置問題)
 - [調試技巧](#-調試技巧)
 
-## ⚡ 常見問題快速修復
+## 常見問題快速修復
 
 | 問題 | 症狀 | 解決方案 | 命令 |
 |------|------|----------|------|
@@ -23,7 +23,7 @@
 | **📦 缺少依賴** | `ImportError: No module named 'torch'` | 安裝依賴 | `pip install torch numpy scikit-learn` |
 | **🐍 Python 版本** | `SyntaxError` 或版本錯誤 | 檢查 Python 版本 | `python --version` (需要 3.8+) |
 
-## 🔧 安裝問題
+## 安裝問題
 
 ### 問題 1: ModuleNotFoundError
 
@@ -218,7 +218,7 @@ def create_model(self, hyperparams):
     )
 ```
 
-## ⚡ 性能問題
+## 性能問題
 
 ### 問題 1: 優化速度太慢
 

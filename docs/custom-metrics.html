@@ -6,8 +6,7 @@
     <title>Custom Metrics & Rewards - MAT-HPO Library</title>
     <meta name="description" content="Learn how to use custom metrics and reward functions in MAT-HPO for time series forecasting and other domains">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-</head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>"></head>
 <body>
     <button class="mobile-toggle">☰</button>
 
@@ -105,14 +104,14 @@
             <div class="main-content">
 
                 <section class="doc-section">
-                    <h2 id="overview">Overview</h2>
+                    <h2 id="overview">📊 Custom Metrics</h2>
                     <p>MAT-HPO provides a <strong>flexible parameter-based interface</strong> that allows you to customize metrics tracking and reward computation <strong>without modifying the library code</strong>. This feature is especially useful for:</p>
 
                     <ul>
-                        <li>🎯 <strong>Time Series Forecasting</strong>: Track MASE, SMAPE, MAE, RMSE instead of F1/AUC/G-mean</li>
-                        <li>📊 <strong>Regression Tasks</strong>: Use MSE, R², RMSE, MAE as metrics</li>
-                        <li>🔬 <strong>Custom Domains</strong>: Define any metrics specific to your problem</li>
-                        <li>🎁 <strong>Custom Rewards</strong>: Implement complex reward functions based on multiple objectives</li>
+                        <li> <strong>Time Series Forecasting</strong>: Track MASE, SMAPE, MAE, RMSE instead of F1/AUC/G-mean</li>
+                        <li> <strong>Regression Tasks</strong>: Use MSE, R², RMSE, MAE as metrics</li>
+                        <li> <strong>Custom Domains</strong>: Define any metrics specific to your problem</li>
+                        <li> <strong>Custom Rewards</strong>: Implement complex reward functions based on multiple objectives</li>
                     </ul>
 
                     <div class="info-box">
@@ -167,121 +166,137 @@
                     <h2 id="time-series-example">Complete Time Series Example</h2>
 
                     <h3>Step 1: Define Custom Functions</h3>
-                    <pre><code class="language-python">import numpy as np
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code class="language-python"><span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 
-# Define custom reward function
-def timeseries_reward(metrics: dict) -> float:
-    """Reward based on training loss (avoid data leakage)"""
-    train_loss = metrics.get('train_loss', 1.0)
-    if train_loss <= 0:
-        train_loss = 1.0
+<span class="token comment"># Define custom reward function</span>
+<span class="token keyword">def</span> <span class="token function">timeseries_reward</span><span class="token punctuation">(</span>metrics<span class="token punctuation">:</span> <span class="token builtin">dict</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">float</span><span class="token punctuation">:</span>
+    <span class="token string">"""Reward based on training loss (avoid data leakage)"""</span>
+    train_loss <span class="token operator">=</span> metrics<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'train_loss'</span><span class="token punctuation">,</span> <span class="token number">1.0</span><span class="token punctuation">)</span>
+    <span class="token keyword">if</span> train_loss <span class="token operator">&lt;</span> <span class="token number">300.0</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token number">0.9</span>
+    <span class="token keyword">elif</span> train_loss <span class="token operator">&lt;</span> <span class="token number">400.0</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token number">0.7</span>
+    <span class="token keyword">return</span> <span class="token number">0.3</span>
 
-    # Convert to reward (lower loss = higher reward)
-    reward = -np.log(max(train_loss, 1e-6))
-    reward = max(0.1, min(10.0, reward))
-    reward = max(0.05, min(0.9, reward / 10.0))
-    return reward
-
-
-# Define metrics extractor
-def extract_timeseries_metrics(hyperparams: dict) -> dict:
-    """Extract all time series metrics from hyperparams"""
-    return {
-        'train_loss': float(hyperparams.get('train_loss', 0.0)),
-        'val_loss': float(hyperparams.get('val_loss', 0.0)),
-        'mase': float(hyperparams.get('mase', 1.0)),
-        'smape': float(hyperparams.get('original_smape', 0.0)),
-        'mae': float(hyperparams.get('original_mae', 0.0)),
-        'rmse': float(hyperparams.get('original_rmse', 0.0)),
-    }</code></pre>
+<span class="token keyword">def</span> <span class="token function">extract_timeseries_metrics</span><span class="token punctuation">(</span>hyperparams<span class="token punctuation">:</span> <span class="token builtin">dict</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">dict</span><span class="token punctuation">:</span>
+    <span class="token string">"""Extract all time series metrics from hyperparams"""</span>
+    <span class="token keyword">return</span> <span class="token punctuation">{</span>
+        <span class="token string">'train_loss'</span><span class="token punctuation">:</span> <span class="token builtin">float</span><span class="token punctuation">(</span>hyperparams<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'train_loss'</span><span class="token punctuation">,</span> <span class="token number">0.0</span><span class="token punctuation">))</span><span class="token punctuation">,</span>
+        <span class="token string">'val_loss'</span><span class="token punctuation">:</span> <span class="token builtin">float</span><span class="token punctuation">(</span>hyperparams<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'val_loss'</span><span class="token punctuation">,</span> <span class="token number">0.0</span><span class="token punctuation">))</span><span class="token punctuation">,</span>
+        <span class="token string">'mase'</span><span class="token punctuation">:</span> <span class="token builtin">float</span><span class="token punctuation">(</span>hyperparams<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'mase'</span><span class="token punctuation">,</span> <span class="token number">1.0</span><span class="token punctuation">))</span><span class="token punctuation">,</span>
+        <span class="token string">'smape'</span><span class="token punctuation">:</span> <span class="token builtin">float</span><span class="token punctuation">(</span>hyperparams<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'original_smape'</span><span class="token punctuation">,</span> <span class="token number">0.0</span><span class="token punctuation">))</span><span class="token punctuation">,</span>
+        <span class="token string">'mae'</span><span class="token punctuation">:</span> <span class="token builtin">float</span><span class="token punctuation">(</span>hyperparams<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'original_mae'</span><span class="token punctuation">,</span> <span class="token number">0.0</span><span class="token punctuation">))</span><span class="token punctuation">,</span>
+        <span class="token string">'rmse'</span><span class="token punctuation">:</span> <span class="token builtin">float</span><span class="token punctuation">(</span>hyperparams<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'original_rmse'</span><span class="token punctuation">,</span> <span class="token number">0.0</span><span class="token punctuation">))</span><span class="token punctuation">,</span>
+    <span class="token punctuation">}</span>
+</code></pre>
+                    </div>
 
                     <h3>Step 2: Configure Environment</h3>
-                    <pre><code class="language-python">from MAT_HPO_LIB import BaseEnvironment
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> <span class="token class-name">BaseEnvironment</span>
 
-class TimeSeriesEnvironment(BaseEnvironment):
-    def __init__(self, model_name, dataset_name):
-        super().__init__(
-            name=f"TS-{model_name}-{dataset_name}",
-            # 🎯 Custom metrics list
-            custom_metrics=['train_loss', 'val_loss', 'mase', 'smape', 'mae', 'rmse'],
-            # 📊 Metric name mapping (for display)
-            metric_names_mapping={
-                'f1': 'SMAPE',
-                'auc': 'MAE',
-                'gmean': 'RMSE'
-            },
-            # 🎁 Custom reward function
-            reward_function=timeseries_reward
-        )
+<span class="token keyword">class</span> <span class="token class-name">TimeSeriesEnvironment</span><span class="token punctuation">(</span><span class="token class-name">BaseEnvironment</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">__init__</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> model_name<span class="token punctuation">,</span> dataset_name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">__init__</span><span class="token punctuation">(</span>
+            name<span class="token operator">=</span><span class="token string">f"TS-{model_name}-{dataset_name}"</span><span class="token punctuation">,</span>
+            <span class="token comment">#  Custom metrics list</span>
+            custom_metrics<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'train_loss'</span><span class="token punctuation">,</span> <span class="token string">'val_loss'</span><span class="token punctuation">,</span> <span class="token string">'mase'</span><span class="token punctuation">,</span> <span class="token string">'smape'</span><span class="token punctuation">,</span> <span class="token string">'mae'</span><span class="token punctuation">,</span> <span class="token string">'rmse'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+            <span class="token comment">#  Metric name mapping (for display)</span>
+            metric_names_mapping<span class="token operator">=</span><span class="token punctuation">{</span>
+                <span class="token string">'f1'</span><span class="token punctuation">:</span> <span class="token string">'SMAPE'</span><span class="token punctuation">,</span>
+                <span class="token string">'auc'</span><span class="token punctuation">:</span> <span class="token string">'MAE'</span><span class="token punctuation">,</span>
+                <span class="token string">'gmean'</span><span class="token punctuation">:</span> <span class="token string">'RMSE'</span>
+            <span class="token punctuation">}</span><span class="token punctuation">,</span>
+            <span class="token comment">#  Custom reward function</span>
+            reward_function<span class="token operator">=</span>timeseries_reward
+        <span class="token punctuation">)</span>
 
-    def train_evaluate(self, model, hyperparams):
-        # Train your model...
-        train_loss = 331.72
-        val_loss = 346.51
+    <span class="token keyword">def</span> <span class="token function">train_evaluate</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> model<span class="token punctuation">,</span> hyperparams<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># Train your model...</span>
+        train_loss <span class="token operator">=</span> <span class="token number">331.72</span>
+        val_loss <span class="token operator">=</span> <span class="token number">346.51</span>
 
-        # Evaluate on test set...
-        mase = 2.304
-        mae = 632.53
-        rmse = 809.25
-        smape = 0.0618
+        <span class="token comment"># Evaluate on test set...</span>
+        mase <span class="token operator">=</span> <span class="token number">2.304</span>
+        mae <span class="token operator">=</span> <span class="token number">632.53</span>
+        rmse <span class="token operator">=</span> <span class="token number">809.25</span>
+        smape <span class="token operator">=</span> <span class="token number">0.0618</span>
 
-        # Return all metrics
-        return {
-            # Original training metrics
-            'train_loss': train_loss,
-            'val_loss': val_loss,
-            'overfitting_ratio': val_loss / train_loss,
+        <span class="token comment"># Return all metrics</span>
+        <span class="token keyword">return</span> <span class="token punctuation">{</span>
+            <span class="token comment"># Original training metrics</span>
+            <span class="token string">'train_loss'</span><span class="token punctuation">:</span> train_loss<span class="token punctuation">,</span>
+            <span class="token string">'val_loss'</span><span class="token punctuation">:</span> val_loss<span class="token punctuation">,</span>
+            <span class="token string">'overfitting_ratio'</span><span class="token punctuation">:</span> val_loss <span class="token operator">/</span> train_loss<span class="token punctuation">,</span>
 
-            # Original test metrics
-            'mase': mase,
-            'smape': smape,
-            'mae': mae,
-            'rmse': rmse,
+            <span class="token comment"># Original test metrics</span>
+            <span class="token string">'mase'</span><span class="token punctuation">:</span> mase<span class="token punctuation">,</span>
+            <span class="token string">'smape'</span><span class="token punctuation">:</span> smape<span class="token punctuation">,</span>
+            <span class="token string">'mae'</span><span class="token punctuation">:</span> mae<span class="token punctuation">,</span>
+            <span class="token string">'rmse'</span><span class="token punctuation">:</span> rmse<span class="token punctuation">,</span>
 
-            # Transformed values for MAT-HPO (higher is better)
-            'f1': 0.8 - min(0.8, smape / 2.0),
-            'auc': 0.8 - min(0.8, mae / 1000.0),
-            'gmean': 0.8 - min(0.8, rmse / 1000.0),
+            <span class="token comment"># Transformed values for MAT-HPO (higher is better)</span>
+            <span class="token string">'f1'</span><span class="token punctuation">:</span> <span class="token number">0.8</span> <span class="token operator">-</span> <span class="token builtin">min</span><span class="token punctuation">(</span><span class="token number">0.8</span><span class="token punctuation">,</span> smape <span class="token operator">/</span> <span class="token number">2.0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token string">'auc'</span><span class="token punctuation">:</span> <span class="token number">0.8</span> <span class="token operator">-</span> <span class="token builtin">min</span><span class="token punctuation">(</span><span class="token number">0.8</span><span class="token punctuation">,</span> mae <span class="token operator">/</span> <span class="token number">1000.0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
+            <span class="token string">'gmean'</span><span class="token punctuation">:</span> <span class="token number">0.8</span> <span class="token operator">-</span> <span class="token builtin">min</span><span class="token punctuation">(</span><span class="token number">0.8</span><span class="token punctuation">,</span> rmse <span class="token operator">/</span> <span class="token number">1000.0</span><span class="token punctuation">)</span><span class="token punctuation">,</span>
 
-            # Save original values
-            'original_smape': smape,
-            'original_mae': mae,
-            'original_rmse': rmse
-        }
+            <span class="token comment"># Save original values</span>
+            <span class="token string">'original_smape'</span><span class="token punctuation">:</span> smape<span class="token punctuation">,</span>
+            <span class="token string">'original_mae'</span><span class="token punctuation">:</span> mae<span class="token punctuation">,</span>
+            <span class="token string">'original_rmse'</span><span class="token punctuation">:</span> rmse
+        <span class="token punctuation">}</span>
 
-    def compute_reward(self, metrics):
-        # Use custom reward function
-        if self.custom_reward_function:
-            return self.custom_reward_function(metrics)
-        return 0.5</code></pre>
+    <span class="token keyword">def</span> <span class="token function">compute_reward</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> metrics<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token comment"># Use custom reward function</span>
+        <span class="token keyword">if</span> self<span class="token punctuation">.</span>custom_reward_function<span class="token punctuation">:</span>
+            <span class="token keyword">return</span> self<span class="token punctuation">.</span>custom_reward_function<span class="token punctuation">(</span>metrics<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token number">0.5</span>
+</code></pre>
+                    </div>
 
                     <h3>Step 3: Create Logger and Optimizer</h3>
-                    <pre><code class="language-python">from MAT_HPO_LIB import MAT_HPO_Optimizer, HyperparameterSpace
-from MAT_HPO_LIB.utils import DefaultConfigs
-from MAT_HPO_LIB.utils.logger import HPOLogger
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> <span class="token class-name">MAT_HPO_Optimizer</span><span class="token punctuation">,</span> <span class="token class-name">HyperparameterSpace</span>
+<span class="token keyword">from</span> MAT_HPO_LIB<span class="token punctuation">.</span>utils <span class="token keyword">import</span> <span class="token class-name">DefaultConfigs</span>
+<span class="token keyword">from</span> MAT_HPO_LIB<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>logger <span class="token keyword">import</span> <span class="token class-name">HPOLogger</span>
 
-# Create environment
-env = TimeSeriesEnvironment("dlinear", "us_births")
+<span class="token comment"># Create environment</span>
+env <span class="token operator">=</span> <span class="token class-name">TimeSeriesEnvironment</span><span class="token punctuation">(</span><span class="token string">"dlinear"</span><span class="token punctuation">,</span> <span class="token string">"us_births"</span><span class="token punctuation">)</span>
 
-# Create hyperparameter space
-space = HyperparameterSpace()
-space.add_continuous('learning_rate', 1e-5, 1e-2, agent=0)
-space.add_discrete('batch_size', [8, 16, 32, 64], agent=0)
+<span class="token comment"># Create hyperparameter space</span>
+space <span class="token operator">=</span> <span class="token class-name">HyperparameterSpace</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'learning_rate'</span><span class="token punctuation">,</span> <span class="token number">1e-5</span><span class="token punctuation">,</span> <span class="token number">1e-2</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+space<span class="token punctuation">.</span><span class="token function">add_discrete</span><span class="token punctuation">(</span><span class="token string">'batch_size'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">]</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
 
-# Create config
-config = DefaultConfigs.standard()
-config.max_steps = 100
+<span class="token comment"># Create config</span>
+config <span class="token operator">=</span> <span class="token class-name">DefaultConfigs</span><span class="token punctuation">.</span><span class="token function">standard</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+config<span class="token punctuation">.</span>max_steps <span class="token operator">=</span> <span class="token number">100</span>
 
-# Create optimizer (automatically inherits environment's custom metrics)
-optimizer = MAT_HPO_Optimizer(env, space, config)
+<span class="token comment"># Create optimizer (automatically inherits environment's custom metrics)</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">MAT_HPO_Optimizer</span><span class="token punctuation">(</span>env<span class="token punctuation">,</span> space<span class="token punctuation">,</span> config<span class="token punctuation">)</span>
 
-# Run optimization
-results = optimizer.optimize()
+<span class="token comment"># Run optimization</span>
+results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-print(f"Best reward: {results['best_performance']['reward']:.4f}")</code></pre>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"Best reward: {results['best_performance']['reward']:.4f}"</span><span class="token punctuation">)</span>
+</code></pre>
+                    </div>
 
                     <div class="tip-box">
-                        <h3>💡 Pro Tip</h3>
+                        <h3> Pro Tip</h3>
                         <p>The optimizer automatically detects and uses the custom metrics configuration from your environment. No manual logger setup needed!</p>
                     </div>
                 </section>
@@ -290,46 +305,48 @@ print(f"Best reward: {results['best_performance']['reward']:.4f}")</code></pre>
                     <h2 id="output-format">Output Format</h2>
 
                     <h3>best_hyperparams.json</h3>
-                    <pre><code class="language-json">{
-  "hyperparameters": {
-    "learning_rate": 0.001,
-    "batch_size": 32
-  },
-  "performance": {
-    "smape": 0.0618,
-    "mae": 632.53,
-    "rmse": 809.25,
-    "mase": 2.304,
-    "train_loss": 331.72,
-    "val_loss": 346.51,
-    "overfitting_ratio": 1.045,
-    "reward": 0.7512
-  },
-  "step": 42
-}</code></pre>
+                    <pre><code class="language-json"><span class="p">{</span>
+  <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;learning_rate&quot;</span><span class="p">:</span> <span class="mf">0.001</span><span class="p">,</span>
+    <span class="s2">&quot;batch_size&quot;</span><span class="p">:</span> <span class="mi">32</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;performance&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;smape&quot;</span><span class="p">:</span> <span class="mf">0.0618</span><span class="p">,</span>
+    <span class="s2">&quot;mae&quot;</span><span class="p">:</span> <span class="mf">632.53</span><span class="p">,</span>
+    <span class="s2">&quot;rmse&quot;</span><span class="p">:</span> <span class="mf">809.25</span><span class="p">,</span>
+    <span class="s2">&quot;mase&quot;</span><span class="p">:</span> <span class="mf">2.304</span><span class="p">,</span>
+    <span class="s2">&quot;train_loss&quot;</span><span class="p">:</span> <span class="mf">331.72</span><span class="p">,</span>
+    <span class="s2">&quot;val_loss&quot;</span><span class="p">:</span> <span class="mf">346.51</span><span class="p">,</span>
+    <span class="s2">&quot;overfitting_ratio&quot;</span><span class="p">:</span> <span class="mf">1.045</span><span class="p">,</span>
+    <span class="s2">&quot;reward&quot;</span><span class="p">:</span> <span class="mf">0.7512</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;step&quot;</span><span class="p">:</span> <span class="mi">42</span>
+<span class="p">}</span>
+</code></pre>
 
                     <h3>step_log.jsonl (each line)</h3>
-                    <pre><code class="language-json">{
-  "step": 0,
-  "timestamp": "2025-10-03T08:00:00",
-  "metrics": {
-    "train_loss": 331.72,
-    "val_loss": 346.51,
-    "overfitting_ratio": 1.045,
-    "mase": 2.304,
-    "smape": 0.0618,
-    "mae": 632.53,
-    "rmse": 809.25,
-    "f1_transformed": 0.7691,
-    "auc_transformed": 0.1675,
-    "gmean_transformed": 0.1000
-  },
-  "timing": {...},
-  "hyperparameters": {...}
-}</code></pre>
+                    <pre><code class="language-json"><span class="p">{</span>
+  <span class="s2">&quot;step&quot;</span><span class="p">:</span> <span class="mi">0</span><span class="p">,</span>
+  <span class="s2">&quot;timestamp&quot;</span><span class="p">:</span> <span class="s2">&quot;2025-10-03T08:00:00&quot;</span><span class="p">,</span>
+  <span class="s2">&quot;metrics&quot;</span><span class="p">:</span> <span class="p">{</span>
+    <span class="s2">&quot;train_loss&quot;</span><span class="p">:</span> <span class="mf">331.72</span><span class="p">,</span>
+    <span class="s2">&quot;val_loss&quot;</span><span class="p">:</span> <span class="mf">346.51</span><span class="p">,</span>
+    <span class="s2">&quot;overfitting_ratio&quot;</span><span class="p">:</span> <span class="mf">1.045</span><span class="p">,</span>
+    <span class="s2">&quot;mase&quot;</span><span class="p">:</span> <span class="mf">2.304</span><span class="p">,</span>
+    <span class="s2">&quot;smape&quot;</span><span class="p">:</span> <span class="mf">0.0618</span><span class="p">,</span>
+    <span class="s2">&quot;mae&quot;</span><span class="p">:</span> <span class="mf">632.53</span><span class="p">,</span>
+    <span class="s2">&quot;rmse&quot;</span><span class="p">:</span> <span class="mf">809.25</span><span class="p">,</span>
+    <span class="s2">&quot;f1_transformed&quot;</span><span class="p">:</span> <span class="mf">0.7691</span><span class="p">,</span>
+    <span class="s2">&quot;auc_transformed&quot;</span><span class="p">:</span> <span class="mf">0.1675</span><span class="p">,</span>
+    <span class="s2">&quot;gmean_transformed&quot;</span><span class="p">:</span> <span class="mf">0.1000</span>
+  <span class="p">},</span>
+  <span class="s2">&quot;timing&quot;</span><span class="p">:</span> <span class="p">{</span><span class="o">...</span><span class="p">},</span>
+  <span class="s2">&quot;hyperparameters&quot;</span><span class="p">:</span> <span class="p">{</span><span class="o">...</span><span class="p">}</span>
+<span class="p">}</span>
+</code></pre>
 
                     <div class="info-box">
-                        <h3>📊 Metric Separation</h3>
+                        <h3> Metric Separation</h3>
                         <p>The logger automatically separates:</p>
                         <ul>
                             <li><strong>Original values</strong>: <code>smape</code>, <code>mae</code>, <code>rmse</code> - True metric values for evaluation</li>
@@ -343,52 +360,67 @@ print(f"Best reward: {results['best_performance']['reward']:.4f}")</code></pre>
 
                     <h3>Manual Logger Configuration</h3>
                     <p>For full control, you can manually configure the logger:</p>
-                    <pre><code class="language-python">from MAT_HPO_LIB.utils.logger import HPOLogger
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB<span class="token punctuation">.</span>utils<span class="token punctuation">.</span>logger <span class="token keyword">import</span> <span class="token class-name">HPOLogger</span>
 
-# Create custom logger
-logger = HPOLogger(
-    output_dir='./results',
-    metric_names={'f1': 'SMAPE', 'auc': 'MAE', 'gmean': 'RMSE'},
-    custom_metrics=['train_loss', 'val_loss', 'mase', 'smape', 'mae', 'rmse'],
-    metrics_extractor=extract_timeseries_metrics
-)
+<span class="token comment"># Create custom logger</span>
+logger <span class="token operator">=</span> <span class="token class-name">HPOLogger</span><span class="token punctuation">(</span>
+    output_dir<span class="token operator">=</span><span class="token string">'./results'</span><span class="token punctuation">,</span>
+    metric_names<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">'f1'</span><span class="token punctuation">:</span> <span class="token string">'SMAPE'</span><span class="token punctuation">,</span> <span class="token string">'auc'</span><span class="token punctuation">:</span> <span class="token string">'MAE'</span><span class="token punctuation">,</span> <span class="token string">'gmean'</span><span class="token punctuation">:</span> <span class="token string">'RMSE'</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    custom_metrics<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'train_loss'</span><span class="token punctuation">,</span> <span class="token string">'val_loss'</span><span class="token punctuation">,</span> <span class="token string">'mase'</span><span class="token punctuation">,</span> <span class="token string">'smape'</span><span class="token punctuation">,</span> <span class="token string">'mae'</span><span class="token punctuation">,</span> <span class="token string">'rmse'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>
+    metrics_extractor<span class="token operator">=</span>extract_timeseries_metrics
+<span class="token punctuation">)</span>
 
-# Create optimizer
-optimizer = MAT_HPO_Optimizer(env, space, config)
-optimizer.logger = logger  # Override default logger
+<span class="token comment"># Create optimizer</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">MAT_HPO_Optimizer</span><span class="token punctuation">(</span>env<span class="token punctuation">,</span> space<span class="token punctuation">,</span> config<span class="token punctuation">)</span>
+optimizer<span class="token punctuation">.</span>logger <span class="token operator">=</span> logger  <span class="token comment"># Override default logger</span>
 
-# Run optimization
-results = optimizer.optimize()</code></pre>
+<span class="token comment"># Run optimization</span>
+results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
+                    </div>
 
                     <h3>Flexible Metric Count</h3>
                     <p>Track as many metrics as you need:</p>
-                    <pre><code class="language-python">super().__init__(
-    name="MyEnv",
-    custom_metrics=[
-        'train_loss', 'val_loss', 'test_loss',
-        'mase', 'smape', 'mae', 'rmse', 'mape', 'mse',
-        'overfitting_ratio', 'training_time', 'inference_time'
-    ],
-    # ... other parameters
-)</code></pre>
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code class="language-python"><span class="token builtin">super</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">.</span><span class="token function">__init__</span><span class="token punctuation">(</span>
+    name<span class="token operator">=</span><span class="token string">"MyEnv"</span><span class="token punctuation">,</span>
+    custom_metrics<span class="token operator">=</span><span class="token punctuation">[</span>
+        <span class="token string">'train_loss'</span><span class="token punctuation">,</span> <span class="token string">'val_loss'</span><span class="token punctuation">,</span> <span class="token string">'test_loss'</span><span class="token punctuation">,</span>
+        <span class="token string">'mase'</span><span class="token punctuation">,</span> <span class="token string">'smape'</span><span class="token punctuation">,</span> <span class="token string">'mae'</span><span class="token punctuation">,</span> <span class="token string">'rmse'</span><span class="token punctuation">,</span> <span class="token string">'mape'</span><span class="token punctuation">,</span> <span class="token string">'mse'</span><span class="token punctuation">,</span>
+        <span class="token string">'overfitting_ratio'</span><span class="token punctuation">,</span> <span class="token string">'training_time'</span><span class="token punctuation">,</span> <span class="token string">'inference_time'</span>
+    <span class="token punctuation">]</span><span class="token punctuation">,</span>
+    <span class="token comment"># ... other parameters</span>
+<span class="token punctuation">)</span>
+</code></pre>
 
                     <h3>Complex Reward Functions</h3>
-                    <pre><code class="language-python">def sophisticated_reward(metrics: dict) -> float:
-    """Multi-objective reward combining accuracy and efficiency"""
-    # Accuracy component (70%)
-    mase = metrics.get('mase', 10.0)
-    accuracy_reward = 0.7 * (1.0 / max(mase, 0.1))
+                    <pre><code class="language-python"><span class="token keyword">def</span> <span class="token function">sophisticated_reward</span><span class="token punctuation">(</span>metrics<span class="token punctuation">:</span> <span class="token builtin">dict</span><span class="token punctuation">)</span> <span class="token operator">-</span><span class="token operator">></span> <span class="token builtin">float</span><span class="token punctuation">:</span>
+    <span class="token string">"""Multi-objective reward combining accuracy and efficiency"""</span>
+    <span class="token comment"># Accuracy component (70%)</span>
+    mase <span class="token operator">=</span> metrics<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'mase'</span><span class="token punctuation">,</span> <span class="token number">10.0</span><span class="token punctuation">)</span>
+    accuracy_reward <span class="token operator">=</span> <span class="token number">0.7</span> <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token number">1.0</span> <span class="token operator">/</span> <span class="token builtin">max</span><span class="token punctuation">(</span>mase<span class="token punctuation">,</span> <span class="token number">0.1</span><span class="token punctuation">))</span>
 
-    # Efficiency component (20%)
-    train_time = metrics.get('training_time', 1000)
-    efficiency_reward = 0.2 * (1.0 / max(train_time / 100, 1.0))
+    <span class="token comment"># Efficiency component (20%)</span>
+    train_time <span class="token operator">=</span> metrics<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'training_time'</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span>
+    efficiency_reward <span class="token operator">=</span> <span class="token number">0.2</span> <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token number">1.0</span> <span class="token operator">/</span> <span class="token builtin">max</span><span class="token punctuation">(</span>train_time <span class="token operator">/</span> <span class="token number">100</span><span class="token punctuation">,</span> <span class="token number">1.0</span><span class="token punctuation">))</span>
 
-    # Stability component (10%)
-    overfitting = metrics.get('overfitting_ratio', 2.0)
-    stability_reward = 0.1 * (1.0 if overfitting <= 1.2 else 0.5)
+    <span class="token comment"># Stability component (10%)</span>
+    overfitting <span class="token operator">=</span> metrics<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'overfitting_ratio'</span><span class="token punctuation">,</span> <span class="token number">2.0</span><span class="token punctuation">)</span>
+    stability_reward <span class="token operator">=</span> <span class="token number">0.1</span> <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token number">1.0</span> <span class="token keyword">if</span> overfitting <span class="token operator">&lt;=</span> <span class="token number">1.2</span> <span class="token keyword">else</span> <span class="token number">0.5</span><span class="token punctuation">)</span>
 
-    total_reward = accuracy_reward + efficiency_reward + stability_reward
-    return max(0.0, min(1.0, total_reward))</code></pre>
+    total_reward <span class="token operator">=</span> accuracy_reward <span class="token operator">+</span> efficiency_reward <span class="token operator">+</span> stability_reward
+    <span class="token keyword">return</span> <span class="token builtin">max</span><span class="token punctuation">(</span><span class="token number">0.0</span><span class="token punctuation">,</span> <span class="token builtin">min</span><span class="token punctuation">(</span><span class="token number">1.0</span><span class="token punctuation">,</span> total_reward<span class="token punctuation">))</span>
+</code></pre>
+                    </div>
                 </section>
 
                 <section class="doc-section">
@@ -396,7 +428,7 @@ results = optimizer.optimize()</code></pre>
 
                     <div class="use-case-grid">
                         <div class="use-case-card">
-                            <h3>🔮 Time Series Forecasting</h3>
+                            <h3> Time Series Forecasting</h3>
                             <ul>
                                 <li>Metrics: MASE, SMAPE, MAE, RMSE</li>
                                 <li>Reward: Based on validation loss</li>
@@ -405,7 +437,7 @@ results = optimizer.optimize()</code></pre>
                         </div>
 
                         <div class="use-case-card">
-                            <h3>📈 Regression</h3>
+                            <h3> Regression</h3>
                             <ul>
                                 <li>Metrics: MSE, RMSE, MAE, R²</li>
                                 <li>Reward: Inverse of validation MSE</li>
@@ -414,7 +446,7 @@ results = optimizer.optimize()</code></pre>
                         </div>
 
                         <div class="use-case-card">
-                            <h3>🎯 Classification (Default)</h3>
+                            <h3> Classification (Default)</h3>
                             <ul>
                                 <li>Metrics: F1, AUC, G-mean, Precision, Recall</li>
                                 <li>Reward: Weighted combination</li>
@@ -423,7 +455,7 @@ results = optimizer.optimize()</code></pre>
                         </div>
 
                         <div class="use-case-card">
-                            <h3>🚀 Multi-Objective</h3>
+                            <h3> Multi-Objective</h3>
                             <ul>
                                 <li>Metrics: Accuracy + Speed + Memory</li>
                                 <li>Reward: Pareto optimization</li>
@@ -447,17 +479,23 @@ results = optimizer.optimize()</code></pre>
                     </div>
 
                     <h3>✅ Recommended Patterns</h3>
-                    <pre><code class="language-python"># ✅ Good: Save both original and transformed
-return {
-    'mase': 2.304,                    # Original value
-    'f1': 0.8 - min(0.8, mase / 5),  # Transformed (higher is better)
-    'original_mase': 2.304            # Explicit original backup
-}
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-language">python</span>
+                            <button class="copy-btn">Copy</button>
+                        </div>
+                        <pre><code class="language-python"><span class="token comment"># ✅ Good: Save both original and transformed</span>
+<span class="token keyword">return</span> <span class="token punctuation">{</span>
+    <span class="token string">'mase'</span><span class="token punctuation">:</span> <span class="token number">2.304</span><span class="token punctuation">,</span>                    <span class="token comment"># Original value</span>
+    <span class="token string">'f1'</span><span class="token punctuation">:</span> <span class="token number">0.8</span> <span class="token operator">-</span> <span class="token builtin">min</span><span class="token punctuation">(</span><span class="token number">0.8</span><span class="token punctuation">,</span> mase <span class="token operator">/</span> <span class="token number">5</span><span class="token punctuation">)</span><span class="token punctuation">,</span>  <span class="token comment"># Transformed (higher is better)</span>
+    <span class="token string">'original_mase'</span><span class="token punctuation">:</span> <span class="token number">2.304</span>            <span class="token comment"># Explicit original backup</span>
+<span class="token punctuation">}</span>
 
-# ❌ Bad: Only transformed values
-return {
-    'f1': 0.8 - min(0.8, mase / 5)   # Lost original information!
-}</code></pre>
+<span class="token comment"># ❌ Bad: Only transformed values</span>
+<span class="token keyword">return</span> <span class="token punctuation">{</span>
+    <span class="token string">'f1'</span><span class="token punctuation">:</span> <span class="token number">0.8</span> <span class="token operator">-</span> <span class="token builtin">min</span><span class="token punctuation">(</span><span class="token number">0.8</span><span class="token punctuation">,</span> mase <span class="token operator">/</span> <span class="token number">5</span><span class="token punctuation">)</span>   <span class="token comment"># Lost original information!</span>
+<span class="token punctuation">}</span>
+</code></pre>
                 </section>
 
                 <section class="doc-section">
@@ -525,8 +563,8 @@ return {
 
                     <p>For complete runnable examples, see:</p>
                     <ul>
-                        <li>📄 <a href="https://github.com/VM230705/MAT-HPO-Library/blob/main/CUSTOM_METRICS_GUIDE.md">CUSTOM_METRICS_GUIDE.md</a> - Detailed Chinese guide</li>
-                        <li>💻 <a href="https://github.com/VM230705/MAT-HPO-Library/blob/main/examples/timeseries_custom_metrics_example.py">examples/timeseries_custom_metrics_example.py</a> - Full working example</li>
+                        <li> <a href="https://github.com/VM230705/MAT-HPO-Library/blob/main/CUSTOM_METRICS_GUIDE.md">CUSTOM_METRICS_GUIDE.md</a> - Detailed Chinese guide</li>
+                        <li> <a href="https://github.com/VM230705/MAT-HPO-Library/blob/main/examples/timeseries_custom_metrics_example.py">examples/timeseries_custom_metrics_example.py</a> - Full working example</li>
                     </ul>
                 </section>
 
@@ -534,6 +572,5 @@ return {
         </main>
     </div>
 
-    <script src="js/main.js"></script>
-</body>
+    <script src="js/main.js"></script></body>
 </html>

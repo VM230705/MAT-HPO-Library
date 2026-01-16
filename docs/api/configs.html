@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Configuration API - MAT-HPO Library</title>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-</head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>"></head>
 <body>
     <button class="mobile-toggle">☰</button>
     
@@ -98,12 +97,12 @@
             <div class="main-content">
                 
                 <section class="content-section">
-                    <h2>📋 Overview</h2>
+                    <h2> Overview</h2>
                     <p>Configuration presets and custom settings for optimization behavior, device usage, and performance tuning.</p>
                 </section>
 
                 <section class="content-section">
-                    <h2>🚀 DefaultConfigs</h2>
+                    <h2> DefaultConfigs</h2>
                     <p>Pre-configured optimization settings for common scenarios:</p>
                     
                     <div class="code-block">
@@ -111,16 +110,17 @@
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code>from MAT_HPO_LIB.utils import DefaultConfigs
+                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB<span class="token punctuation">.</span>utils <span class="token keyword">import</span> <span class="token class-name">DefaultConfigs</span>
 
-# Quick test (10 steps, fast evaluation)
-config = DefaultConfigs.quick_test()
+<span class="token comment"># Quick test (10 steps, fast evaluation)</span>
+config <span class="token operator">=</span> <span class="token class-name">DefaultConfigs</span><span class="token punctuation">.</span><span class="token function">quick_test</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-# Standard optimization (100 steps, balanced)  
-config = DefaultConfigs.standard()
+<span class="token comment"># Standard optimization (100 steps, balanced)  </span>
+config <span class="token operator">=</span> <span class="token class-name">DefaultConfigs</span><span class="token punctuation">.</span><span class="token function">standard</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-# CPU-only mode (no GPU usage)
-config = DefaultConfigs.cpu_only()</code></pre>
+<span class="token comment"># CPU-only mode (no GPU usage)</span>
+config <span class="token operator">=</span> <span class="token class-name">DefaultConfigs</span><span class="token punctuation">.</span><span class="token function">cpu_only</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+</code></pre>
                     </div>
                 </section>
 
@@ -132,23 +132,24 @@ config = DefaultConfigs.cpu_only()</code></pre>
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code>from MAT_HPO_LIB.utils import OptimizationConfig
+                        <pre><code><span class="kn">from</span> <span class="nn">MAT_HPO_LIB.utils</span> <span class="kn">import</span> <span class="n">OptimizationConfig</span>
 
-config = OptimizationConfig(
-    max_steps=50,              # Number of optimization steps
-    batch_size=32,             # Agent batch size
-    use_cuda=True,             # Enable GPU acceleration  
-    gpu_device=0,              # GPU device ID
-    verbose=True,              # Show progress
-    save_interval=10,          # Save every N steps
-    early_stop_patience=15,    # Stop if no improvement
-    output_dir="./results"     # Results directory
-)</code></pre>
+<span class="n">config</span> <span class="o">=</span> <span class="n">OptimizationConfig</span><span class="p">(</span>
+    <span class="n">max_steps</span><span class="o">=</span><span class="mi">50</span><span class="p">,</span>              <span class="c1"># Number of optimization steps</span>
+    <span class="n">batch_size</span><span class="o">=</span><span class="mi">32</span><span class="p">,</span>             <span class="c1"># Agent batch size</span>
+    <span class="n">use_cuda</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>             <span class="c1"># Enable GPU acceleration  </span>
+    <span class="n">gpu_device</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span>              <span class="c1"># GPU device ID</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>              <span class="c1"># Show progress</span>
+    <span class="n">save_interval</span><span class="o">=</span><span class="mi">10</span><span class="p">,</span>          <span class="c1"># Save every N steps</span>
+    <span class="n">early_stop_patience</span><span class="o">=</span><span class="mi">15</span><span class="p">,</span>    <span class="c1"># Stop if no improvement</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;./results&quot;</span>     <span class="c1"># Results directory</span>
+<span class="p">)</span>
+</code></pre>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>🔧 Configuration Options</h2>
+                    <h2> Configuration Options</h2>
                     
                     <div class="feature-grid">
                         <div class="feature-item">
@@ -181,7 +182,7 @@ config = OptimizationConfig(
                 </section>
 
                 <section class="content-section">
-                    <h2>🎯 Preset Comparison</h2>
+                    <h2> Preset Comparison</h2>
                     
                     <div style="overflow-x: auto;">
                         <table>
@@ -224,33 +225,34 @@ config = OptimizationConfig(
                 </section>
 
                 <section class="content-section">
-                    <h2>📝 Usage Example</h2>
+                    <h2> Usage Example</h2>
                     
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code># Choose based on your needs:
+                        <pre><code><span class="c1"># Choose based on your needs:</span>
 
-# 1. Quick testing/debugging
-config = DefaultConfigs.quick_test()
+<span class="c1"># 1. Quick testing/debugging</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">DefaultConfigs</span><span class="o">.</span><span class="n">quick_test</span><span class="p">()</span>
 
-# 2. Standard optimization run  
-config = DefaultConfigs.standard()
+<span class="c1"># 2. Standard optimization run  </span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">DefaultConfigs</span><span class="o">.</span><span class="n">standard</span><span class="p">()</span>
 
-# 3. Custom configuration for your specific needs
-config = OptimizationConfig(
-    max_steps=200,           # Longer optimization
-    use_cuda=True,          
-    gpu_device=1,           # Use GPU 1
-    verbose=True,           # Show progress
-    output_dir="./my_results"
-)
+<span class="c1"># 3. Custom configuration for your specific needs</span>
+<span class="n">config</span> <span class="o">=</span> <span class="n">OptimizationConfig</span><span class="p">(</span>
+    <span class="n">max_steps</span><span class="o">=</span><span class="mi">200</span><span class="p">,</span>           <span class="c1"># Longer optimization</span>
+    <span class="n">use_cuda</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>          
+    <span class="n">gpu_device</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span>           <span class="c1"># Use GPU 1</span>
+    <span class="n">verbose</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>           <span class="c1"># Show progress</span>
+    <span class="n">output_dir</span><span class="o">=</span><span class="s2">&quot;./my_results&quot;</span>
+<span class="p">)</span>
 
-# Use with optimizer
-optimizer = MAT_HPO_Optimizer(environment, space, config)
-results = optimizer.optimize()</code></pre>
+<span class="c1"># Use with optimizer</span>
+<span class="n">optimizer</span> <span class="o">=</span> <span class="n">MAT_HPO_Optimizer</span><span class="p">(</span><span class="n">environment</span><span class="p">,</span> <span class="n">space</span><span class="p">,</span> <span class="n">config</span><span class="p">)</span>
+<span class="n">results</span> <span class="o">=</span> <span class="n">optimizer</span><span class="o">.</span><span class="n">optimize</span><span class="p">()</span>
+</code></pre>
                     </div>
                 </section>
                 
@@ -258,6 +260,5 @@ results = optimizer.optimize()</code></pre>
         </main>
     </div>
     
-    <script src="../js/main.js"></script>
-</body>
+    <script src="../js/main.js"></script></body>
 </html>

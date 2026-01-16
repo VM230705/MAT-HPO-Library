@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FullControlHPO API - MAT-HPO Library</title>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-</head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>"></head>
 <body>
     <button class="mobile-toggle">☰</button>
 
@@ -101,26 +100,26 @@
             <div class="main-content">
 
                 <section class="content-section">
-                    <h2>📋 Overview</h2>
+                    <h2> Overview</h2>
                     <p>The <code>FullControlHPO</code> class provides complete control over all MAT-HPO parameters including advanced LLM strategies, RL configurations, and optimization settings. This is the production interface used in the SPNV2 ECG classification system.</p>
 
                     <div class="alert alert-info">
-                        <strong>🎯 Production Ready:</strong> This interface is used in real research applications and provides access to all advanced features including LLM enhancement, adaptive strategies, and fine-grained RL parameter control.
+                        <strong> Production Ready:</strong> This interface is used in real research applications and provides access to all advanced features including LLM enhancement, adaptive strategies, and fine-grained RL parameter control.
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>🏗️ Class Definition</h2>
+                    <h2>️ Class Definition</h2>
 
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> FullControlHPO
+                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> <span class="token class-name">FullControlHPO</span>
 
 <span class="token comment"># Basic LLM-enhanced optimization</span>
-optimizer <span class="token operator">=</span> <span class="token function">FullControlHPO</span><span class="token punctuation">(</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">FullControlHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"time_series_classification"</span><span class="token punctuation">,</span>
     max_trials<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">,</span>
     llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
@@ -131,7 +130,7 @@ optimizer <span class="token operator">=</span> <span class="token function">Ful
                 </section>
 
                 <section class="content-section">
-                    <h2>🔧 Constructor Parameters</h2>
+                    <h2> Constructor Parameters</h2>
 
                     <div class="api-section">
                         <div class="api-header">
@@ -359,7 +358,7 @@ optimizer <span class="token operator">=</span> <span class="token function">Ful
                 </section>
 
                 <section class="content-section">
-                    <h2>🎯 Production Example (SPNV2 ECG Classification)</h2>
+                    <h2> Production Example (SPNV2 ECG Classification)</h2>
 
                     <div class="code-block">
                         <div class="code-header">
@@ -369,8 +368,8 @@ optimizer <span class="token operator">=</span> <span class="token function">Ful
                         <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> FullControlHPO
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 
-<span class="token comment"># 🏥 ICBEB Dataset Configuration (9-class cardiac arrhythmia)</span>
-optimizer_icbeb <span class="token operator">=</span> <span class="token function">FullControlHPO</span><span class="token punctuation">(</span>
+<span class="token comment">#  ICBEB Dataset Configuration (9-class cardiac arrhythmia)</span>
+optimizer_icbeb <span class="token operator">=</span> <span class="token class-name">FullControlHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"time_series_classification"</span><span class="token punctuation">,</span>
     max_trials<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">,</span>
 
@@ -399,7 +398,7 @@ optimizer_icbeb <span class="token operator">=</span> <span class="token functio
     task_description<span class="token operator">=</span><span class="token string">"ECG classification on ICBEB dataset with 9 classes"</span>
 <span class="token punctuation">)</span>
 
-<span class="token comment"># 🚀 Run optimization (SPNV2 pattern)</span>
+<span class="token comment">#  Run optimization (SPNV2 pattern)</span>
 results <span class="token operator">=</span> optimizer_icbeb<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span>
     X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">,</span>
     X_test<span class="token punctuation">,</span> y_test<span class="token punctuation">,</span>
@@ -407,23 +406,23 @@ results <span class="token operator">=</span> optimizer_icbeb<span class="token 
     custom_space<span class="token operator">=</span>your_hyperparameter_space
 <span class="token punctuation">)</span>
 
-<span class="token comment"># 📊 Results analysis</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"🏆 Best F1: {results['best_performance']['f1']:.4f}"</span><span class="token punctuation">)</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"🎯 Best Hyperparameters: {results['best_hyperparameters']}"</span><span class="token punctuation">)</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"🤖 LLM Usage: {results['llm_usage_stats']['success_rate']:.2%}"</span><span class="token punctuation">)</span></code></pre>
+<span class="token comment">#  Results analysis</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f" Best F1: {results['best_performance']['f1']:.4f}"</span><span class="token punctuation">)</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f" Best Hyperparameters: {results['best_hyperparameters']}"</span><span class="token punctuation">)</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f" LLM Usage: {results['llm_usage_stats']['success_rate']:.2%}"</span><span class="token punctuation">)</span></code></pre>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>📈 Adaptive Strategy Example</h2>
+                    <h2> Adaptive Strategy Example</h2>
 
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python"><span class="token comment"># 📈 Adaptive strategy - triggers LLM when RL performance plateaus</span>
-optimizer_adaptive <span class="token operator">=</span> <span class="token function">FullControlHPO</span><span class="token punctuation">(</span>
+                        <pre><code class="language-python"><span class="token comment">#  Adaptive strategy - triggers LLM when RL performance plateaus</span>
+optimizer_adaptive <span class="token operator">=</span> <span class="token class-name">FullControlHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"time_series_classification"</span><span class="token punctuation">,</span>
     max_trials<span class="token operator">=</span><span class="token number">50</span><span class="token punctuation">,</span>
 
@@ -443,10 +442,10 @@ optimizer_adaptive <span class="token operator">=</span> <span class="token func
     critic_lr<span class="token operator">=</span><span class="token number">0.002</span>                        <span class="token comment"># Faster convergence</span>
 <span class="token punctuation">)</span>
 
-<span class="token comment"># 🎯 Custom hyperparameter space (optional)</span>
+<span class="token comment">#  Custom hyperparameter space (optional)</span>
 <span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> HyperparameterSpace
 
-custom_space <span class="token operator">=</span> <span class="token function">HyperparameterSpace</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+custom_space <span class="token operator">=</span> <span class="token class-name">HyperparameterSpace</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span class="token comment"># Agent 0: Problem-specific parameters</span>
 custom_space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'focal_gamma'</span><span class="token punctuation">,</span> <span class="token number">1.0</span><span class="token punctuation">,</span> <span class="token number">3.0</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
 custom_space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'class_weight_scale'</span><span class="token punctuation">,</span> <span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token number">2.0</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
@@ -468,7 +467,7 @@ results <span class="token operator">=</span> optimizer_adaptive<span class="tok
                 </section>
 
                 <section class="content-section">
-                    <h2>📚 Methods</h2>
+                    <h2> Methods</h2>
 
                     <div class="api-section">
                         <div class="api-header">
@@ -517,15 +516,15 @@ results <span class="token operator">=</span> optimizer_adaptive<span class="tok
                 </section>
 
                 <section class="content-section">
-                    <h2>🔧 Advanced Configuration</h2>
+                    <h2> Advanced Configuration</h2>
 
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python"><span class="token comment"># 🎛️ Complete parameter control example</span>
-optimizer <span class="token operator">=</span> <span class="token function">FullControlHPO</span><span class="token punctuation">(</span>
+                        <pre><code class="language-python"><span class="token comment"># ️ Complete parameter control example</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">FullControlHPO</span><span class="token punctuation">(</span>
     <span class="token comment"># Basic configuration</span>
     task_type<span class="token operator">=</span><span class="token string">"time_series_classification"</span><span class="token punctuation">,</span>
     max_trials<span class="token operator">=</span><span class="token number">100</span><span class="token punctuation">,</span>
@@ -568,7 +567,7 @@ optimizer <span class="token operator">=</span> <span class="token function">Ful
                 </section>
 
                 <section class="content-section">
-                    <h2>📚 Next Steps</h2>
+                    <h2> Next Steps</h2>
 
                     <div class="next-steps">
                         <div class="step-item">
@@ -592,6 +591,5 @@ optimizer <span class="token operator">=</span> <span class="token function">Ful
         </main>
     </div>
 
-    <script src="../js/main.js"></script>
-</body>
+    <script src="../js/main.js"></script></body>
 </html>

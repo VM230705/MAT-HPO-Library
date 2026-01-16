@@ -1,10 +1,10 @@
-# MAT-HPO 自訂Metrics和Reward指南
+# MAT-HPO Library - Custom Metrics Guide
 
-## 🎯 設計理念
+## 設計理念
 
 MAT-HPO-Library提供**通用接口**，讓使用者可以透過參數傳入自訂的metrics和reward設計，**而不需要修改庫本身的代碼**。
 
-## 📋 通用接口概覽
+## 通用接口概覽
 
 ### 1. **BaseEnvironment 自訂參數**
 
@@ -211,7 +211,7 @@ if __name__ == "__main__":
     print(f"\n✅ 最佳reward: {results['best_performance']['reward']:.4f}")
 ```
 
-## 📊 輸出格式
+## 輸出格式
 
 ### **step_log.jsonl 格式**
 
@@ -247,7 +247,7 @@ if __name__ == "__main__":
 4. **✅ 保持原始值** - 記錄未經轉換的真實數據
 5. **✅ 通用可重用** - 適用於任何領域（時間序列、分類、回歸等）
 
-## 🎯 使用建議
+## 使用建議
 
 1. **定義metrics_extractor**: 明確指定要記錄哪些原始指標
 2. **定義reward_function**: 明確如何計算reward

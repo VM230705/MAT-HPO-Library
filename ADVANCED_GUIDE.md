@@ -1,8 +1,8 @@
-# 🚀 MAT-HPO Library Advanced Guide
+# MAT-HPO Library - Advanced Guide
 
 Complete guide for advanced usage, API reference, and production deployment.
 
-## 📋 Table of Contents
+## Table of Contents
 
 - [User Interface Levels](#-user-interface-levels)
 - [LLM Strategies](#-llm-strategies)
@@ -12,7 +12,7 @@ Complete guide for advanced usage, API reference, and production deployment.
 - [Performance Tuning](#-performance-tuning)
 - [Integration Examples](#-integration-examples)
 
-## 🎯 User Interface Levels
+## User Interface Levels
 
 MAT-HPO provides three levels of interfaces to accommodate different needs:
 
@@ -29,12 +29,12 @@ results = optimizer.optimize(X_train, y_train, X_val, y_val)
 ```
 
 **Features**:
-- ✅ **Zero boilerplate** - just pass your data
-- ✅ **Automatic model creation** for common tasks
-- ✅ **Built-in training loops** and evaluation
-- ✅ **Smart defaults** based on task type
-- ✅ **LLM enhancement** with simple flags
-- ✅ **Auto dataset analysis** and feature detection
+- **Zero boilerplate** - just pass your data
+- **Automatic model creation** for common tasks
+- **Built-in training loops** and evaluation
+- **Smart defaults** based on task type
+- **LLM enhancement** with simple flags
+- **Auto dataset analysis** and feature detection
 
 ### Level 2: FullControlHPO (Production Interface)
 
@@ -59,11 +59,11 @@ results = optimizer.optimize(X_train, y_train, X_val, y_val)
 ```
 
 **Features**:
-- ✅ **Pre-built environments** for time series, ECG, etc.
-- ✅ **Configuration presets** for common scenarios
-- ✅ **Automatic dataset analysis** with LLM context
-- ✅ **Flexible customization** while maintaining smart defaults
-- ✅ **Multi-fidelity optimization** support
+- **Pre-built environments** for time series, ECG, etc.
+- **Configuration presets** for common scenarios
+- **Automatic dataset analysis** with LLM context
+- **Flexible customization** while maintaining smart defaults
+- **Multi-fidelity optimization** support
 
 ### Level 3: Core Components (Full Control)
 
@@ -83,13 +83,13 @@ optimizer = MAT_HPO_Optimizer(environment, space, config)
 ```
 
 **Features**:
-- ✅ **Complete control** over every aspect
-- ✅ **Research-grade flexibility** for novel algorithms
-- ✅ **Multi-agent RL** with SQDDPG algorithm
-- ✅ **Custom reward functions** and metrics
-- ✅ **Advanced configuration** options
+- **Complete control** over every aspect
+- **Research-grade flexibility** for novel algorithms
+- **Multi-agent RL** with SQDDPG algorithm
+- **Custom reward functions** and metrics
+- **Advanced configuration** options
 
-## 🧠 LLM Strategies
+## LLM Strategies
 
 Based on paper [arXiv:2507.13712](https://arxiv.org/abs/2507.13712), MAT-HPO supports intelligent hyperparameter suggestions.
 
@@ -319,7 +319,7 @@ class MyEnvironment(BaseEnvironment):
         return custom_reward_function(metrics)
 ```
 
-## ⚡ Performance Tuning
+## Performance Tuning
 
 ### Memory Optimization
 
@@ -425,7 +425,7 @@ optimizer = EasyHPO(
 results = optimizer.optimize(X_train, y_train, X_val, y_val)
 ```
 
-## 📊 Monitoring and Logging
+## Monitoring and Logging
 
 ### WandB Integration
 
@@ -472,7 +472,7 @@ config = OptimizationConfig(
 )
 ```
 
-## 🎯 Best Practices
+## Best Practices
 
 ### 1. Hyperparameter Space Design
 
@@ -529,7 +529,7 @@ class BadEnvironment(BaseEnvironment):
         model = self.create_model(hyperparams)  # Bad!
 ```
 
-## 🔧 Advanced Configuration
+## Advanced Configuration
 
 ### Custom LLM Clients
 

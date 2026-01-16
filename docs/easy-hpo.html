@@ -6,8 +6,7 @@
     <title>EasyHPO Interface - MAT-HPO Library</title>
     <meta name="description" content="Simplified hyperparameter optimization with EasyHPO - one-liner solutions for ML optimization">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-</head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>"></head>
 <body>
     <button class="mobile-toggle">☰</button>
 
@@ -96,25 +95,25 @@
                 <nav class="breadcrumb">
                     <a href="index.html">Home</a> &gt; EasyHPO Interface
                 </nav>
-                <h1>🚀 EasyHPO Interface</h1>
+                <h1> EasyHPO Interface</h1>
                 <p class="subtitle">Simplified hyperparameter optimization with one-liner solutions</p>
             </div>
 
             <div class="main-content">
 
                 <section class="content-section">
-                    <h2>✨ What is EasyHPO?</h2>
+                    <h2>🎯 EasyHPO Interface</h2>
 
                     <p>EasyHPO provides a simplified, user-friendly interface for hyperparameter optimization that requires minimal setup while providing powerful optimization capabilities including <strong>LLM enhancement</strong>.</p>
 
                     <div class="feature-grid">
                         <div class="feature-item">
-                            <h3>🎯 One-Liner Optimization</h3>
+                            <h3> One-Liner Optimization</h3>
                             <p>Just pass your data and get optimized hyperparameters</p>
                         </div>
 
                         <div class="feature-item">
-                            <h3>🧠 LLM-Enhanced</h3>
+                            <h3> LLM-Enhanced</h3>
                             <p>Intelligent parameter suggestions using Large Language Models</p>
                         </div>
 
@@ -126,7 +125,7 @@
                 </section>
 
                 <section class="content-section">
-                    <h2>🚀 Quick Start</h2>
+                    <h2> Quick Start</h2>
 
                     <h3>Basic Usage - Just Pass Data</h3>
                     <p>The simplest way to use EasyHPO:</p>
@@ -140,21 +139,21 @@
 <span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>datasets <span class="token keyword">import</span> make_classification
 <span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> train_test_split
 
-<span class="token comment"># 📊 Create your dataset</span>
+<span class="token comment">#  Create your dataset</span>
 X<span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token function">make_classification</span><span class="token punctuation">(</span>n_samples<span class="token operator">=</span><span class="token number">1000</span><span class="token punctuation">,</span> n_features<span class="token operator">=</span><span class="token number">20</span><span class="token punctuation">,</span> n_classes<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">)</span>
 X_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> y_val <span class="token operator">=</span> <span class="token function">train_test_split</span><span class="token punctuation">(</span>X<span class="token punctuation">,</span> y<span class="token punctuation">,</span> test_size<span class="token operator">=</span><span class="token number">0.2</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 🚀 One-liner optimization</span>
-optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>task_type<span class="token operator">=</span><span class="token string">"classification"</span><span class="token punctuation">,</span> max_trials<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">)</span>
+<span class="token comment">#  One-liner optimization</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>task_type<span class="token operator">=</span><span class="token string">"classification"</span><span class="token punctuation">,</span> max_trials<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">)</span>
 results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span>
 
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"🏆 Best hyperparameters: {results['best_hyperparameters']}"</span><span class="token punctuation">)</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"📈 Best performance: {results['best_performance']}"</span><span class="token punctuation">)</span></code></pre>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f" Best hyperparameters: {results['best_hyperparameters']}"</span><span class="token punctuation">)</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f" Best performance: {results['best_performance']}"</span><span class="token punctuation">)</span></code></pre>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>🧠 LLM-Enhanced Optimization</h2>
+                    <h2> LLM-Enhanced Optimization</h2>
 
                     <p>Enable LLM-enhanced optimization for intelligent hyperparameter suggestions:</p>
 
@@ -163,9 +162,9 @@ results <span class="token operator">=</span> optimizer<span class="token punctu
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python">optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>
+                        <pre><code class="language-python">optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"time_series_classification"</span><span class="token punctuation">,</span>
-    llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>              <span class="token comment"># 🧠 Enable LLM enhancement</span>
+    llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>              <span class="token comment">#  Enable LLM enhancement</span>
     llm_model<span class="token operator">=</span><span class="token string">"llama3.2:3b"</span><span class="token punctuation">,</span>           <span class="token comment"># LLM model to use</span>
     llm_strategy<span class="token operator">=</span><span class="token string">"adaptive"</span><span class="token punctuation">,</span>          <span class="token comment"># Smart adaptive strategy</span>
     max_trials<span class="token operator">=</span><span class="token number">30</span>
@@ -173,7 +172,7 @@ results <span class="token operator">=</span> optimizer<span class="token punctu
 results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span></code></pre>
                     </div>
 
-                    <h3>🎯 LLM Strategies</h3>
+                    <h3> LLM Strategies</h3>
 
                     <div class="feature-grid">
                         <div class="feature-item">
@@ -194,17 +193,17 @@ results <span class="token operator">=</span> optimizer<span class="token punctu
                 </section>
 
                 <section class="content-section">
-                    <h2>🎯 Task Types and Auto-Configuration</h2>
+                    <h2> Task Types and Auto-Configuration</h2>
 
                     <p>EasyHPO automatically configures hyperparameter spaces based on task type:</p>
 
-                    <h3>🔬 Time Series Classification</h3>
+                    <h3> Time Series Classification</h3>
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python">optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>task_type<span class="token operator">=</span><span class="token string">"time_series_classification"</span><span class="token punctuation">,</span> max_trials<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">)</span>
+                        <pre><code class="language-python">optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>task_type<span class="token operator">=</span><span class="token string">"time_series_classification"</span><span class="token punctuation">,</span> max_trials<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">)</span>
 results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span></code></pre>
                     </div>
 
@@ -223,11 +222,11 @@ results <span class="token operator">=</span> optimizer<span class="token punctu
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python"><span class="token comment"># 🚀 Specialized for ECG data</span>
-optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>task_type<span class="token operator">=</span><span class="token string">"ecg_classification"</span><span class="token punctuation">,</span> max_trials<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">)</span>
+                        <pre><code class="language-python"><span class="token comment">#  Specialized for ECG data</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>task_type<span class="token operator">=</span><span class="token string">"ecg_classification"</span><span class="token punctuation">,</span> max_trials<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">)</span>
 results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span>
 
-<span class="token comment"># 🎯 Or use the convenience function</span>
+<span class="token comment">#  Or use the convenience function</span>
 <span class="token keyword">from</span> MAT_HPO_LIB<span class="token punctuation">.</span>easy_hpo <span class="token keyword">import</span> quick_ecg_optimize
 best_params <span class="token operator">=</span> <span class="token function">quick_ecg_optimize</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span></code></pre>
                     </div>
@@ -241,7 +240,7 @@ best_params <span class="token operator">=</span> <span class="token function">q
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python">optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>
+                        <pre><code class="language-python">optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"time_series_classification"</span><span class="token punctuation">,</span>  <span class="token comment"># Task type for auto-config</span>
     llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>                        <span class="token comment"># Enable LLM enhancement</span>
     llm_model<span class="token operator">=</span><span class="token string">"llama3.2:3b"</span><span class="token punctuation">,</span>                 <span class="token comment"># LLM model to use</span>
@@ -256,7 +255,7 @@ best_params <span class="token operator">=</span> <span class="token function">q
                 </section>
 
                 <section class="content-section">
-                    <h2>📊 Results and Performance</h2>
+                    <h2> Results and Performance</h2>
 
                     <div class="code-block">
                         <div class="code-header">
@@ -265,15 +264,15 @@ best_params <span class="token operator">=</span> <span class="token function">q
                         </div>
                         <pre><code class="language-python">results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span>
 
-<span class="token comment"># 🏆 Best hyperparameters</span>
+<span class="token comment">#  Best hyperparameters</span>
 best_params <span class="token operator">=</span> results<span class="token punctuation">[</span><span class="token string">'best_hyperparameters'</span><span class="token punctuation">]</span>
 
-<span class="token comment"># 📈 Performance metrics</span>
+<span class="token comment">#  Performance metrics</span>
 performance <span class="token operator">=</span> results<span class="token punctuation">[</span><span class="token string">'best_performance'</span><span class="token punctuation">]</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"F1: {performance['f1']:.4f}"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"AUC: {performance['auc']:.4f}"</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 📊 Optimization statistics</span>
+<span class="token comment">#  Optimization statistics</span>
 stats <span class="token operator">=</span> results<span class="token punctuation">[</span><span class="token string">'optimization_stats'</span><span class="token punctuation">]</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"Trials completed: {stats['trials_completed']}"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"Total time: {stats['optimization_time']:.2f}s"</span><span class="token punctuation">)</span></code></pre>
@@ -281,7 +280,7 @@ stats <span class="token operator">=</span> results<span class="token punctuatio
                 </section>
 
                 <section class="content-section">
-                    <h2>🔗 Complete Example: ECG Classification</h2>
+                    <h2> Complete Example: ECG Classification</h2>
 
                     <div class="code-block">
                         <div class="code-header">
@@ -292,29 +291,29 @@ stats <span class="token operator">=</span> results<span class="token punctuatio
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 <span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> train_test_split
 
-<span class="token comment"># 📊 Simulate ECG data (in practice, load your real data)</span>
+<span class="token comment">#  Simulate ECG data (in practice, load your real data)</span>
 n_samples<span class="token punctuation">,</span> sequence_length <span class="token operator">=</span> <span class="token number">1000</span><span class="token punctuation">,</span> <span class="token number">500</span>
 X <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span><span class="token function">randn</span><span class="token punctuation">(</span>n_samples<span class="token punctuation">,</span> sequence_length<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># ECG signals</span>
 y <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span><span class="token function">randint</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">9</span><span class="token punctuation">,</span> n_samples<span class="token punctuation">)</span>              <span class="token comment"># 9 cardiac conditions</span>
 
-<span class="token comment"># 🔀 Split data</span>
+<span class="token comment">#  Split data</span>
 X_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> y_val <span class="token operator">=</span> <span class="token function">train_test_split</span><span class="token punctuation">(</span>X<span class="token punctuation">,</span> y<span class="token punctuation">,</span> test_size<span class="token operator">=</span><span class="token number">0.2</span><span class="token punctuation">,</span>
                                                   stratify<span class="token operator">=</span>y<span class="token punctuation">,</span> random_state<span class="token operator">=</span><span class="token number">42</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 🚀 Optimize with EasyHPO</span>
-optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>
+<span class="token comment">#  Optimize with EasyHPO</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"ecg_classification"</span><span class="token punctuation">,</span>
     llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>              <span class="token comment"># Use LLM for intelligent suggestions</span>
     max_trials<span class="token operator">=</span><span class="token number">50</span><span class="token punctuation">,</span>                 <span class="token comment"># More trials for better results</span>
     verbose<span class="token operator">=</span><span class="token boolean">True</span>
 <span class="token punctuation">)</span>
 
-<span class="token comment"># 🎯 Run optimization</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"🚀 Starting ECG hyperparameter optimization..."</span><span class="token punctuation">)</span>
+<span class="token comment">#  Run optimization</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">" Starting ECG hyperparameter optimization..."</span><span class="token punctuation">)</span>
 results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span>
 
-<span class="token comment"># 🏆 Display results</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n🏆 Best Performance:"</span><span class="token punctuation">)</span>
+<span class="token comment">#  Display results</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n Best Performance:"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   F1 Score: {results['best_performance']['f1']:.4f}"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   AUC: {results['best_performance']['auc']:.4f}"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   G-mean: {results['best_performance']['gmean']:.4f}"</span><span class="token punctuation">)</span>
@@ -326,7 +325,7 @@ results <span class="token operator">=</span> optimizer<span class="token punctu
                 </section>
 
                 <section class="content-section">
-                    <h2>📚 Next Steps</h2>
+                    <h2> Next Steps</h2>
 
                     <div class="next-steps">
                         <div class="step-item">
@@ -350,6 +349,5 @@ results <span class="token operator">=</span> optimizer<span class="token punctu
         </main>
     </div>
 
-    <script src="js/main.js"></script>
-</body>
+    <script src="js/main.js"></script></body>
 </html>

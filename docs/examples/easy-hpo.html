@@ -6,8 +6,7 @@
     <title>EasyHPO Examples - MAT-HPO Library</title>
     <meta name="description" content="Complete working examples of EasyHPO interface with LLM enhancement">
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-</head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>"></head>
 <body>
     <button class="mobile-toggle">☰</button>
 
@@ -96,14 +95,14 @@
                 <nav class="breadcrumb">
                     <a href="../index.html">Home</a> &gt; <a href="../examples/">Examples</a> &gt; EasyHPO Examples
                 </nav>
-                <h1>🚀 EasyHPO Examples</h1>
+                <h1> EasyHPO Examples</h1>
                 <p class="subtitle">Complete working examples using the simplified EasyHPO interface</p>
             </div>
 
             <div class="main-content">
 
                 <section class="content-section">
-                    <h2>📊 Example 1: Basic Classification</h2>
+                    <h2> Example 1: Basic Classification</h2>
 
                     <p>The simplest way to get started with EasyHPO:</p>
 
@@ -116,7 +115,7 @@
 <span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>datasets <span class="token keyword">import</span> make_classification
 <span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> train_test_split
 
-<span class="token comment"># 📊 Create sample dataset</span>
+<span class="token comment">#  Create sample dataset</span>
 X<span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token function">make_classification</span><span class="token punctuation">(</span>
     n_samples<span class="token operator">=</span><span class="token number">1000</span><span class="token punctuation">,</span>
     n_features<span class="token operator">=</span><span class="token number">20</span><span class="token punctuation">,</span>
@@ -125,23 +124,23 @@ X<span class="token punctuation">,</span> y <span class="token operator">=</span
     random_state<span class="token operator">=</span><span class="token number">42</span>
 <span class="token punctuation">)</span>
 
-<span class="token comment"># 🔀 Split data</span>
+<span class="token comment">#  Split data</span>
 X_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> y_val <span class="token operator">=</span> <span class="token function">train_test_split</span><span class="token punctuation">(</span>
     X<span class="token punctuation">,</span> y<span class="token punctuation">,</span> test_size<span class="token operator">=</span><span class="token number">0.2</span><span class="token punctuation">,</span> stratify<span class="token operator">=</span>y<span class="token punctuation">,</span> random_state<span class="token operator">=</span><span class="token number">42</span>
 <span class="token punctuation">)</span>
 
-<span class="token comment"># 🚀 One-liner optimization</span>
-optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>
+<span class="token comment">#  One-liner optimization</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"classification"</span><span class="token punctuation">,</span>
     max_trials<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">,</span>
     verbose<span class="token operator">=</span><span class="token boolean">True</span>
 <span class="token punctuation">)</span>
 
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"🚀 Starting basic classification optimization..."</span><span class="token punctuation">)</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">" Starting basic classification optimization..."</span><span class="token punctuation">)</span>
 results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span>
 
-<span class="token comment"># 🏆 Display results</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n🏆 Best Performance:"</span><span class="token punctuation">)</span>
+<span class="token comment">#  Display results</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n Best Performance:"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   F1 Score: {results['best_performance']['f1']:.4f}"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   Accuracy: {results['best_performance'].get('accuracy', 'N/A')}"</span><span class="token punctuation">)</span>
 
@@ -152,7 +151,7 @@ results <span class="token operator">=</span> optimizer<span class="token punctu
                 </section>
 
                 <section class="content-section">
-                    <h2>🧠 Example 2: LLM-Enhanced Time Series Classification</h2>
+                    <h2> Example 2: LLM-Enhanced Time Series Classification</h2>
 
                     <p>Using LLM enhancement for intelligent hyperparameter suggestions:</p>
 
@@ -165,7 +164,7 @@ results <span class="token operator">=</span> optimizer<span class="token punctu
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 <span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> train_test_split
 
-<span class="token comment"># 📊 Create time series data</span>
+<span class="token comment">#  Create time series data</span>
 <span class="token keyword">def</span> <span class="token function">create_time_series_data</span><span class="token punctuation">(</span>n_samples<span class="token operator">=</span><span class="token number">1000</span><span class="token punctuation">,</span> sequence_length<span class="token operator">=</span><span class="token number">100</span><span class="token punctuation">,</span> n_classes<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token comment">"""Generate synthetic time series classification data"""</span>
     X <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span><span class="token function">randn</span><span class="token punctuation">(</span>n_samples<span class="token punctuation">,</span> sequence_length<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
@@ -181,16 +180,16 @@ results <span class="token operator">=</span> optimizer<span class="token punctu
     y <span class="token operator">=</span> np<span class="token punctuation">.</span><span class="token function">array</span><span class="token punctuation">(</span><span class="token punctuation">[</span>i <span class="token operator">%</span> n_classes <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span>n_samples<span class="token punctuation">)</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
     <span class="token keyword">return</span> X<span class="token punctuation">,</span> y
 
-<span class="token comment"># 📊 Generate data</span>
+<span class="token comment">#  Generate data</span>
 X<span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token function">create_time_series_data</span><span class="token punctuation">(</span>n_samples<span class="token operator">=</span><span class="token number">1500</span><span class="token punctuation">,</span> sequence_length<span class="token operator">=</span><span class="token number">50</span><span class="token punctuation">)</span>
 X_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> y_val <span class="token operator">=</span> <span class="token function">train_test_split</span><span class="token punctuation">(</span>
     X<span class="token punctuation">,</span> y<span class="token punctuation">,</span> test_size<span class="token operator">=</span><span class="token number">0.2</span><span class="token punctuation">,</span> stratify<span class="token operator">=</span>y<span class="token punctuation">,</span> random_state<span class="token operator">=</span><span class="token number">42</span>
 <span class="token punctuation">)</span>
 
-<span class="token comment"># 🧠 LLM-enhanced optimization with adaptive strategy</span>
-optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>
+<span class="token comment">#  LLM-enhanced optimization with adaptive strategy</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"time_series_classification"</span><span class="token punctuation">,</span>
-    llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>              <span class="token comment"># 🧠 Enable LLM enhancement</span>
+    llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>              <span class="token comment">#  Enable LLM enhancement</span>
     llm_strategy<span class="token operator">=</span><span class="token string">"adaptive"</span><span class="token punctuation">,</span>        <span class="token comment"># Smart adaptive strategy</span>
     llm_config<span class="token operator">=</span><span class="token punctuation">{</span>
         <span class="token string">'performance_threshold'</span><span class="token punctuation">:</span> <span class="token number">0.01</span><span class="token punctuation">,</span>
@@ -201,16 +200,16 @@ optimizer <span class="token operator">=</span> <span class="token function">Eas
     verbose<span class="token operator">=</span><span class="token boolean">True</span>
 <span class="token punctuation">)</span>
 
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"🧠 Starting LLM-enhanced time series optimization..."</span><span class="token punctuation">)</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">" Starting LLM-enhanced time series optimization..."</span><span class="token punctuation">)</span>
 results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span>
 
-<span class="token comment"># 📊 Analyze results</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n🏆 LLM-Enhanced Results:"</span><span class="token punctuation">)</span>
+<span class="token comment">#  Analyze results</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n LLM-Enhanced Results:"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   F1 Score: {results['best_performance']['f1']:.4f}"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   AUC: {results['best_performance']['auc']:.4f}"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   G-mean: {results['best_performance']['gmean']:.4f}"</span><span class="token punctuation">)</span>
 
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n🎯 LLM Usage Statistics:"</span><span class="token punctuation">)</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n LLM Usage Statistics:"</span><span class="token punctuation">)</span>
 stats <span class="token operator">=</span> results<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'optimization_stats'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   Total trials: {stats.get('trials_completed', 'N/A')}"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   LLM interventions: {stats.get('llm_interventions', 'N/A')}"</span><span class="token punctuation">)</span>
@@ -233,7 +232,7 @@ stats <span class="token operator">=</span> results<span class="token punctuatio
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 <span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> train_test_split
 
-<span class="token comment"># 📊 Simulate realistic ECG data</span>
+<span class="token comment">#  Simulate realistic ECG data</span>
 <span class="token keyword">def</span> <span class="token function">create_ecg_data</span><span class="token punctuation">(</span>n_samples<span class="token operator">=</span><span class="token number">2000</span><span class="token punctuation">,</span> signal_length<span class="token operator">=</span><span class="token number">500</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token comment">"""Generate synthetic ECG data for 9 cardiac conditions"""</span>
     X <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span><span class="token function">randn</span><span class="token punctuation">(</span>n_samples<span class="token punctuation">,</span> signal_length<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
@@ -264,27 +263,27 @@ stats <span class="token operator">=</span> results<span class="token punctuatio
 
     <span class="token keyword">return</span> X<span class="token punctuation">,</span> y
 
-<span class="token comment"># 📊 Generate ECG dataset</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"📊 Generating synthetic ECG data..."</span><span class="token punctuation">)</span>
+<span class="token comment">#  Generate ECG dataset</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">" Generating synthetic ECG data..."</span><span class="token punctuation">)</span>
 X<span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token function">create_ecg_data</span><span class="token punctuation">(</span>n_samples<span class="token operator">=</span><span class="token number">3000</span><span class="token punctuation">,</span> signal_length<span class="token operator">=</span><span class="token number">500</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 🔀 Stratified split to maintain class distribution</span>
+<span class="token comment">#  Stratified split to maintain class distribution</span>
 X_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> y_val <span class="token operator">=</span> <span class="token function">train_test_split</span><span class="token punctuation">(</span>
     X<span class="token punctuation">,</span> y<span class="token punctuation">,</span> test_size<span class="token operator">=</span><span class="token number">0.2</span><span class="token punctuation">,</span> stratify<span class="token operator">=</span>y<span class="token punctuation">,</span> random_state<span class="token operator">=</span><span class="token number">42</span>
 <span class="token punctuation">)</span>
 
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"📊 Dataset shape: {X_train.shape}, Classes: {len(np.unique(y))}"</span><span class="token punctuation">)</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f" Dataset shape: {X_train.shape}, Classes: {len(np.unique(y))}"</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 🚀 Method 1: Use convenience function</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"\\n🚀 Method 1: Using convenience function..."</span><span class="token punctuation">)</span>
+<span class="token comment">#  Method 1: Use convenience function</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"\\n Method 1: Using convenience function..."</span><span class="token punctuation">)</span>
 quick_results <span class="token operator">=</span> <span class="token function">quick_ecg_optimize</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"Quick optimization result: {quick_results}"</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 🧠 Method 2: Full EasyHPO with LLM enhancement</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"\\n🧠 Method 2: Full LLM-enhanced optimization..."</span><span class="token punctuation">)</span>
-optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>
+<span class="token comment">#  Method 2: Full EasyHPO with LLM enhancement</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"\\n Method 2: Full LLM-enhanced optimization..."</span><span class="token punctuation">)</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"ecg_classification"</span><span class="token punctuation">,</span>
-    llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>              <span class="token comment"># 🧠 Use LLM for intelligent suggestions</span>
+    llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>              <span class="token comment">#  Use LLM for intelligent suggestions</span>
     llm_strategy<span class="token operator">=</span><span class="token string">"fixed_alpha"</span><span class="token punctuation">,</span>     <span class="token comment"># Stable strategy for ECG</span>
     llm_config<span class="token operator">=</span><span class="token punctuation">{</span>
         <span class="token string">'alpha'</span><span class="token punctuation">:</span> <span class="token number">0.3</span><span class="token punctuation">,</span>                  <span class="token comment"># 30% LLM + 70% RL</span>
@@ -297,16 +296,16 @@ optimizer <span class="token operator">=</span> <span class="token function">Eas
     verbose<span class="token operator">=</span><span class="token boolean">True</span>
 <span class="token punctuation">)</span>
 
-<span class="token comment"># 🎯 Run optimization</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"🎯 Starting ECG hyperparameter optimization..."</span><span class="token punctuation">)</span>
+<span class="token comment">#  Run optimization</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">" Starting ECG hyperparameter optimization..."</span><span class="token punctuation">)</span>
 results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span>
 
-<span class="token comment"># 🏆 Comprehensive results analysis</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n🏆 Final ECG Classification Results:"</span><span class="token punctuation">)</span>
+<span class="token comment">#  Comprehensive results analysis</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n Final ECG Classification Results:"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"="</span> <span class="token operator">*</span> <span class="token number">50</span><span class="token punctuation">)</span>
 
 performance <span class="token operator">=</span> results<span class="token punctuation">[</span><span class="token string">'best_performance'</span><span class="token punctuation">]</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"📈 Performance Metrics:"</span><span class="token punctuation">)</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f" Performance Metrics:"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   F1 Score:  {performance['f1']:.4f}"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   AUC:       {performance['auc']:.4f}"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   G-mean:    {performance['gmean']:.4f}"</span><span class="token punctuation">)</span>
@@ -316,19 +315,19 @@ best_params <span class="token operator">=</span> results<span class="token punc
 <span class="token keyword">for</span> param<span class="token punctuation">,</span> value <span class="token keyword">in</span> best_params<span class="token punctuation">.</span><span class="token function">items</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   {param:20s}: {value}"</span><span class="token punctuation">)</span>
 
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n📊 Optimization Statistics:"</span><span class="token punctuation">)</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n Optimization Statistics:"</span><span class="token punctuation">)</span>
 stats <span class="token operator">=</span> results<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'optimization_stats'</span><span class="token punctuation">,</span> <span class="token punctuation">{</span><span class="token punctuation">}</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   Total trials:     {stats.get('trials_completed', 'N/A')}"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   LLM usage:        {stats.get('llm_interventions', 'N/A')} interventions"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   Total time:       {stats.get('optimization_time', 'N/A'):.2f} seconds"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   Convergence step: {stats.get('convergence_step', 'N/A')}"</span><span class="token punctuation">)</span>
 
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n💾 Results saved to: {optimizer.output_dir if hasattr(optimizer, 'output_dir') else 'current directory'}"</span><span class="token punctuation">)</span></code></pre>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n Results saved to: {optimizer.output_dir if hasattr(optimizer, 'output_dir') else 'current directory'}"</span><span class="token punctuation">)</span></code></pre>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>🔗 Example 4: Custom Pipeline with Model Factory</h2>
+                    <h2> Example 4: Custom Pipeline with Model Factory</h2>
 
                     <p>Advanced usage with custom model creation and training pipeline:</p>
 
@@ -337,13 +336,13 @@ stats <span class="token operator">=</span> results<span class="token punctuatio
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> EasyHPO<span class="token punctuation">,</span> HyperparameterSpace
+                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">,</span> <span class="token class-name">HyperparameterSpace</span>
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 <span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>ensemble <span class="token keyword">import</span> RandomForestClassifier
 <span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>neural_network <span class="token keyword">import</span> MLPClassifier
 <span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>metrics <span class="token keyword">import</span> f1_score<span class="token punctuation">,</span> roc_auc_score
 
-<span class="token comment"># 🏗️ Custom model factory</span>
+<span class="token comment"># ️ Custom model factory</span>
 <span class="token keyword">def</span> <span class="token function">custom_model_factory</span><span class="token punctuation">(</span><span class="token operator">**</span>hyperparams<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token comment">"""Create custom model based on hyperparameters"""</span>
     model_type <span class="token operator">=</span> hyperparams<span class="token punctuation">.</span><span class="token function">get</span><span class="token punctuation">(</span><span class="token string">'model_type'</span><span class="token punctuation">,</span> <span class="token string">'rf'</span><span class="token punctuation">)</span>
@@ -362,7 +361,7 @@ stats <span class="token operator">=</span> results<span class="token punctuatio
             random_state<span class="token operator">=</span><span class="token number">42</span>
         <span class="token punctuation">)</span>
 
-<span class="token comment"># 🎓 Custom trainer</span>
+<span class="token comment">#  Custom trainer</span>
 <span class="token keyword">def</span> <span class="token function">custom_trainer</span><span class="token punctuation">(</span>model<span class="token punctuation">,</span> X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> <span class="token operator">**</span>hyperparams<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token comment">"""Custom training logic"""</span>
     <span class="token comment"># Add preprocessing if needed</span>
@@ -376,7 +375,7 @@ stats <span class="token operator">=</span> results<span class="token punctuatio
     model<span class="token punctuation">.</span><span class="token function">fit</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">)</span>
     <span class="token keyword">return</span> model
 
-<span class="token comment"># 📊 Custom evaluator</span>
+<span class="token comment">#  Custom evaluator</span>
 <span class="token keyword">def</span> <span class="token function">custom_evaluator</span><span class="token punctuation">(</span>model<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span><span class="token punctuation">:</span>
     <span class="token comment">"""Custom evaluation logic"""</span>
     <span class="token comment"># Apply same preprocessing as training</span>
@@ -404,12 +403,12 @@ stats <span class="token operator">=</span> results<span class="token punctuatio
         <span class="token string">'accuracy'</span><span class="token punctuation">:</span> np<span class="token punctuation">.</span><span class="token function">mean</span><span class="token punctuation">(</span>y_pred <span class="token operator">==</span> y_val<span class="token punctuation">)</span>
     <span class="token punctuation">}</span>
 
-<span class="token comment"># 📊 Create sample data</span>
+<span class="token comment">#  Create sample data</span>
 <span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>datasets <span class="token keyword">import</span> make_classification
 X<span class="token punctuation">,</span> y <span class="token operator">=</span> <span class="token function">make_classification</span><span class="token punctuation">(</span>n_samples<span class="token operator">=</span><span class="token number">1000</span><span class="token punctuation">,</span> n_features<span class="token operator">=</span><span class="token number">20</span><span class="token punctuation">,</span> n_classes<span class="token operator">=</span><span class="token number">3</span><span class="token punctuation">)</span>
 X_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> y_val <span class="token operator">=</span> train_test_split<span class="token punctuation">(</span>X<span class="token punctuation">,</span> y<span class="token punctuation">,</span> test_size<span class="token operator">=</span><span class="token number">0.2</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 🔧 Define custom hyperparameter space</span>
+<span class="token comment">#  Define custom hyperparameter space</span>
 custom_space <span class="token operator">=</span> <span class="token function">HyperparameterSpace</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 custom_space<span class="token punctuation">.</span><span class="token function">add_discrete</span><span class="token punctuation">(</span><span class="token string">'model_type'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'rf'</span><span class="token punctuation">,</span> <span class="token string">'mlp'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
 custom_space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'n_estimators'</span><span class="token punctuation">,</span> <span class="token number">50</span><span class="token punctuation">,</span> <span class="token number">200</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># For RF</span>
@@ -418,8 +417,8 @@ custom_space<span class="token punctuation">.</span><span class="token function"
 custom_space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'learning_rate'</span><span class="token punctuation">,</span> <span class="token number">0.001</span><span class="token punctuation">,</span> <span class="token number">0.1</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token comment"># For MLP</span>
 custom_space<span class="token punctuation">.</span><span class="token function">add_boolean</span><span class="token punctuation">(</span><span class="token string">'normalize'</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>                           <span class="token comment"># Preprocessing</span>
 
-<span class="token comment"># 🚀 Create optimizer with custom pipeline</span>
-optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>
+<span class="token comment">#  Create optimizer with custom pipeline</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"classification"</span><span class="token punctuation">,</span>
     llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
     llm_strategy<span class="token operator">=</span><span class="token string">"adaptive"</span><span class="token punctuation">,</span>
@@ -427,8 +426,8 @@ optimizer <span class="token operator">=</span> <span class="token function">Eas
     verbose<span class="token operator">=</span><span class="token boolean">True</span>
 <span class="token punctuation">)</span>
 
-<span class="token comment"># 🎯 Run optimization with custom pipeline</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"🎯 Starting custom pipeline optimization..."</span><span class="token punctuation">)</span>
+<span class="token comment">#  Run optimization with custom pipeline</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">" Starting custom pipeline optimization..."</span><span class="token punctuation">)</span>
 results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize_with_pipeline</span><span class="token punctuation">(</span>
     data_loader<span class="token operator">=</span><span class="token keyword">lambda</span><span class="token punctuation">:</span> <span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span><span class="token punctuation">,</span>
     model_factory<span class="token operator">=</span>custom_model_factory<span class="token punctuation">,</span>
@@ -437,20 +436,20 @@ results <span class="token operator">=</span> optimizer<span class="token punctu
     custom_space<span class="token operator">=</span>custom_space
 <span class="token punctuation">)</span>
 
-<span class="token comment"># 🏆 Display results</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n🏆 Custom Pipeline Results:"</span><span class="token punctuation">)</span>
+<span class="token comment">#  Display results</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"\\n Custom Pipeline Results:"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   Best F1: {results['best_performance']['f1']:.4f}"</span><span class="token punctuation">)</span>
 <span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"   Best Model: {results['best_hyperparameters']['model_type']}"</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 🏗️ Create final tuned model</span>
+<span class="token comment"># ️ Create final tuned model</span>
 best_config <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">get_best_config</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 final_model <span class="token operator">=</span> <span class="token function">custom_model_factory</span><span class="token punctuation">(</span><span class="token operator">**</span>best_config<span class="token punctuation">)</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"🏗️ Final tuned model created: {type(final_model).__name__}"</span><span class="token punctuation">)</span></code></pre>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"️ Final tuned model created: {type(final_model).__name__}"</span><span class="token punctuation">)</span></code></pre>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>📚 Next Steps</h2>
+                    <h2> Next Steps</h2>
 
                     <div class="next-steps">
                         <div class="step-item">
@@ -474,6 +473,5 @@ final_model <span class="token operator">=</span> <span class="token function">c
         </main>
     </div>
 
-    <script src="../js/main.js"></script>
-</body>
+    <script src="../js/main.js"></script></body>
 </html>

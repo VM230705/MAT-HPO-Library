@@ -17,8 +17,7 @@
     <link rel="stylesheet" href="css/style.css">
     
     <!-- Favicon -->
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-</head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>"></head>
 <body>
     <!-- Mobile Menu Toggle -->
     <button class="mobile-toggle">☰</button>
@@ -113,7 +112,7 @@
             <div class="main-content">
                 
                 <section class="content-section">
-                    <h2>🚀 Quick Installation</h2>
+                    <h2>📦 Installation</h2>
                     <p>Get up and running with MAT-HPO in minutes:</p>
                     
                     <div class="code-block">
@@ -121,20 +120,21 @@
                             <span class="code-language">bash</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code># Clone the repository
-git clone https://github.com/VM230705/MAT-HPO-Library.git
-cd MAT-HPO-Library
+                        <pre><code class="language-bash"><span class="token comment"># Clone the repository</span>
+<span class="token function">git</span> clone https://github.com/VM230705/MAT-HPO-Library.git
+<span class="token builtin">cd</span> MAT-HPO-Library
 
-# Install dependencies
-pip install torch numpy scikit-learn
+<span class="token comment"># Install dependencies</span>
+<span class="token function">pip</span> install torch numpy scikit-learn
 
-# Test the installation
-python test_working_examples.py</code></pre>
+<span class="token comment"># Test the installation</span>
+<span class="token function">python</span> test_working_examples.py
+</code></pre>
                     </div>
                 </section>
                 
                 <section class="content-section">
-                    <h2>📋 System Requirements</h2>
+                    <h2> System Requirements</h2>
                     
                     <h3>Minimum Requirements</h3>
                     <ul>
@@ -154,7 +154,7 @@ python test_working_examples.py</code></pre>
                 </section>
                 
                 <section class="content-section">
-                    <h2>📦 Dependencies</h2>
+                    <h2> Dependencies</h2>
                     
                     <h3>Core Dependencies</h3>
                     <div class="code-block">
@@ -162,16 +162,17 @@ python test_working_examples.py</code></pre>
                             <span class="code-language">bash</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code># Core ML/DL dependencies
-pip install torch>=2.0.0
-pip install numpy>=1.20.0
-pip install scikit-learn>=1.0.0
+                        <pre><code class="language-bash"><span class="token comment"># Core ML/DL dependencies</span>
+<span class="token function">pip</span> install torch&gt;=2.0.0
+<span class="token function">pip</span> install numpy&gt;=1.20.0
+<span class="token function">pip</span> install scikit-learn&gt;=1.0.0
 
-# Optional but recommended
-pip install tqdm              # Progress bars
-pip install wandb             # Experiment tracking
-pip install matplotlib       # Plotting
-pip install seaborn          # Enhanced plotting</code></pre>
+<span class="token comment"># Optional but recommended</span>
+<span class="token function">pip</span> install tqdm              <span class="token comment"># Progress bars</span>
+<span class="token function">pip</span> install wandb             <span class="token comment"># Experiment tracking</span>
+<span class="token function">pip</span> install matplotlib       <span class="token comment"># Plotting</span>
+<span class="token function">pip</span> install seaborn          <span class="token comment"># Enhanced plotting</span>
+</code></pre>
                     </div>
                     
                     <h3>GPU Support (Optional)</h3>
@@ -180,16 +181,17 @@ pip install seaborn          # Enhanced plotting</code></pre>
                             <span class="code-language">bash</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code># For CUDA support (check your CUDA version)
-pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
+                        <pre><code class="language-bash"><span class="token comment"># For CUDA support (check your CUDA version)</span>
+<span class="token function">pip</span> install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cu118
 
-# Verify GPU support
-python -c "import torch; print('CUDA Available:', torch.cuda.is_available())"</code></pre>
+<span class="token comment"># Verify GPU support</span>
+<span class="token function">python</span> -c <span class="token string">"import torch; print('CUDA Available:', torch.cuda.is_available())"</span>
+</code></pre>
                     </div>
                 </section>
                 
                 <section class="content-section">
-                    <h2>📥 Installation Methods</h2>
+                    <h2> Installation Methods</h2>
                     
                     <h3>Method 1: Git Clone (Recommended)</h3>
                     <div class="code-block">
@@ -197,12 +199,13 @@ python -c "import torch; print('CUDA Available:', torch.cuda.is_available())"</c
                             <span class="code-language">bash</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code># Clone the repository
-git clone https://github.com/VM230705/MAT-HPO-Library.git
-cd MAT-HPO-Library
+                        <pre><code class="language-bash"><span class="token comment"># Clone the repository</span>
+<span class="token function">git</span> clone https://github.com/VM230705/MAT-HPO-Library.git
+<span class="token builtin">cd</span> MAT-HPO-Library
 
-# Add to Python path for development
-export PYTHONPATH=$PYTHONPATH:$(pwd)</code></pre>
+<span class="token comment"># Add to Python path for development</span>
+<span class="token builtin">export</span> PYTHONPATH=<span class="token variable">$PYTHONPATH</span>:<span class="token variable">$(pwd)</span>
+</code></pre>
                     </div>
                     
                     <h3>Method 2: Development Installation</h3>
@@ -211,17 +214,18 @@ export PYTHONPATH=$PYTHONPATH:$(pwd)</code></pre>
                             <span class="code-language">bash</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code># Clone and install in development mode
-git clone https://github.com/VM230705/MAT-HPO-Library.git
-cd MAT-HPO-Library
-pip install -e .
+                        <pre><code class="language-bash"><span class="token comment"># Clone and install in development mode</span>
+<span class="token function">git</span> clone https://github.com/VM230705/MAT-HPO-Library.git
+<span class="token builtin">cd</span> MAT-HPO-Library
+<span class="token function">pip</span> install -e .
 
-# This allows you to modify the code and see changes immediately</code></pre>
+<span class="token comment"># This allows you to modify the code and see changes immediately</span>
+</code></pre>
                     </div>
                 </section>
                 
                 <section class="content-section">
-                    <h2>🧪 Verify Installation</h2>
+                    <h2> Verify Installation</h2>
                     
                     <h3>Quick Test</h3>
                     <div class="code-block">
@@ -229,12 +233,13 @@ pip install -e .
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code># Test basic imports
-import sys
-sys.path.insert(0, '.')
+                        <pre><code class="language-python"><span class="token comment"># Test basic imports</span>
+<span class="token keyword">import</span> sys
+sys.path.insert<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">'.'</span><span class="token punctuation">)</span>
 
-from MAT_HPO_LIB import MAT_HPO_Optimizer, BaseEnvironment, HyperparameterSpace
-print("✅ MAT-HPO Library imported successfully!")</code></pre>
+<span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> <span class="token class-name">MAT_HPO_Optimizer</span><span class="token punctuation">,</span> <span class="token class-name">BaseEnvironment</span><span class="token punctuation">,</span> <span class="token class-name">HyperparameterSpace</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">"✅ MAT-HPO Library imported successfully!"</span><span class="token punctuation">)</span>
+</code></pre>
                     </div>
                     
                     <h3>Run Test Suite</h3>
@@ -243,23 +248,24 @@ print("✅ MAT-HPO Library imported successfully!")</code></pre>
                             <span class="code-language">bash</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code># Run the comprehensive functionality test
-python test_working_examples.py
+                        <pre><code class="language-bash"><span class="token comment"># Run the comprehensive functionality test</span>
+<span class="token function">python</span> test_working_examples.py
 
-# Expected output:
-# 🚀 MAT-HPO Library Simple Functionality Test
-# ==================================================
-# 🧪 Testing imports...
-# ✅ Core imports successful
-# ...
-# 📊 Test Results: 5/5 tests passed
-# 🎉 All functionality tests passed!</code></pre>
+<span class="token comment"># Expected output:</span>
+<span class="token comment">#  MAT-HPO Library Simple Functionality Test</span>
+<span class="token comment"># ==================================================</span>
+<span class="token comment">#  Testing imports...</span>
+<span class="token comment"># ✅ Core imports successful</span>
+<span class="token comment"># ...</span>
+<span class="token comment">#  Test Results: 5/5 tests passed</span>
+<span class="token comment">#  All functionality tests passed!</span>
+</code></pre>
                     </div>
                 </section>
                 
                 
                 <section class="content-section">
-                    <h2>🚀 Next Steps</h2>
+                    <h2> Next Steps</h2>
                     <p>Now that you have MAT-HPO installed, here's what to do next:</p>
                     
                     <div class="next-steps">
@@ -284,6 +290,5 @@ python test_working_examples.py
         </main>
     </div>
     
-    <script src="js/main.js"></script>
-</body>
+    <script src="js/main.js"></script></body>
 </html>

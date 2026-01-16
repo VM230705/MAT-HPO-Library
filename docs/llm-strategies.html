@@ -6,8 +6,7 @@
     <title>LLM Strategies - MAT-HPO Library</title>
     <meta name="description" content="LLM-enhanced hyperparameter optimization strategies based on arXiv:2507.13712">
     <link rel="stylesheet" href="css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-</head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>"></head>
 <body>
     <button class="mobile-toggle">☰</button>
 
@@ -96,24 +95,24 @@
                 <nav class="breadcrumb">
                     <a href="index.html">Home</a> &gt; LLM Strategies
                 </nav>
-                <h1>🧠 LLM Enhancement Strategies</h1>
+                <h1> LLM Enhancement Strategies</h1>
                 <p class="subtitle">Based on research paper <a href="https://arxiv.org/abs/2507.13712" target="_blank">arXiv:2507.13712</a></p>
             </div>
 
             <div class="main-content">
 
                 <section class="content-section">
-                    <h2>📚 Overview</h2>
+                    <h2>🧠 LLM Strategies</h2>
 
                     <p>MAT-HPO Library includes cutting-edge LLM-enhanced hyperparameter optimization based on the research paper <strong>arXiv:2507.13712</strong>. Large Language Models provide intelligent, domain-aware parameter suggestions that complement traditional reinforcement learning approaches.</p>
 
                     <div class="alert alert-info">
-                        <strong>🔬 Research-Based:</strong> All LLM strategies implement the exact methods described in the academic paper, ensuring scientific rigor and reproducibility.
+                        <strong> Research-Based:</strong> All LLM strategies implement the exact methods described in the academic paper, ensuring scientific rigor and reproducibility.
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>🎯 Supported LLM Strategies</h2>
+                    <h2>LLM Strategies</h2>
 
                     <h3>1. Fixed Alpha Strategy</h3>
 
@@ -147,7 +146,7 @@
                         </div>
                         <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> EasyHPO
 
-optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"time_series_classification"</span><span class="token punctuation">,</span>
     max_trials<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">,</span>
     llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
@@ -192,11 +191,11 @@ optimizer <span class="token operator">=</span> <span class="token function">Eas
                         </div>
                         <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> EasyHPO
 
-optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"time_series_classification"</span><span class="token punctuation">,</span>
     max_trials<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">,</span>
     llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
-    llm_strategy<span class="token operator">=</span><span class="token string">"adaptive"</span><span class="token punctuation">,</span>  <span class="token comment"># 🧠 Intelligent adaptive strategy</span>
+    llm_strategy<span class="token operator">=</span><span class="token string">"adaptive"</span><span class="token punctuation">,</span>  <span class="token comment">#  Intelligent adaptive strategy</span>
     llm_config<span class="token operator">=</span><span class="token punctuation">{</span>
         <span class="token string">'performance_threshold'</span><span class="token punctuation">:</span> <span class="token number">0.01</span><span class="token punctuation">,</span>  <span class="token comment"># RL slope threshold</span>
         <span class="token string">'min_episodes'</span><span class="token punctuation">:</span> <span class="token number">5</span><span class="token punctuation">,</span>              <span class="token comment"># Start monitoring after 5 episodes</span>
@@ -208,7 +207,7 @@ optimizer <span class="token operator">=</span> <span class="token function">Eas
                 </section>
 
                 <section class="content-section">
-                    <h2>📊 Strategy Comparison</h2>
+                    <h2> Strategy Comparison</h2>
 
                     <table>
                         <thead>
@@ -223,16 +222,16 @@ optimizer <span class="token operator">=</span> <span class="token function">Eas
                         <tbody>
                             <tr>
                                 <td><strong>Fixed Alpha</strong></td>
-                                <td>🟢 High</td>
-                                <td>🟡 Good</td>
-                                <td>🟡 Medium</td>
+                                <td> High</td>
+                                <td> Good</td>
+                                <td> Medium</td>
                                 <td>Production, Stability</td>
                             </tr>
                             <tr>
                                 <td><strong>Adaptive</strong></td>
-                                <td>🟡 Medium</td>
-                                <td>🟢 Excellent</td>
-                                <td>🟢 Efficient</td>
+                                <td> Medium</td>
+                                <td> Excellent</td>
+                                <td> Efficient</td>
                                 <td>Research, Optimization</td>
                             </tr>
                         </tbody>
@@ -240,7 +239,7 @@ optimizer <span class="token operator">=</span> <span class="token function">Eas
                 </section>
 
                 <section class="content-section">
-                    <h2>🔧 Parameter Tuning Guide</h2>
+                    <h2> Parameter Tuning Guide</h2>
 
                     <h3>Adaptive Strategy Tuning</h3>
 
@@ -249,21 +248,21 @@ optimizer <span class="token operator">=</span> <span class="token function">Eas
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python"><span class="token comment"># 🎯 Conservative approach (less LLM usage)</span>
+                        <pre><code class="language-python"><span class="token comment">#  Conservative approach (less LLM usage)</span>
 llm_config <span class="token operator">=</span> <span class="token punctuation">{</span>
     <span class="token string">'performance_threshold'</span><span class="token punctuation">:</span> <span class="token number">0.02</span><span class="token punctuation">,</span>  <span class="token comment"># Higher threshold</span>
     <span class="token string">'min_episodes'</span><span class="token punctuation">:</span> <span class="token number">8</span><span class="token punctuation">,</span>               <span class="token comment"># Wait longer before monitoring</span>
     <span class="token string">'cooldown'</span><span class="token punctuation">:</span> <span class="token number">5</span>                     <span class="token comment"># Longer cooldown</span>
 <span class="token punctuation">}</span>
 
-<span class="token comment"># ⚡ Aggressive approach (more LLM usage)</span>
+<span class="token comment">#  Aggressive approach (more LLM usage)</span>
 llm_config <span class="token operator">=</span> <span class="token punctuation">{</span>
     <span class="token string">'performance_threshold'</span><span class="token punctuation">:</span> <span class="token number">0.005</span><span class="token punctuation">,</span> <span class="token comment"># Lower threshold</span>
     <span class="token string">'min_episodes'</span><span class="token punctuation">:</span> <span class="token number">3</span><span class="token punctuation">,</span>               <span class="token comment"># Start monitoring earlier</span>
     <span class="token string">'cooldown'</span><span class="token punctuation">:</span> <span class="token number">2</span>                     <span class="token comment"># Shorter cooldown</span>
 <span class="token punctuation">}</span>
 
-<span class="token comment"># 🎯 Balanced approach (recommended starting point)</span>
+<span class="token comment">#  Balanced approach (recommended starting point)</span>
 llm_config <span class="token operator">=</span> <span class="token punctuation">{</span>
     <span class="token string">'performance_threshold'</span><span class="token punctuation">:</span> <span class="token number">0.01</span><span class="token punctuation">,</span>
     <span class="token string">'min_episodes'</span><span class="token punctuation">:</span> <span class="token number">5</span><span class="token punctuation">,</span>
@@ -278,19 +277,19 @@ llm_config <span class="token operator">=</span> <span class="token punctuation"
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python"><span class="token comment"># 🛡️ Conservative strategy (20% LLM)</span>
+                        <pre><code class="language-python"><span class="token comment"># ️ Conservative strategy (20% LLM)</span>
 <span class="token string">'alpha'</span><span class="token punctuation">:</span> <span class="token number">0.2</span>
 
 <span class="token comment"># ⚖️ Balanced strategy (30% LLM) - Recommended</span>
 <span class="token string">'alpha'</span><span class="token punctuation">:</span> <span class="token number">0.3</span>
 
-<span class="token comment"># 🚀 Aggressive strategy (40% LLM)</span>
+<span class="token comment">#  Aggressive strategy (40% LLM)</span>
 <span class="token string">'alpha'</span><span class="token punctuation">:</span> <span class="token number">0.4</span></code></pre>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>💡 Practical Examples</h2>
+                    <h2> Practical Examples</h2>
 
                     <h3>SPNV2 ECG Classification with LLM</h3>
 
@@ -303,7 +302,7 @@ llm_config <span class="token operator">=</span> <span class="token punctuation"
 <span class="token function">python</span> <span class="token string">"2. SPL_HPO_Complete.py"</span> --dataset ICBEB --fold <span class="token number">1</span> --steps <span class="token number">20</span> --gpu <span class="token number">0</span> <span class="token punctuation">\</span>
   --llm_enabled --llm_strategy fixed_alpha --llm_alpha <span class="token number">0.3</span>
 
-<span class="token comment"># 🧠 Using adaptive strategy for optimal performance</span>
+<span class="token comment">#  Using adaptive strategy for optimal performance</span>
 <span class="token function">python</span> <span class="token string">"2. SPL_HPO_Complete.py"</span> --dataset ICBEB --fold <span class="token number">1</span> --steps <span class="token number">20</span> --gpu <span class="token number">0</span> <span class="token punctuation">\</span>
   --llm_enabled --llm_strategy adaptive</code></pre>
                     </div>
@@ -318,7 +317,7 @@ llm_config <span class="token operator">=</span> <span class="token punctuation"
                         <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> EasyHPO
 <span class="token keyword">import</span> numpy <span class="token keyword">as</span> np
 
-<span class="token comment"># 📊 Create sample time series data</span>
+<span class="token comment">#  Create sample time series data</span>
 n_samples<span class="token punctuation">,</span> sequence_length <span class="token operator">=</span> <span class="token number">1000</span><span class="token punctuation">,</span> <span class="token number">100</span>
 X <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span><span class="token function">randn</span><span class="token punctuation">(</span>n_samples<span class="token punctuation">,</span> sequence_length<span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span>
 y <span class="token operator">=</span> np<span class="token punctuation">.</span>random<span class="token punctuation">.</span><span class="token function">randint</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">3</span><span class="token punctuation">,</span> n_samples<span class="token punctuation">)</span>
@@ -326,7 +325,7 @@ y <span class="token operator">=</span> np<span class="token punctuation">.</spa
 <span class="token keyword">from</span> sklearn<span class="token punctuation">.</span>model_selection <span class="token keyword">import</span> train_test_split
 X_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> y_val <span class="token operator">=</span> <span class="token function">train_test_split</span><span class="token punctuation">(</span>X<span class="token punctuation">,</span> y<span class="token punctuation">,</span> test_size<span class="token operator">=</span><span class="token number">0.2</span><span class="token punctuation">)</span>
 
-<span class="token comment"># 🧠 Advanced adaptive strategy with custom configuration</span>
+<span class="token comment">#  Advanced adaptive strategy with custom configuration</span>
 advanced_llm_config <span class="token operator">=</span> <span class="token punctuation">{</span>
     <span class="token string">'performance_threshold'</span><span class="token punctuation">:</span> <span class="token number">0.008</span><span class="token punctuation">,</span>  <span class="token comment"># Sensitive threshold</span>
     <span class="token string">'min_episodes'</span><span class="token punctuation">:</span> <span class="token number">3</span><span class="token punctuation">,</span>               <span class="token comment"># Early monitoring</span>
@@ -336,7 +335,7 @@ advanced_llm_config <span class="token operator">=</span> <span class="token pun
     <span class="token string">'learning_rate'</span><span class="token punctuation">:</span> <span class="token number">0.001</span>             <span class="token comment"># RL parameter</span>
 <span class="token punctuation">}</span>
 
-optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"time_series_classification"</span><span class="token punctuation">,</span>
     max_trials<span class="token operator">=</span><span class="token number">30</span><span class="token punctuation">,</span>
     llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
@@ -345,11 +344,11 @@ optimizer <span class="token operator">=</span> <span class="token function">Eas
     verbose<span class="token operator">=</span><span class="token boolean">True</span>  <span class="token comment"># See LLM decisions in real-time</span>
 <span class="token punctuation">)</span>
 
-<span class="token comment"># 🚀 Run optimization</span>
+<span class="token comment">#  Run optimization</span>
 results <span class="token operator">=</span> optimizer<span class="token punctuation">.</span><span class="token function">optimize</span><span class="token punctuation">(</span>X_train<span class="token punctuation">,</span> y_train<span class="token punctuation">,</span> X_val<span class="token punctuation">,</span> y_val<span class="token punctuation">)</span>
 
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"🏆 Best F1 Score: {results['best_performance']['f1']:.4f}"</span><span class="token punctuation">)</span>
-<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"🎯 LLM Interventions: {results.get('llm_interventions', 0)}"</span><span class="token punctuation">)</span></code></pre>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f" Best F1 Score: {results['best_performance']['f1']:.4f}"</span><span class="token punctuation">)</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f" LLM Interventions: {results.get('llm_interventions', 0)}"</span><span class="token punctuation">)</span></code></pre>
                     </div>
                 </section>
 
@@ -380,12 +379,12 @@ results <span class="token operator">=</span> optimizer<span class="token punctu
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code class="language-python"><span class="token comment"># 🔍 Enable detailed logging to monitor LLM behavior</span>
-optimizer <span class="token operator">=</span> <span class="token function">EasyHPO</span><span class="token punctuation">(</span>
+                        <pre><code class="language-python"><span class="token comment">#  Enable detailed logging to monitor LLM behavior</span>
+optimizer <span class="token operator">=</span> <span class="token class-name">EasyHPO</span><span class="token punctuation">(</span>
     task_type<span class="token operator">=</span><span class="token string">"time_series_classification"</span><span class="token punctuation">,</span>
     llm_enabled<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>
     llm_strategy<span class="token operator">=</span><span class="token string">"adaptive"</span><span class="token punctuation">,</span>
-    verbose<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>  <span class="token comment"># 📊 See real-time decisions</span>
+    verbose<span class="token operator">=</span><span class="token boolean">True</span><span class="token punctuation">,</span>  <span class="token comment">#  See real-time decisions</span>
     llm_config<span class="token operator">=</span><span class="token punctuation">{</span>
         <span class="token string">'log_decisions'</span><span class="token punctuation">:</span> <span class="token boolean">True</span><span class="token punctuation">,</span>  <span class="token comment"># Log every LLM/RL decision</span>
         <span class="token string">'save_history'</span><span class="token punctuation">:</span> <span class="token boolean">True</span>    <span class="token comment"># Save decision history</span>
@@ -395,17 +394,17 @@ optimizer <span class="token operator">=</span> <span class="token function">Eas
                 </section>
 
                 <section class="content-section">
-                    <h2>📖 Academic Reference</h2>
+                    <h2> Academic Reference</h2>
 
                     <div class="alert alert-info">
-                        <strong>📚 Citation:</strong> This implementation strictly follows the methodology described in research paper <a href="https://arxiv.org/abs/2507.13712" target="_blank">arXiv:2507.13712</a>, ensuring academic rigor and reproducibility.
+                        <strong> Citation:</strong> This implementation strictly follows the methodology described in research paper <a href="https://arxiv.org/abs/2507.13712" target="_blank">arXiv:2507.13712</a>, ensuring academic rigor and reproducibility.
                     </div>
 
                     <p>The adaptive trigger mechanism monitors the slope of reinforcement learning performance improvement and intelligently decides when to incorporate Large Language Model suggestions, leading to more efficient and effective hyperparameter optimization.</p>
                 </section>
 
                 <section class="content-section">
-                    <h2>📚 Next Steps</h2>
+                    <h2> Next Steps</h2>
 
                     <div class="next-steps">
                         <div class="step-item">
@@ -429,6 +428,5 @@ optimizer <span class="token operator">=</span> <span class="token function">Eas
         </main>
     </div>
 
-    <script src="js/main.js"></script>
-</body>
+    <script src="js/main.js"></script></body>
 </html>

@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HyperparameterSpace API - MAT-HPO Library</title>
     <link rel="stylesheet" href="../css/style.css">
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🤖</text></svg>">
-</head>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>"></head>
 <body>
     <button class="mobile-toggle">☰</button>
     
@@ -98,35 +97,36 @@
             <div class="main-content">
                 
                 <section class="content-section">
-                    <h2>📋 Overview</h2>
+                    <h2> Overview</h2>
                     <p>Define the search space for hyperparameters and assign them to different agents for specialized optimization.</p>
                 </section>
 
                 <section class="content-section">
-                    <h2>🏗️ Initialization</h2>
+                    <h2>️ Initialization</h2>
                     
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code># Method 1: Dynamic addition
-space = HyperparameterSpace()
-space.add_continuous('learning_rate', 1e-4, 1e-2, agent=0)
+                        <pre><code class="language-python"><span class="token comment"># Method 1: Dynamic addition</span>
+space <span class="token operator">=</span> <span class="token class-name">HyperparameterSpace</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'class_weight_0'</span><span class="token punctuation">,</span> <span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token number">3.0</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>  <span class="token comment"># Problem-specific</span>
 
-# Method 2: Full initialization
-space = HyperparameterSpace(
-    agent0_params=['learning_rate', 'weight_decay'],
-    agent1_params=['hidden_size'],
-    agent2_params=['batch_size'],
-    bounds={'learning_rate': (1e-4, 1e-2), ...},
-    param_types={'learning_rate': float, ...}
-)</code></pre>
+<span class="token comment"># Method 2: Full initialization</span>
+space <span class="token operator">=</span> <span class="token class-name">HyperparameterSpace</span><span class="token punctuation">(</span>
+    agent0_params<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'class_weight_0'</span><span class="token punctuation">,</span> <span class="token string">'weight_decay'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment"># Problem-specific</span>
+    agent1_params<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'hidden_size'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment"># Architecture</span>
+    agent2_params<span class="token operator">=</span><span class="token punctuation">[</span><span class="token string">'learning_rate'</span><span class="token punctuation">,</span> <span class="token string">'batch_size'</span><span class="token punctuation">]</span><span class="token punctuation">,</span>  <span class="token comment"># Training</span>
+    bounds<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">'class_weight_0'</span><span class="token punctuation">:</span> <span class="token punctuation">(</span><span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token number">3.0</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token operator">...</span><span class="token punctuation">}</span><span class="token punctuation">,</span>
+    param_types<span class="token operator">=</span><span class="token punctuation">{</span><span class="token string">'class_weight_0'</span><span class="token punctuation">:</span> <span class="token builtin">float</span><span class="token punctuation">,</span> <span class="token operator">...</span><span class="token punctuation">}</span>
+<span class="token punctuation">)</span>
+</code></pre>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>🔧 Methods</h2>
+                    <h2> Methods</h2>
                     
                     <div class="api-section">
                         <div class="api-header">
@@ -141,13 +141,14 @@ space = HyperparameterSpace(
                                     <span class="code-language">python</span>
                                     <button class="copy-btn">Copy</button>
                                 </div>
-                                <pre><code># Float parameters
-space.add_continuous('learning_rate', 1e-5, 1e-2, agent=0)
-space.add_continuous('dropout_rate', 0.0, 0.5, agent=1)
+                                <pre><code class="language-python"><span class="token comment"># Float parameters</span>
+space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'class_weight_0'</span><span class="token punctuation">,</span> <span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token number">3.0</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>  <span class="token comment"># Problem-specific</span>
+space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'hidden_size'</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">512</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># Architecture (will be cast to int)</span>
 
-# Int parameters (will be cast from continuous range)
-space.add_continuous('hidden_size', 64, 512, agent=2)
-space.add_continuous('batch_size', 16, 128, agent=2)</code></pre>
+<span class="token comment"># Training parameters</span>
+space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'learning_rate'</span><span class="token punctuation">,</span> <span class="token number">1e-5</span><span class="token punctuation">,</span> <span class="token number">1e-2</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment"># Training</span>
+space<span class="token punctuation">.</span><span class="token function">add_discrete</span><span class="token punctuation">(</span><span class="token string">'batch_size'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">]</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment"># Training</span>
+</code></pre>
                             </div>
                         </div>
                     </div>
@@ -165,60 +166,62 @@ space.add_continuous('batch_size', 16, 128, agent=2)</code></pre>
                                     <span class="code-language">python</span>
                                     <button class="copy-btn">Copy</button>
                                 </div>
-                                <pre><code>space.add_discrete('optimizer', ['adam', 'sgd', 'adamw'], agent=0)
-space.add_discrete('activation', ['relu', 'tanh', 'gelu'], agent=1)</code></pre>
+                                <pre><code class="language-python"><span class="token keyword">space</span><span class="token punctuation">.</span><span class="token function">add_discrete</span><span class="token punctuation">(</span><span class="token string">'optimizer'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'adam'</span><span class="token punctuation">,</span> <span class="token string">'sgd'</span><span class="token punctuation">,</span> <span class="token string">'adamw'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>  <span class="token comment"># Training</span>
+<span class="token keyword">space</span><span class="token punctuation">.</span><span class="token function">add_discrete</span><span class="token punctuation">(</span><span class="token string">'activation'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token string">'relu'</span><span class="token punctuation">,</span> <span class="token string">'tanh'</span><span class="token punctuation">,</span> <span class="token string">'gelu'</span><span class="token punctuation">]</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>  <span class="token comment"># Architecture</span>
+</code></pre>
                             </div>
                         </div>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>🎯 Agent Assignment</h2>
+                    <h2> Agent Assignment</h2>
                     <div class="feature-grid">
                         <div class="feature-item">
-                            <h3>Agent 0</h3>
-                            <p>Problem-specific parameters like learning rates, regularization, class weights</p>
+                            <h3>🤖 Agent 0</h3>
+                            <p><strong>Problem-Specific</strong><br>Class weights, regularization, loss functions, domain-specific parameters</p>
                         </div>
                         
                         <div class="feature-item">
-                            <h3>Agent 1</h3>
-                            <p>Model architecture parameters like hidden layers, network size, activation functions</p>
+                            <h3>🏗️ Agent 1</h3>
+                            <p><strong>Architecture</strong><br>Hidden layers, network size, activation functions, model structure</p>
                         </div>
                         
                         <div class="feature-item">
-                            <h3>Agent 2</h3>
-                            <p>Training parameters like batch size, dropout rate, optimization settings</p>
+                            <h3>⚙️ Agent 2</h3>
+                            <p><strong>Training</strong><br>Batch size, learning rate, optimizers, training schedule</p>
                         </div>
                     </div>
                 </section>
 
                 <section class="content-section">
-                    <h2>📝 Complete Example</h2>
+                    <h2> Complete Example</h2>
                     
                     <div class="code-block">
                         <div class="code-header">
                             <span class="code-language">python</span>
                             <button class="copy-btn">Copy</button>
                         </div>
-                        <pre><code>from MAT_HPO_LIB import HyperparameterSpace
+                        <pre><code class="language-python"><span class="token keyword">from</span> MAT_HPO_LIB <span class="token keyword">import</span> <span class="token class-name">HyperparameterSpace</span>
 
-# Create space for neural network optimization
-space = HyperparameterSpace()
+<span class="token comment"># Create space for neural network optimization</span>
+space <span class="token operator">=</span> <span class="token class-name">HyperparameterSpace</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
 
-# Agent 0: Problem-specific parameters
-space.add_continuous('learning_rate', 1e-5, 1e-2, agent=0)
-space.add_continuous('weight_decay', 1e-6, 1e-3, agent=0)
+<span class="token comment"># Agent 0: Problem-specific parameters</span>
+space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'class_weight_0'</span><span class="token punctuation">,</span> <span class="token number">0.5</span><span class="token punctuation">,</span> <span class="token number">3.0</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
+space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'weight_decay'</span><span class="token punctuation">,</span> <span class="token number">1e-6</span><span class="token punctuation">,</span> <span class="token number">1e-3</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">0</span><span class="token punctuation">)</span>
 
-# Agent 1: Architecture parameters  
-space.add_continuous('hidden_size', 64, 512, agent=1)
-space.add_continuous('num_layers', 2, 8, agent=1)
+<span class="token comment"># Agent 1: Architecture parameters  </span>
+space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'hidden_size'</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">512</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
+space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'num_layers'</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">8</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">1</span><span class="token punctuation">)</span>
 
-# Agent 2: Training parameters
-space.add_continuous('batch_size', 16, 128, agent=2)
-space.add_continuous('dropout_rate', 0.0, 0.5, agent=2)
+<span class="token comment"># Agent 2: Training parameters</span>
+space<span class="token punctuation">.</span><span class="token function">add_continuous</span><span class="token punctuation">(</span><span class="token string">'learning_rate'</span><span class="token punctuation">,</span> <span class="token number">1e-5</span><span class="token punctuation">,</span> <span class="token number">1e-2</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
+space<span class="token punctuation">.</span><span class="token function">add_discrete</span><span class="token punctuation">(</span><span class="token string">'batch_size'</span><span class="token punctuation">,</span> <span class="token punctuation">[</span><span class="token number">16</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> <span class="token number">128</span><span class="token punctuation">]</span><span class="token punctuation">,</span> agent<span class="token operator">=</span><span class="token number">2</span><span class="token punctuation">)</span>
 
-# Each agent will have 2 parameters to optimize
-print(f"Agent dimensions: {space.agent_dims}")  # (2, 2, 2)</code></pre>
+<span class="token comment"># Each agent will have 2 parameters to optimize</span>
+<span class="token builtin">print</span><span class="token punctuation">(</span><span class="token string">f"Agent dimensions: {space.agent_dims}"</span><span class="token punctuation">)</span>  <span class="token comment"># (2, 2, 2)</span>
+</code></pre>
                     </div>
                 </section>
                 
@@ -226,6 +229,5 @@ print(f"Agent dimensions: {space.agent_dims}")  # (2, 2, 2)</code></pre>
         </main>
     </div>
     
-    <script src="../js/main.js"></script>
-</body>
+    <script src="../js/main.js"></script></body>
 </html>

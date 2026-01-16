@@ -544,7 +544,7 @@ tr:hover {
     color: #d4d4d4;
 }
 
-/* Python Syntax Highlighting */
+/* Python Syntax Highlighting - Enhanced colors for better visibility */
 .language-python .token.keyword {
     color: #569cd6;
     font-weight: bold;
@@ -556,10 +556,12 @@ tr:hover {
 
 .language-python .token.function {
     color: #dcdcaa;
+    font-weight: 500;
 }
 
 .language-python .token.class-name {
     color: #4ec9b0;
+    font-weight: 500;
 }
 
 .language-python .token.comment {
@@ -569,6 +571,7 @@ tr:hover {
 
 .language-python .token.number {
     color: #b5cea8;
+    font-weight: 500;
 }
 
 .language-python .token.operator {
@@ -581,11 +584,22 @@ tr:hover {
 
 .language-python .token.builtin {
     color: #569cd6;
+    font-weight: 500;
 }
 
-/* Bash/Shell Syntax Highlighting */
+/* Ensure all code blocks have syntax highlighting */
+.code-block pre code {
+    background: transparent !important;
+}
+
+.code-block pre code .token {
+    display: inline;
+}
+
+/* Bash/Shell Syntax Highlighting - Enhanced colors */
 .language-bash .token.function {
     color: #569cd6;
+    font-weight: 500;
 }
 
 .language-bash .token.string {
@@ -603,6 +617,11 @@ tr:hover {
 
 .language-bash .token.option {
     color: #c586c0;
+}
+
+.language-bash .token.builtin {
+    color: #569cd6;
+    font-weight: 500;
 }
 
 /* JSON Syntax Highlighting */
@@ -647,6 +666,61 @@ tr:hover {
 .token.variable {
     color: #9cdcfe;
 }
+
+/* Additional Python token types for complete syntax highlighting */
+.language-python .token.property {
+    color: #9cdcfe;
+}
+
+.language-python .token.constant {
+    color: #569cd6;
+    font-weight: 500;
+}
+
+.language-python code:not(.token) {
+    color: #d4d4d4;
+}
+
+/* Ensure class names and identifiers have colors even without token class */
+.language-python code {
+    color: #d4d4d4;
+}
+
+/* Variable names and identifiers */
+.language-python code .token.plain,
+.language-python code:not([class*="token"]) {
+    color: #d4d4d4;
+}
+
+/* Better handling for unmarked identifiers in Python */
+.language-python pre code {
+    color: #d4d4d4;
+}
+
+/* Default color for text without token classes */
+.language-python code:not(.token) {
+    color: #d4d4d4;
+}
+
+/* Property access (e.g., space.add_continuous) */
+.language-python .token.property-access {
+    color: #9cdcfe;
+}
+
+/* Support for Pygments format (fallback) */
+.language-python .kn { color: #569cd6; font-weight: bold; } /* keyword namespace */
+.language-python .nn { color: #4ec9b0; } /* namespace name */
+.language-python .n { color: #d4d4d4; } /* name */
+.language-python .c1 { color: #6a9955; font-style: italic; } /* comment */
+.language-python .o { color: #d4d4d4; } /* operator */
+.language-python .p { color: #d4d4d4; } /* punctuation */
+.language-python .s1 { color: #ce9178; } /* string single */
+.language-python .s2 { color: #ce9178; } /* string double */
+.language-python .mf { color: #b5cea8; font-weight: 500; } /* number float */
+.language-python .mi { color: #b5cea8; font-weight: 500; } /* number integer */
+.language-python .nb { color: #569cd6; font-weight: 500; } /* name builtin */
+.language-python .sa { color: #569cd6; } /* string affix */
+.language-python .si { color: #9cdcfe; } /* string interpol */
 
 /* Enhanced Code block styling */
 .code-block {
@@ -736,11 +810,18 @@ tr:hover {
 }
 
 .code-block pre code {
-    background: none;
+    background: transparent !important;
     color: #e2e8f0;
     padding: 0;
     border: none;
     font-family: inherit;
+    display: block;
+}
+
+/* Ensure syntax highlighting tokens are visible */
+.code-block pre code .token {
+    display: inline;
+    background: transparent !important;
 }
 
 /* API documentation styles */

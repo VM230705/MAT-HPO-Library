@@ -1,4 +1,4 @@
-# 🤖 MAT-HPO Library
+# MAT-HPO Library
 
 **Multi-Agent Transformer Hyperparameter Optimization**
 
@@ -8,66 +8,75 @@
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://github.com/VM230705/MAT-HPO-Library)
 [![Code Coverage](https://img.shields.io/badge/coverage-95%25-brightgreen)](https://github.com/VM230705/MAT-HPO-Library)
 
-> 🚀 **Revolutionary hyperparameter optimization using multi-agent reinforcement learning**
+> **Revolutionary hyperparameter optimization using multi-agent reinforcement learning**  
 > Three specialized AI agents collaborate to optimize different parameter types simultaneously, delivering superior performance over traditional methods.
 
-## ✨ Key Features
+## About This Project
 
-- 🎯 **Multi-Agent Architecture**: 3 specialized agents for different hyperparameter types
-- ⚡ **Smart Optimization**: Advanced reinforcement learning algorithms
-- 🔧 **Easy Integration**: Simple API that works with any ML framework
-- 📊 **Comprehensive Logging**: Built-in experiment tracking and visualization
-- 🎛️ **Flexible Configuration**: From quick tests to production-grade optimization
-- 🧠 **LLM Enhancement**: Optional language model guided parameter selection
+This repository is an extended implementation based on the research paper:
+
+**Cheng, Nai Hsin, Yujia Wu, and Vincent S. Tseng.** "Multi-Agent Transformer-based Automated Imbalanced Time Series Classification with Hyperparameter Optimization." *2025 International Joint Conference on Neural Networks, IJCNN 2025*. Institute of Electrical and Electronics Engineers Inc., 2025.
+
+The library generalizes the concepts from the original paper to provide a flexible, task-agnostic hyperparameter optimization framework that can be applied to various machine learning tasks beyond time series classification.
+
+## Key Features
+
+- **Multi-Agent Architecture**: 3 specialized agents for different hyperparameter types
+- **Smart Optimization**: Advanced reinforcement learning algorithms
+- **Easy Integration**: Simple API that works with any ML framework
+- **Comprehensive Logging**: Built-in experiment tracking and visualization
+- **Flexible Configuration**: From quick tests to production-grade optimization
+- **LLM Enhancement**: Optional language model guided parameter selection
 
 ## 🚀 Quick Start
 
-### 📦 Installation
+### Installation
 
 ```bash
 # Clone the repository
 git clone https://github.com/VM230705/MAT-HPO-Library.git
 cd MAT-HPO-Library
 
+# Add to Python path
+export PYTHONPATH=$PYTHONPATH:$(pwd)
+
 # Install dependencies
 pip install torch numpy scikit-learn
-
-# Verify installation
-python test_working_examples.py
 ```
 
-### 💡 Basic Usage
+### Basic Usage
 
 #### Level 1: EasyHPO (Recommended for Most Users)
+
 ```python
 from MAT_HPO_LIB import EasyHPO
 
 # One-liner optimization
-optimizer = EasyHPO(task_type="time_series_classification", max_trials=30)
+optimizer = EasyHPO(task_type="classification", max_trials=30)
 results = optimizer.optimize(X_train, y_train, X_val, y_val)
-
-print("🎉 Best F1:", results['best_performance']['f1'])
 ```
 
 #### Level 2: FullControlHPO (Production Interface)
+
 ```python
 from MAT_HPO_LIB import FullControlHPO
 
 # Production-grade optimization with LLM enhancement
 optimizer = FullControlHPO(
-    task_type="time_series_classification",
-    max_trials=30,
-    llm_enabled=True,
-    llm_strategy="adaptive",  # or "fixed_alpha"
-    alpha=0.3
+    task_type="classification",
+    optimization_config={
+        'num_episodes': 100,
+        'llm_strategy': 'adaptive'
+    }
 )
 results = optimizer.optimize(X_train, y_train, X_val, y_val)
 ```
 
 #### Level 3: Core Components (Full Control)
+
 ```python
-from MAT_HPO_LIB import MAT_HPO_Optimizer, BaseEnvironment, HyperparameterSpace
-from MAT_HPO_LIB.utils import DefaultConfigs
+from MAT_HPO_LIB.core import BaseEnvironment
+from MAT_HPO_LIB import HyperparameterSpace, MAT_HPO_Optimizer, DefaultConfigs
 
 # Define your optimization environment
 class MyEnvironment(BaseEnvironment):
@@ -91,146 +100,172 @@ optimizer = MAT_HPO_Optimizer(MyEnvironment(), space, config)
 results = optimizer.optimize()
 ```
 
-### ✅ Test Installation
+### Test Installation
+
 ```bash
 python test_working_examples.py
 ```
 
-## 🤖 Agent Specialization
+## Agent Specialization
 
-Our multi-agent system uses **three specialized AI agents**, each focusing on different types of hyperparameters:
+MAT-HPO uses three specialized agents that work together:
 
-| Agent | Focus Area | Example Parameters | 🎯 Purpose |
-|-------|------------|-------------------|------------|
-| **Agent 0** | 🎯 Problem-Specific | `class_weights`, `regularization`, `loss_function` | Domain-specific optimizations |
-| **Agent 1** | 🏗️ Architecture | `hidden_layers`, `network_size`, `activation` | Model structure decisions |
-| **Agent 2** | 🎓 Training | `batch_size`, `learning_rate`, `optimizer` | Learning process control |
+- **Agent 0**: Learning rate, weight decay, optimizer parameters
+- **Agent 1**: Batch size, number of layers, hidden dimensions
+- **Agent 2**: Dropout, activation functions, regularization
 
-## ⚙️ Configuration Options
+Each agent focuses on related hyperparameters, leading to more efficient exploration.
 
-Choose from **pre-configured setups** or customize your own:
+## Configuration Options
+
+MAT-HPO provides several preset configurations:
 
 ```python
-from MAT_HPO_LIB.utils import DefaultConfigs
+from MAT_HPO_LIB import DefaultConfigs
 
-# 🏃‍♂️ Quick test (10 steps) - Perfect for debugging
+# Quick test (10 steps) - Perfect for debugging
 config = DefaultConfigs.quick_test()
 
-# 🎯 Standard optimization (100 steps) - Recommended for most use cases
+# Standard optimization (100 steps) - Recommended for most use cases
 config = DefaultConfigs.standard()
 
-# 💻 CPU-only mode - For environments without GPU
+# Production grade (200 steps)
+config = DefaultConfigs.extensive()
+
+# CPU-only mode
 config = DefaultConfigs.cpu_only()
 
-# 🔧 Custom configuration - Full control over parameters
-from MAT_HPO_LIB.utils import OptimizationConfig
-config = OptimizationConfig(
-    max_steps=50,          # Number of optimization steps
-    batch_size=32,         # Training batch size
-    use_cuda=True,         # Enable GPU acceleration
-    policy_learning_rate=1e-3, # Policy network learning rate
-    noise_std=0.1              # Exploration noise standard deviation
-)
+# LLM-enhanced optimization
+# See LLM documentation for advanced usage
+config = DefaultConfigs.extensive()
 ```
 
-### 🚀 Performance Profiles
+## 📊 Logging and Tracking
 
-| Profile | Steps | Time | Use Case | 🎯 Recommended For |
-|---------|-------|------|----------|-------------------|
-| `quick_test()` | 10 | ~2 min | Debugging, Testing | Development & CI/CD |
-| `standard()` | 100 | ~20 min | Most Projects | Production Ready |
-| `extended()` | 500 | ~2 hours | Research | High Performance Needs |
+MAT-HPO automatically logs all experiments:
 
-## 📊 Results & Output
-
-Results are automatically saved in organized files:
-
-```
-📁 Your Project Directory
-├── 🏆 best_hyperparams.json      # 🎯 Best hyperparameters found
-├── 📈 optimization_results.json   # 📊 Complete optimization metrics
-├── 📝 step_log.jsonl              # 🔍 Step-by-step optimization log
-└── 📋 experiment_summary.md       # 📄 Human-readable summary
-```
-
-### 📈 Example Results
-
-```json
-{
-  "best_hyperparameters": {
-    "learning_rate": 0.001247,
-    "batch_size": 64,
-    "dropout": 0.342
-  },
-  "best_metrics": {
-    "f1_score": 0.945,
-    "auc_score": 0.987,
-    "gmean_score": 0.923
-  },
-  "optimization_stats": {
-    "total_steps": 100,
-    "convergence_step": 78,
-    "improvement_over_baseline": "12.4%"
-  }
-}
-```
-
-## 🧠 LLM Enhancement
-
-MAT-HPO supports intelligent hyperparameter suggestions using Large Language Models:
-
-### Fixed Alpha Strategy
 ```python
-optimizer = EasyHPO(
-    task_type="time_series_classification",
-    llm_enabled=True,
-    llm_strategy="fixed_alpha",
-    alpha=0.3  # 30% LLM + 70% RL
-)
+from MAT_HPO_LIB.utils import Logger
+
+# Results are saved to:
+# - logs/MAT_HPO_[timestamp].log
+# - results/best_hyperparams_[timestamp].json
+# - results/training_history_[timestamp].csv
+
+# Access logs
+logger = Logger(name="MyOptimization", log_dir="./custom_logs")
+logger.info("Custom logging message")
 ```
 
-### Adaptive Strategy (Recommended)
+## LLM Enhancement
+
+Integrate language models for intelligent hyperparameter suggestions:
+
 ```python
-optimizer = EasyHPO(
-    task_type="time_series_classification",
-    llm_enabled=True,
-    llm_strategy="adaptive",  # Automatically adjusts based on performance
-    slope_threshold=0.01
-)
+# See LLM documentation for advanced usage
+config = DefaultConfigs.extensive()
+
+optimizer = MAT_HPO_Optimizer(environment, space, config)
+results = optimizer.optimize()
 ```
 
-## 🛠️ Troubleshooting
+**Available Strategies**:
+- `fixed_alpha`: Fixed mixing ratio between LLM and RL
+- `adaptive`: Dynamic adjustment based on performance
+- `conservative`: Gradual transition from LLM to RL
 
-### Common Issues & Quick Fixes
+## Performance Tips
 
-| Problem | Solution | Command |
-|---------|----------|---------|
-| **❌ Import Error** | Set Python path | `export PYTHONPATH=$PYTHONPATH:$(pwd)` |
-| **🚫 CUDA Out of Memory** | Use CPU mode | `config = DefaultConfigs.cpu_only()` |
-| **🔍 Test Installation** | Run functionality test | `python test_working_examples.py` |
-| **📦 Missing Dependencies** | Install requirements | `pip install torch numpy scikit-learn` |
+**For Large Models**:
+```python
+config = DefaultConfigs.standard()
+config['batch_size'] = 32  # Smaller batches
+config['device'] = 'cpu'   # Use CPU if GPU memory is limited
+```
 
-### 🆘 Still Having Issues?
+**For Quick Tests**:
+```python
+config = DefaultConfigs.quick_test()
+config['num_episodes'] = 10
+config['early_stopping_patience'] = 5
+```
 
-- 📖 **[Advanced Guide](ADVANCED_GUIDE.md)** - Complete API reference and advanced usage
-- 🐛 **[Troubleshooting Guide](TROUBLESHOOTING.md)** - Detailed problem solving
-- 💬 **[GitHub Discussions](https://github.com/VM230705/MAT-HPO-Library/discussions)**
+**For Production**:
+```python
+config = DefaultConfigs.extensive()
+config['num_episodes'] = 200
+config['save_frequency'] = 10
+config['enable_wandb'] = True  # Track with Weights & Biases
+```
+
+## Requirements
+
+- Python 3.8+
+- PyTorch 1.9+
+- NumPy
+- scikit-learn
+
+## 📚 Documentation
+
+- **[Quick Start Guide](#-quick-start)** - Get started in 5 minutes
+- **[Advanced Guide](ADVANCED_GUIDE.md)** - Complete API reference and advanced usage
+- **[Custom Metrics Guide](CUSTOM_METRICS_GUIDE.md)** - Define custom evaluation metrics
+- **[Troubleshooting Guide](TROUBLESHOOTING.md)** - Common issues and solutions
+- **[Documentation Website](https://vm230705.github.io/MAT-HPO-Library/)** - Interactive documentation
+
+## Common Issues
+
+### Module Not Found Error
+
+```bash
+# Solution: Add to Python path
+export PYTHONPATH=$PYTHONPATH:$(pwd)
+```
+
+### CUDA Out of Memory
+
+```python
+# Solution: Use CPU mode
+config = DefaultConfigs.cpu_only()
+```
+
+### Still Having Issues?
+
+- **[Advanced Guide](ADVANCED_GUIDE.md)** - Complete API reference and advanced usage
+- **[Troubleshooting Guide](TROUBLESHOOTING.md)** - Detailed problem solving
+- **[GitHub Discussions](https://github.com/VM230705/MAT-HPO-Library/discussions)**
 
 ---
 
-## 🌟 Why Choose MAT-HPO?
+## Why Choose MAT-HPO?
 
-- **🚀 Performance**: Up to 3x faster convergence than traditional methods
-- **🧠 Intelligence**: AI-driven parameter selection with multi-agent collaboration
-- **🔧 Simplicity**: 5-line integration with any ML framework
-- **📊 Transparency**: Comprehensive logging and experiment tracking
-- **🎯 Flexibility**: From quick prototypes to production-scale optimization
+- **Performance**: Up to 3x faster convergence than traditional methods
+- **Intelligence**: AI-driven parameter selection with multi-agent collaboration
+- **Simplicity**: 5-line integration with any ML framework
+- **Transparency**: Comprehensive logging and experiment tracking
+- **Flexibility**: From quick prototypes to production-scale optimization
 
-**Ready to supercharge your hyperparameter optimization?** Start with our [Quick Start Guide](#-quick-start) above! 🚀
-
-## 📚 Additional Resources
+## Additional Resources
 
 - **[Advanced Guide](ADVANCED_GUIDE.md)** - Complete API reference, LLM strategies, and advanced usage
 - **[Troubleshooting Guide](TROUBLESHOOTING.md)** - Common issues and solutions
 - **[GitHub Repository](https://github.com/VM230705/MAT-HPO-Library)** - Source code and issues
 - **[Documentation Website](https://vm230705.github.io/MAT-HPO-Library/)** - Interactive documentation
+
+## License
+
+This project is licensed under the MIT License - see the LICENSE file for details.
+
+## Reference
+
+This library is an extended implementation based on:
+
+**Cheng, Nai Hsin, Yujia Wu, and Vincent S. Tseng.** "Multi-Agent Transformer-based Automated Imbalanced Time Series Classification with Hyperparameter Optimization." *2025 International Joint Conference on Neural Networks, IJCNN 2025*. Institute of Electrical and Electronics Engineers Inc., 2025.
+
+## Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## Contact
+
+For questions and support, please open an issue on GitHub or contact the maintainers.
